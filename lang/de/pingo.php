@@ -33,6 +33,9 @@ $string['modulename'] = 'Pingo';
 $string['modulename_help'] = 'Die Aktivität Pingo erlaubt ... ';
 $string['modulename_link'] = 'mod/pingo/view';
 $string['pluginadministration'] = 'Administration der Pingo-Instanz';
+$string['editability'] = 'Bearbeitbarkeit';
+$string['editableforall'] = 'Sessions durch andere Lehrende bearbeitbar';
+$string['editableforall_help'] = 'Wenn aktiviert können andere Lehrende in die in PINGO eingestellte Session bearbeiten.';
 
 // Strings for index.php.
 $string['modulenameplural'] = 'Pingos';
@@ -43,11 +46,44 @@ $string['deletealluserdata'] = 'Alle Benutzerdaten löschen';
 
 // Strings for the capabilities.
 $string['pingo:addinstance'] = 'Neue Pingo Instanz hinzufügen';
-$string['pingo:viewasteacher'] = 'Pingo als Lehrer:in ansehen';
-$string['pingo:viewasstudent'] = 'Pingo als Teilnehmer:in ansehen';
+$string['pingo:viewsessionsoverview'] = 'Übersicht der PINGO Sessions ansehen';
+$string['pingo:logintosession'] = 'PINGO Session starten';
+$string['pingo:viewallsessions'] = 'Alle PINGO Sessions ansehen';
+$string['pingo:startsurvey'] = 'Umfrage aus PINGO starten';
 
 // Strings for the tasks.
 $string['task'] = 'Aufgabe';
+
+// Strings for the admin settings.
+$string['connectionsdetails'] = 'Verbindungseinstellungen';
+$string['remoteserver'] = 'PINGO-Server';
+$string['remoteserverall'] = 'PINGO-Server zu dem sich das Plugin verbinden soll.';
+
+// Strings for the view page.
+$string['overview'] = 'Überblick aller PINGO Sessions';
+$string['viewallpingos'] = 'Alle PINGO-Instanzen im Kurs ansehen';
+$string['loginfailed'] = 'PINGO Login fehlgeschlagen';
+$string['loginfailedinvalidcredentials'] = 'PINGO Login fehlgeschlagen (fehlerhafte Anmeldedaten)';
+$string['loginsuccessfull'] = 'PINGO Login erfolgreich';
+$string['sessionid'] = 'Session ID';
+$string['sessiontoken'] = 'Session Token';
+$string['sessionactive'] = 'Session aktiv';
+$string['nosession'] = 'Keine Session aktiv';
+$string['sessionlogout'] = 'Aktuelle Session abmelden';
+$string['nosurveyactive'] = 'Keine Umfrage aktiv';
+
+// Strings for the login form.
+$string['pingousername'] = 'Der Anmeldename in PINGO';
+$string['pingousername_help'] = 'Der Anmeldename des Accounts in PINGO';
+$string['pingopassword'] = 'Das Passwort in PINGO';
+$string['pingopassword_help'] = 'Das Passwort des Accounts in PINGO';
+$string['nopingoyet'] = 'Noch kein Account?';
+$string['registerforpingo'] = 'Bei PINGO registrieren (externe Seite)';
+
+// Strings for the events.
+$string['eventsessioncreated'] = 'PINGO Session angelegt';
+$string['eventpingologinfailed'] = 'PINGO Login fehlgeschlagen';
+$string['eventpingologinsuccessful'] = 'PINGO Login erfolgreich';
 
 // Strings for the privacy api.
 /*

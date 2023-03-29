@@ -27,15 +27,10 @@ defined('MOODLE_INTERNAL') || die();
 if ($hassiteconfig) {
     $settings = new admin_settingpage('mod_pingo_settings', new lang_string('pluginname', 'mod_pingo'));
 
-    /* if ($ADMIN->fulltree) {
-        // TODO: Define actual plugin settings page and add it to the tree - {@link https://docs.moodle.org/dev/Admin_settings}.
-        $settings->add(new admin_setting_heading('pingo/editability', get_string('editability', 'pingo'), ''));
-        $settings->add(new admin_setting_configselect('pingo/defaulterrortypetemplateseditable',
-            get_string('settingsdesciption', 'pingo'),
-            get_string('settingsdesciption_help', 'pingo'), 1, array(
-            '0' => get_string('no'),
-            '1' => get_string('yes')
-        )));
+    if ($ADMIN->fulltree) {
+        $settings->add(new admin_setting_heading('pingo/connectiondetails', get_string('connectionsdetails', 'pingo'), ''));
+        $settings->add(new admin_setting_configtext('pingo/remoteserver', get_string('remoteserver', 'pingo'),
+        get_string('remoteserverall', 'pingo'), 'https://pingo.coactum.de/')); // Todo: Add validation as 5th param.
 
-    } */
+    }
 }

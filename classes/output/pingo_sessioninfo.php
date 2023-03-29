@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Class containing data for pingo main page
+ * Class containing data for pingo session info block
  *
  * @package     mod_pingo
  * @copyright   2023 coactum GmbH
@@ -29,13 +29,13 @@ use templatable;
 use stdClass;
 
 /**
- * Class containing data for pingo_view
+ * Class containing data for pingo_sessioninfo
  *
  * @package     mod_pingo
  * @copyright   2023 coactum GmbH
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class pingo_view implements renderable, templatable {
+class pingo_sessioninfo implements renderable, templatable {
 
     /** @var int */
     protected $cmid;
@@ -43,9 +43,11 @@ class pingo_view implements renderable, templatable {
     /**
      * Construct this renderable.
      * @param int $cmid The course module id
+     * @param obj $activesession The object with the active session
      */
-    public function __construct($cmid) {
+    public function __construct($cmid, $activesession) {
         $this->cmid = $cmid;
+        $this->activesession = $activesession;
     }
 
     /**
@@ -57,6 +59,8 @@ class pingo_view implements renderable, templatable {
     public function export_for_template(renderer_base $output) {
         $data = new stdClass();
         $data->cmid = $this->cmid;
+        $data->remoteserver = get_config('pingo', 'remoteserver');
+        $data->activesession = $this->activesession;
         return $data;
     }
 }

@@ -62,18 +62,20 @@ class mod_pingo_mod_form extends moodleform_mod {
         $this->standard_intro_elements();
 
         // Set default values if module instance is updated.
-        /* $update = optional_param('update', null, PARAM_INT);
+        /*
+        $update = optional_param('update', null, PARAM_INT);
         if (!isset($update) || $update == 0) {
                 // ... .
-        } */
+        }
+        */
 
         // Add custom activity settings.
-        /* $mform->addElement('header', 'availibilityhdr', get_string('availability'));
+        $mform->addElement('header', 'editability', get_string('editability', 'pingo'));
 
-        $mform->addElement('date_time_selector', 'timeopen', get_string('pingoopentime', 'pingo'), array(
-            'optional' => true
-        ));
-        $mform->addHelpButton('timeopen', 'pingoopentime', 'pingo'); */
+        // Edit all setting if user can edit its own entries.
+        $mform->addElement('selectyesno', 'editableforall', get_string('editableforall', 'pingo'));
+        $mform->addHelpButton('editableforall', 'editableforall', 'pingo');
+        $mform->setDefault('editableforall', 1);
 
         // Add standard grading elements.
         $this->standard_grading_coursemodule_elements();
