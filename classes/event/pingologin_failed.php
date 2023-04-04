@@ -56,7 +56,7 @@ class pingologin_failed extends \core\event\base {
      * @return string
      */
     public function get_description() {
-        return "The user with the id '$this->userid' tried to create a session but failed
+        return "The user with the id '$this->userid' tried to create a connection but failed
             in the pingo activity with the course module id '$this->contextinstanceid'";
     }
 

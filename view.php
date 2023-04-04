@@ -22,11 +22,11 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
- use mod_pingo\output\pingo_sessioninfo;
+ use mod_pingo\output\pingo_connectioninfo;
+ use mod_pingo\output\pingo_sessionsoverview;
+ use mod_pingo\output\pingo_sessionview;
 
  use core\output\notification;
-
- use GuzzleHttp\Client;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
@@ -34,9 +34,11 @@ require_once(__DIR__.'/lib.php');
 // Course_module ID.
 $id = optional_param('id', 0, PARAM_INT);
 
-// If current session should be closed.
-$sessionlogout = optional_param('sessionlogout', 0, PARAM_INT);
+// If current connection should be closed.
+$closeconnection = optional_param('closeconnection', 0, PARAM_INT);
 
+// Session that should be displayed.
+$session = optional_param('session', 0, PARAM_INT);
 
 // Set the basic variables $course, $cm and $moduleinstance.
 if ($id) {
@@ -50,9 +52,12 @@ require_login($course, true, $cm);
 
 $context = context_module::instance($cm->id);
 
-if ($sessionlogout && $DB->record_exists('pingo_sessions', array('pingo' => $moduleinstance->id))) {
-    $DB->delete_records('pingo_sessions', array('pingo' => $moduleinstance->id));
+if ($closeconnection && $DB->record_exists('pingo_connections', array('pingo' => $moduleinstance->id))) {
+    $DB->delete_records('pingo_connections', array('pingo' => $moduleinstance->id));
 }
+
+// Check if connection is active.
+$activeconnection = $DB->get_record('pingo_connections', array('pingo' => $moduleinstance->id));
 
 // Trigger course_module_viewed event.
 $event = \mod_pingo\event\course_module_viewed::create(array(
@@ -71,9 +76,21 @@ $modulename = format_string($moduleinstance->name, true, array(
 ));
 
 // Set $PAGE and completion.
-$PAGE->set_url('/mod/pingo/view.php', array('id' => $cm->id));
 
-$PAGE->navbar->add(get_string("overview", "pingo"));
+$PAGE->navbar->add(get_string("overview", "pingo"), new moodle_url('/mod/pingo/view.php', array('id' => $cm->id)));
+
+if (!$activeconnection) {
+    $PAGE->navbar->add(get_string("login", "pingo"));
+    $PAGE->set_url('/mod/pingo/view.php', array('id' => $cm->id));
+} else if (!$session) {
+    $PAGE->navbar->add(get_string("sessionsoverview", "pingo"));
+    $PAGE->set_url('/mod/pingo/view.php', array('id' => $cm->id));
+} else {
+    $PAGE->navbar->add(get_string("sessionview", "pingo"));
+    $PAGE->set_url('/mod/pingo/view.php', array('id' => $cm->id, 'session' => $session));
+}
+
+$PAGE->requires->js_call_amd('mod_pingo/view', 'init', array('cmid' => $cm->id));
 
 $completion = new completion_info($course);
 $completion->set_module_viewed($cm);
@@ -82,13 +99,9 @@ $PAGE->set_title(get_string('modulename', 'mod_pingo').': ' . $modulename);
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($context);
 
+if (!$activeconnection) {
 
-// Check if session is active.
-$activesession = $DB->get_record('pingo_sessions', array('pingo' => $moduleinstance->id));
-
-if (!$activesession) {
-
-    // Check if new session should be saved.
+    // Check if new connection should be saved.
     require_once($CFG->dirroot . '/mod/pingo/login_form.php');
 
     // Instantiate form.
@@ -97,82 +110,53 @@ if (!$activesession) {
     if ($fromform = $mform->get_data()) {
 
         // In this case you process validated data. $mform->get_data() returns data posted in form.
-        if (isset($fromform->username) && $fromform->password) { // Try login.
+        if (isset($fromform->email) && $fromform->password) { // Try login.
 
-            // Magic code making guzzle request to pingo and returning session_token if login succeded.
+            // Requesting authentication_token from PINGO for email and password from the form.
+            $url = get_config('pingo', 'remoteserver') . "/api/get_auth_token";
 
-             ############### TESTING CURL ###############
-            // $url = "{" . get_config('pingo', 'remoteserver') . "}/login";
+            $data = 'password=' . urlencode($fromform->password) . '&email=' . urlencode($fromform->email);
 
-            // $data = array(
-            //     'username' => $fromform->username,
-            //     'passwort' => $fromform->password,
-            // );
+            $options = array(
+                'RETURNTRANSFER' => 1,
+                'HEADER' => 0,
+                'FAILONERROR' => 1,
+            );
 
-            // $jsondata = json_encode($data);
+            $header = array(
+                'Content-Type: application/x-www-form-urlencoded',
+                'Content-Length: ' . strlen($data),
+                'Accept: application/json'
+            );
 
-            // $options = array(
-            //     'RETURNTRANSFER' => 1,
-            //     'HEADER' => 0,
-            //     'FAILONERROR' => 1,
-            // );
+            $curl = new \curl();
+            $curl->setHeader($header);
+            $jsonresult = $curl->post($url, $data, $options);
 
-            // $header = array(
-            //     'Content-Type: application/json',
-            //     'Content-Length: ' . strlen($jsondata),
-            //     'Accept: application/json',
-            //     "{111}:{111}"
-            // );
+            $result = json_decode($jsonresult, true);
 
-            // $curl = new \curl();
-            // $curl->setHeader($header);
-            // $jsonresult = $curl->post($url, $jsondata, $options);
+            // var_dump($result['authentication_token']);
 
-            // var_dump($jsonresult);
+            if (isset($result['authentication_token'])) {
+                $connection = new stdClass();
+                $connection->pingo = (int) $cm->instance;
+                $connection->userid = (int) $USER->id;
+                $connection->timestarted = time();
+                $connection->authenticationtoken = $result['authentication_token'];
 
-            // $result = json_decode($jsonresult);
+                $newconnectionid = $DB->insert_record('pingo_connections', $connection);
 
-
-            // var_dump($result);
-
-             ############### TESTING GUZZLE ###############
-            // $httpclient = new GuzzleHttp\Client();
-
-            // $response = $httpclient->request('GET', 'https://example.com/api/resource');
-            // $statuscode = $response->getStatusCode();
-            // $body = $response->getBody()->getContents();
-            // var_dump($statuscode);
-
-
-
-            $sessiontoken = false;
-            $sessionid = false;
-
-            $sessiontoken = 'ansu89a9';
-            $sessionid = 1;
-
-
-            if ($sessionid && $sessiontoken) {
-                $session = new stdClass();
-                $session->pingo = (int) $cm->instance;
-                $session->userid = (int) $USER->id;
-                $session->timestarted = time();
-                $session->sessionid = $sessionid;
-                $session->sessiontoken = $sessiontoken;
-
-                $newsessionid = $DB->insert_record('pingo_sessions', $session);
-
-                // Trigger pingo session login successfull event.
+                // Trigger pingo connection login successful event.
                 $event = \mod_pingo\event\pingologin_successful::create(array(
-                    'objectid' => $sessionid,
+                    'objectid' => $newconnectionid,
                     'context' => $context
                 ));
 
                 $event->trigger();
 
-                // Trigger pingo session created event.
-                $event = \mod_pingo\event\session_created::create(array(
-                    'objectid' => $newsessionid,
+                // Trigger pingo connection created event.
+                $event = \mod_pingo\event\connection_created::create(array(
+                    'objectid' => $newconnectionid,
                     'context' => $context
                 ));
 
@@ -184,7 +168,7 @@ if (!$activesession) {
                 redirect($redirecturl, get_string('loginsuccessful', 'mod_pingo'), null, notification::NOTIFY_SUCCESS);
 
             } else {
-                // Trigger pingo session login failed event.
+                // Trigger pingo connection login failed event.
                 $event = \mod_pingo\event\pingologin_failed::create(array(
                     'objectid' => (int) $USER->id,
                     'context' => $context
@@ -223,7 +207,8 @@ if ($CFG->branch < 400) {
     }
 }
 
-$viewsessionsoverview = has_capability('mod/pingo:viewsessionsoverview', $context);
+$viewoverview = has_capability('mod/pingo:viewoverview', $context);
+$viewallsessions = has_capability('mod/pingo:viewallsessions', $context);
 
 // Get grading of current user when pingo is rated.
 /* if ($moduleinstance->assessed != 0) {
@@ -240,20 +225,81 @@ $viewsessionsoverview = has_capability('mod/pingo:viewsessionsoverview', $contex
 // Handle groups.
 echo groups_print_activity_menu($cm, $CFG->wwwroot . "/mod/pingo/view.php?id=$id");
 
-if ($viewsessionsoverview) { // Teacher view.
+if ($viewoverview) { // Teacher view.
 
-    // Add section for sessioninfo.
-    $sessioninfo = new pingo_sessioninfo($cm->id, $activesession);
-    echo $OUTPUT->render($sessioninfo);
+    // Add section for connectioninfo.
+    $connectioninfo = new pingo_connectioninfo($cm->id, $activeconnection);
+    echo $OUTPUT->render($connectioninfo);
 
-    if ($activesession) {
-        // Render response from guzzle request with sessions list from pingo.
+    if ($activeconnection) {
+
+        if (!$session) {
+
+            // Requesting sessions list from PINGO .
+            $url = get_config('pingo', 'remoteserver') . "/events?auth_token=" . $activeconnection->authenticationtoken;
+
+            $data = '';
+
+            $options = array(
+                'RETURNTRANSFER' => 1,
+                'HEADER' => 0,
+                'FAILONERROR' => 1,
+            );
+
+            $header = array(
+                'Content-Type: application/x-www-form-urlencoded',
+                'Content-Length: ' . strlen($data),
+                'Accept: application/json'
+            );
+
+            $curl = new \curl();
+            $curl->setHeader($header);
+            $jsonresult = $curl->get($url, $data, $options);
+
+            $sessions = json_decode($jsonresult, true);
+
+            // Add section with sessions overview.
+            $sessionsoverview = new pingo_sessionsoverview($cm->id, $sessions);
+            echo $OUTPUT->render($sessionsoverview);
+        } else {
+            // Requesting session from PINGO .
+            $url = get_config('pingo', 'remoteserver') . "/events/$session/?auth_token=" . $activeconnection->authenticationtoken;
+
+            $data = '';
+
+            $options = array(
+                'RETURNTRANSFER' => 1,
+                'HEADER' => 0,
+                'FAILONERROR' => 1,
+            );
+
+            $header = array(
+                'Content-Type: application/x-www-form-urlencoded',
+                'Content-Length: ' . strlen($data),
+                'Accept: application/json'
+            );
+
+            $curl = new \curl();
+            $curl->setHeader($header);
+            $jsonresult = $curl->get($url, $data, $options);
+
+            $session = json_decode($jsonresult, true);
+
+            // Add section with session view.
+            $sessionview = new pingo_sessionview($cm->id, $session);
+            echo $OUTPUT->render($sessionview);
+            var_dump($activeconnection->authenticationtoken);
+
+            // echo '<pre>' , var_dump($session) , '</pre>';
+        }
+
     } else {
         // Add form for pingo login.
         $mform = new mod_pingo_login_form(new moodle_url('/mod/pingo/view.php', array('id' => $cm->id)));
 
         // Set default data.
-        $mform->set_data(array('id' => $cm->id, 'username' => $USER->username));
+        $mform->set_data(array('id' => $cm->id, 'email' => 'b3855300@urhen.com', 'password' => 'Supergeheimespasswort1!'));
+        // $mform->set_data(array('id' => $cm->id));
 
         echo $mform->render();
 

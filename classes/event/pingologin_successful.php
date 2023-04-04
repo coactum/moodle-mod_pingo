@@ -56,8 +56,8 @@ class pingologin_successful extends \core\event\base {
      * @return string
      */
     public function get_description() {
-        return "The user with the id '$this->userid' successfully loged in to pingo and started the session with the id '
-            $this->objectid'in the pingo activity with the course module id '$this->contextinstanceid'";
+        return "The user with the id '$this->userid' successfully loged in to pingo and started the connection with the id '
+            $this->objectid' in the pingo activity with the course module id '$this->contextinstanceid'";
     }
 
     /**
@@ -75,6 +75,6 @@ class pingologin_successful extends \core\event\base {
      * Get objectid mapping for restore.
      */
     public static function get_objectid_mapping() {
-        return array('db' => 'pingo_sessions', 'restore' => 'pingo_sessions');
+        return array('db' => 'pingo_connections', 'restore' => 'pingo_connections');
     }
 }

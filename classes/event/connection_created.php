@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * The session created event for mod_pingo.
+ * The connection created event for mod_pingo.
  *
  * @package   mod_pingo
  * @copyright 2023 coactum GmbH
@@ -24,13 +24,13 @@
 namespace mod_pingo\event;
 
 /**
- * The session created event for mod_pingo.
+ * The connection created event for mod_pingo.
  *
  * @package   mod_pingo
  * @copyright 2023 coactum GmbH
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class session_created extends \core\event\base {
+class connection_created extends \core\event\base {
 
     /**
      * Init method.
@@ -47,7 +47,7 @@ class session_created extends \core\event\base {
      * @return string
      */
     public static function get_name() {
-        return get_string('eventsessioncreated', 'mod_pingo');
+        return get_string('eventconnectioncreated', 'mod_pingo');
     }
 
     /**
@@ -56,7 +56,7 @@ class session_created extends \core\event\base {
      * @return string
      */
     public function get_description() {
-        return "The user with the id '$this->userid' has created the session with the id '$this->objectid
+        return "The user with the id '$this->userid' has created the connection with the id '$this->objectid
             ' in the pingo activity with the course module id '$this->contextinstanceid'";
     }
 
@@ -75,6 +75,6 @@ class session_created extends \core\event\base {
      * Get objectid mapping for restore.
      */
     public static function get_objectid_mapping() {
-        return array('db' => 'pingo_sessions', 'restore' => 'pingo_sessions');
+        return array('db' => 'pingo_connections', 'restore' => 'pingo_connections');
     }
 }

@@ -45,16 +45,19 @@ class mod_pingo_login_form extends moodleform {
 
         $mform = $this->_form; // Don't forget the underscore!
 
+        $mform->addElement('header', 'login', get_string('login', 'pingo'));
+
         $mform->addElement('hidden', 'id', null);
         $mform->setType('id', PARAM_INT);
 
         $mform->addElement('hidden', 'user', null);
         $mform->setType('user', PARAM_INT);
 
-        $mform->addElement('text', 'username', get_string('pingousername', 'mod_pingo'));
-        $mform->addHelpButton('username', 'pingousername', 'mod_pingo');
-        $mform->setType('username', PARAM_TEXT);
-        $mform->addRule('username', null, 'required', null, 'client');
+        $mform->addElement('text', 'email', get_string('pingoemail', 'mod_pingo'));
+        $mform->addHelpButton('email', 'pingoemail', 'mod_pingo');
+        $mform->addRule('email', null, 'required', null, 'client');
+        $mform->addRule('email', get_string('errnoemail', 'mod_pingo'), 'email', '', 'client', false, false);
+        $mform->setType('email', PARAM_EMAIL);
 
         $mform->addElement('text', 'password', get_string('pingopassword', 'mod_pingo'));
         $mform->addHelpButton('password', 'pingopassword', 'mod_pingo');
@@ -65,7 +68,7 @@ class mod_pingo_login_form extends moodleform {
             '<a class="btn btn-secondary" target="_blank" href="' . get_config('pingo', 'remoteserver') . '/users/sign_up"' . '">' .
             get_string('registerforpingo', 'mod_pingo') . '</a>');
 
-        $this->add_action_buttons();
+        $this->add_action_buttons(false);
     }
 
     /**

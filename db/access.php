@@ -38,7 +38,7 @@ $capabilities = array(
         'clonepermissionsfrom' => 'moodle/course:manageactivities'
     ),
 
-    'mod/pingo:viewsessionsoverview' => array(
+    'mod/pingo:viewoverview' => array(
         'riskbitmask' => RISK_PERSONAL,
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,
@@ -49,7 +49,7 @@ $capabilities = array(
         )
     ),
 
-    'mod/pingo:logintosession' => array(
+    'mod/pingo:logintopingo' => array(
         'riskbitmask' => RISK_PERSONAL,
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,

@@ -13,7 +13,7 @@
           <FIELD NAME="introformat" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Format of the intro field used by feature MOD_INTRO."/>
           <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
           <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
-          <FIELD NAME="editableforall" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="If other teachers can edit the session"/>
+          <FIELD NAME="editableforall" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="If other teachers can edit things using the connection"/>
         </FIELDS>
         <KEYS>
           <KEY NAME="primary" TYPE="primary" FIELDS="id" />
@@ -23,13 +23,12 @@
           <INDEX NAME="course" UNIQUE="false" FIELDS="course"/>
         </INDEXES>
       </TABLE>
-      <TABLE NAME="pingo_sessions" COMMENT="Tabele with data of all sessions for pingo">
+      <TABLE NAME="pingo_connections" COMMENT="Tabele with data of all connections for pingo">
         <FIELDS>
           <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
           <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Moodle id of user"/>
           <FIELD NAME="pingo" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="ID of pingo"/>
-          <FIELD NAME="sessionid" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="OD for the session from pingo"/>
-          <FIELD NAME="sessiontoken" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Token for the session from pingo"/>
+          <FIELD NAME="authentication_token" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Token for the connection from pingo"/>
           <FIELD NAME="timestarted" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
         </FIELDS>
         <KEYS>
