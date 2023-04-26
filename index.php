@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * This page lists all the instances of pingo in a particular course
+ * This page lists all the instances of mod_pingo in a particular course
  *
  * @package     mod_pingo
  * @copyright   2023 coactum GmbH

@@ -61,6 +61,7 @@ class pingo_connectioninfo implements renderable, templatable {
         $data->cmid = $this->cmid;
         $data->remoteserver = get_config('pingo', 'remoteserver');
         $data->activeconnection = $this->activeconnection;
+        $data->sesskey = sesskey();
         return $data;
     }
 }

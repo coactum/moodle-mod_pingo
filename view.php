@@ -22,11 +22,11 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
- use mod_pingo\output\pingo_connectioninfo;
- use mod_pingo\output\pingo_sessionsoverview;
- use mod_pingo\output\pingo_sessionview;
+use mod_pingo\output\pingo_connectioninfo;
+use mod_pingo\output\pingo_sessionsoverview;
+use mod_pingo\output\pingo_sessionview;
 
- use core\output\notification;
+use core\output\notification;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
@@ -53,11 +53,23 @@ require_login($course, true, $cm);
 $context = context_module::instance($cm->id);
 
 if ($closeconnection && $DB->record_exists('pingo_connections', array('pingo' => $moduleinstance->id))) {
+    require_sesskey();
+
     $DB->delete_records('pingo_connections', array('pingo' => $moduleinstance->id));
+
+    // Trigger pingo connection closed event.
+    $event = \mod_pingo\event\connection_closed::create(array(
+        'objectid' => (int) $DB->get_record('pingo_connections', array('pingo' => $moduleinstance->id))->id,
+        'context' => $context
+    ));
+
+    $event->trigger();
 }
 
 // Check if connection is active.
 $activeconnection = $DB->get_record('pingo_connections', array('pingo' => $moduleinstance->id));
+
+$remoteurl = get_config('pingo', 'remoteserver');
 
 // Trigger course_module_viewed event.
 $event = \mod_pingo\event\course_module_viewed::create(array(
@@ -113,7 +125,7 @@ if (!$activeconnection) {
         if (isset($fromform->email) && $fromform->password) { // Try login.
 
             // Requesting authentication_token from PINGO for email and password from the form.
-            $url = get_config('pingo', 'remoteserver') . "/api/get_auth_token";
+            $url = $remoteurl . "/api/get_auth_token";
 
             $data = 'password=' . urlencode($fromform->password) . '&email=' . urlencode($fromform->email);
 
@@ -231,12 +243,20 @@ if ($viewoverview) { // Teacher view.
     $connectioninfo = new pingo_connectioninfo($cm->id, $activeconnection);
     echo $OUTPUT->render($connectioninfo);
 
-    if ($activeconnection) {
+    if ($activeconnection) { // Show content from PINGO.
 
-        if (!$session) {
+        // Trigger pingo connection viewed event.
+        $event = \mod_pingo\event\connection_viewed::create(array(
+            'objectid' => (int) $activeconnection->id,
+            'context' => $context
+        ));
+
+        $event->trigger();
+
+        if (!$session && $viewallsessions) { // View sessions overview.
 
             // Requesting sessions list from PINGO .
-            $url = get_config('pingo', 'remoteserver') . "/events?auth_token=" . $activeconnection->authenticationtoken;
+            $url = $remoteurl . "/events?auth_token=" . $activeconnection->authenticationtoken;
 
             $data = '';
 
@@ -256,14 +276,19 @@ if ($viewoverview) { // Teacher view.
             $curl->setHeader($header);
             $jsonresult = $curl->get($url, $data, $options);
 
+            if ($curl->info['http_code'] == 401) {
+                \core\notification::error(get_string('errunauthorized', 'mod_pingo'));
+            }
+
             $sessions = json_decode($jsonresult, true);
 
             // Add section with sessions overview.
             $sessionsoverview = new pingo_sessionsoverview($cm->id, $sessions);
             echo $OUTPUT->render($sessionsoverview);
-        } else {
+        } else if ($session) { // View selected session.
+
             // Requesting session from PINGO .
-            $url = get_config('pingo', 'remoteserver') . "/events/$session/?auth_token=" . $activeconnection->authenticationtoken;
+            $url = $remoteurl . "/events/$session/?auth_token=" . $activeconnection->authenticationtoken;
 
             $data = '';
 
@@ -286,15 +311,15 @@ if ($viewoverview) { // Teacher view.
             $session = json_decode($jsonresult, true);
 
             // Add section with session view.
-            $sessionview = new pingo_sessionview($cm->id, $session);
+            $sessionview = new pingo_sessionview($cm->id, $session, $context, $activeconnection->authenticationtoken);
             echo $OUTPUT->render($sessionview);
-            var_dump($activeconnection->authenticationtoken);
+            // var_dump($activeconnection->authenticationtoken);
 
-            // echo '<pre>' , var_dump($session) , '</pre>';
+            echo '<pre>' , var_dump($session) , '</pre>';
         }
 
-    } else {
-        // Add form for pingo login.
+    } else { // Show from for login to PINGO.
+        // Add form for PINGO login.
         $mform = new mod_pingo_login_form(new moodle_url('/mod/pingo/view.php', array('id' => $cm->id)));
 
         // Set default data.
@@ -306,10 +331,41 @@ if ($viewoverview) { // Teacher view.
     }
 
 } else { // Student view.
+
     $activesurvey = false;
 
-    if ($activesurvey) {
+    //var_dump($activeconnection);
+
+    if ($activeconnection) {
         // Print QR code to survey;
+        require_once($CFG->libdir.'/pdflib.php');
+
+        $surveyid = '029725';
+
+        $pdf = new TCPDF;
+
+        // Set document information.
+        $pdf->SetCreator(PDF_CREATOR);
+        // $pdf->SetAuthor($exammanagementinstanceobj->getMoodleSystemName());
+        // $pdf->SetTitle(get_string('examlabels', 'mod_exammanagement') . ': ' . $exammanagementinstanceobj->getCourse()->fullname . ', '. $exammanagementinstanceobj->moduleinstance->name);
+        // $pdf->SetSubject(get_string('examlabels', 'mod_exammanagement'));
+        // $pdf->SetKeywords(get_string('examlabels', 'mod_exammanagement') . ', ' . $exammanagementinstanceobj->getCourse()->fullname . ', ' . $exammanagementinstanceobj->moduleinstance->name);
+
+        $styleqr = array(
+            'border' => false,
+            'padding' => 0,
+            'fgcolor' => array(0, 0, 0),
+            'bgcolor' => false
+        );
+
+        $pdf->write2DBarcode($remoteurl . '/' . $surveyid, 'QRCODE,Q', 0 + 25, 0 + 18, 25, 25, $styleqr, 'N');
+
+        //Close and output PDF document.
+        // ob_start();
+        // // All other content
+        // ob_end_clean();
+        //$pdf->Output('pingo_qrcode_' . $surveyid . '.pdf', 'I');
+
     } else {
         echo get_string('nosurveyactive', 'mod_pingo');
     }

@@ -57,7 +57,7 @@ class connection_created extends \core\event\base {
      */
     public function get_description() {
         return "The user with the id '$this->userid' has created the connection with the id '$this->objectid
-            ' in the pingo activity with the course module id '$this->contextinstanceid'";
+            ' in the PINGO activity with the course module id '$this->contextinstanceid'";
     }
 
     /**

@@ -26,29 +26,29 @@
 defined('MOODLE_INTERNAL') || die();
 
 // Common strings.
-$string['pluginname'] = 'Pingo';
+$string['pluginname'] = 'PINGO';
 
 // Strings for mod_form.php.
-$string['modulename'] = 'Pingo';
+$string['modulename'] = 'PINGO';
 $string['modulename_help'] = 'Die Aktivität Pingo erlaubt ... ';
 $string['modulename_link'] = 'mod/pingo/view';
 $string['pluginadministration'] = 'Administration der Pingo-Instanz';
 $string['editability'] = 'Bearbeitbarkeit';
-$string['editableforall'] = 'connections durch andere Lehrende bearbeitbar';
-$string['editableforall_help'] = 'Wenn aktiviert können andere Lehrende in die in PINGO eingestellte connection bearbeiten.';
+$string['editableforall'] = 'Durch andere Lehrende bearbeitbar';
+$string['editableforall_help'] = 'Wenn aktiviert können andere Lehrende in dieser Aktivität Änderungen vornehmen.';
 
 // Strings for index.php.
-$string['modulenameplural'] = 'Pingos';
+$string['modulenameplural'] = 'PINGOs';
 $string['nonewmodules'] = 'Keine neuen Instanzen';
 
 // Strings for lib.php.
 $string['deletealluserdata'] = 'Alle Benutzerdaten löschen';
 
 // Strings for the capabilities.
-$string['pingo:addinstance'] = 'Neue Pingo Instanz hinzufügen';
-$string['pingo:viewconnectionsoverview'] = 'Übersichtsseite ansehen';
-$string['pingo:logintoconnection'] = 'PINGO connection starten';
-$string['pingo:viewallconnections'] = 'Alle PINGO connections ansehen';
+$string['pingo:addinstance'] = 'Neue PINGO Instanz hinzufügen';
+$string['pingo:viewoverview'] = 'Übersichtsseite ansehen';
+$string['pingo:logintopingo'] = 'Bei PINGO anmelden';
+$string['pingo:viewallsessions'] = 'Alle PINGO Sessions ansehen';
 $string['pingo:startsurvey'] = 'Umfrage aus PINGO starten';
 
 // Strings for the tasks.
@@ -78,8 +78,9 @@ $string['lastsurvey'] = 'Letzte Umfrage';
 $string['answers'] = 'Antwortmöglichkeiten';
 $string['editquestions'] = 'Fragen bearbeiten (in PINGO)';
 $string['editsession'] = 'Session bearbeiten (in PINGO)';
-$string['continue'] = 'Fortfahren';
-$string['repeat'] = 'Wiederholen';
+$string['continuesurvey'] = 'Fortfahren';
+$string['repeatsurvey'] = 'Wiederholen';
+$string['stopsurvey'] = 'Stoppen';
 $string['surveys'] = 'Umfragen';
 $string['nosurveys'] = 'Sie haben noch keine Umfragen in dieser Session erstellt.';
 $string['nosurveyactive'] = 'Keine Umfrage aktiv';
@@ -94,11 +95,14 @@ $string['registerforpingo'] = 'Bei PINGO registrieren (externe Seite)';
 $string['logintopingo'] = 'Bei PINGO anmelden';
 
 // Strings for the events.
-$string['eventconnectioncreated'] = 'PINGO connection angelegt';
+$string['eventconnectionclosed'] = 'PINGO Verbindung beendet';
+$string['eventconnectioncreated'] = 'PINGO Verbindung angelegt';
+$string['eventconnectionview'] = 'PINGO Verbindung angesehen';
 $string['eventpingologinfailed'] = 'PINGO Login fehlgeschlagen';
 $string['eventpingologinsuccessful'] = 'PINGO Login erfolgreich';
 
 // Strings for all errors.
+$string['errunauthorized'] = 'Authentifizierung fehlgeschlagen. Die gespeicherte Anmeldung für PINGO ist ungültig oder wurde in PINGO widerrufen.';
 $string['errnoemail'] = 'Keine gültige E-Mail-Adresse';
 $string['errnosession'] = 'Fehler beim Laden der Session Daten. Bitte Seite neu laden.';
 

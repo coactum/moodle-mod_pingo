@@ -45,9 +45,11 @@ class pingo_sessionview implements renderable, templatable {
      * @param int $cmid The course module id
      * @param obj $session The object with the session
      */
-    public function __construct($cmid, $session) {
+    public function __construct($cmid, $session, $context, $authtoken) {
         $this->cmid = $cmid;
         $this->session = $session;
+        $this->context = $context;
+        $this->authtoken = $authtoken;
     }
 
     /**
@@ -60,6 +62,9 @@ class pingo_sessionview implements renderable, templatable {
         $data = new stdClass();
         $data->cmid = $this->cmid;
         $data->session = $this->session;
+        $data->startsurvey = has_capability('mod/pingo:startsurvey', $this->context);
+        $data->remoteserver = get_config('pingo', 'remoteserver');
+        $data->authtoken = $this->authtoken;
         return $data;
     }
 }

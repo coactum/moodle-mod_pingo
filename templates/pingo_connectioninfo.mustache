@@ -38,8 +38,10 @@
             <div class="bg-warning text-white text-center p-2">{{#str}}noconnection, mod_pingo{{/str}}</div>
         {{/activeconnection}}
 
-        <div class="actionbuttons">
-            <a class="btn btn-primary" href="view.php?id={{cmid}}&closeconnection=1"> {{#str}}closeconnection, mod_pingo{{/str}}</a>
-        </div>
+        {{#activeconnection}}
+            <div class="actionbuttons">
+                <a class="btn btn-primary" href="view.php?id={{cmid}}&closeconnection=1&sesskey={{sesskey}}"> {{#str}}closeconnection, mod_pingo{{/str}}</a>
+            </div>
+        {{/activeconnection}}
     </div>
 </div>
