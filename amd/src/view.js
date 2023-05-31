@@ -25,9 +25,9 @@ import $ from 'jquery';
 import {get_string as getString} from 'core/str';
 
 export const init = () => {
-    getString('logintopingo', 'mod_pingo')
-        .then(buttonString => {
-            $('.path-mod-pingo #id_submitbutton').attr('value', buttonString);
-        })
-        .catch();
+    // getString('logintopingo', 'mod_pingo')
+    //     .then(buttonString => {
+    //         $('.path-mod-pingo .loginform #id_submitbutton').attr('value', buttonString);
+    //     })
+    //     .catch();
 };

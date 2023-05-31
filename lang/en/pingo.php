@@ -73,17 +73,19 @@ $string['sessionsoverview'] = 'Sessions overview';
 $string['yoursessions'] = 'Your sessions';
 $string['nosessionsavailable'] = 'No sessions available';
 $string['sessionview'] = 'Session';
-$string['backtosessionsoverview'] = 'Back to sessions overview';
 $string['lastsurvey'] = 'Last survey';
 $string['answers'] = 'Answers';
-$string['editquestions'] = 'Edit questions (in PINGO)';
-$string['editsession'] = 'Edit session (in PINGO)';
 $string['continuesurvey'] = 'Continue';
 $string['repeatsurvey'] = 'Repeat';
 $string['stopsurvey'] = 'Stop';
 $string['surveys'] = 'Surveys';
 $string['nosurveys'] = 'You have not yet created any surveys in this session.';
 $string['nosurveyactive'] = 'No survey active';
+$string['sessions'] = 'Sessions';
+$string['quickstart'] = 'Quickstart';
+$string['catalog'] = 'Catalog';
+$string['createsessioninpingo'] = 'Create session (in PINGO)';
+$string['startsurvey'] = 'Start';
 
 // Strings for the login form.
 $string['pingoemail'] = 'The email in PINGO';
@@ -94,6 +96,11 @@ $string['nopingoyet'] = 'No account yet?';
 $string['registerforpingo'] = 'Register for PINGO (external page)';
 $string['logintopingo'] = 'Login to PINGO';
 
+// Strings for the quickstart form.
+$string['questiontypes'] = 'Question type';
+$string['answeroptions'] = 'Answer options';
+$string['durationchoices'] = 'Duration';
+
 // Strings for the events.
 $string['eventconnectionclosed'] = 'PINGO connection closed';
 $string['eventconnectioncreated'] = 'PINGO connection created';
@@ -102,7 +109,7 @@ $string['eventpingologinfailed'] = 'PINGO login failed';
 $string['eventpingologinsuccessful'] = 'PINGO login successful';
 
 // Strings for all errors.
-$string['errunauthorized'] = 'Authentication failed. The saved login for PINGO is invalid or has been revoked in PINGO.';
+$string['errunauthorized'] = 'Authentication failed. The saved login for PINGO is invalid or has been revoked in PINGO. You have to close the connection and login in again.';
 $string['errnoemail'] = 'Not a valid mail adress';
 $string['errnosession'] = 'Error while fetching session data. Please reload page.';
 

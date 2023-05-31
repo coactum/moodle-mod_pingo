@@ -73,17 +73,19 @@ $string['sessionsoverview'] = 'Sessions Übersicht';
 $string['yoursessions'] = 'Ihre Sessions';
 $string['nosessionsavailable'] = 'Keine Sitzungen verfügbar';
 $string['sessionview'] = 'Session';
-$string['backtosessionsoverview'] = 'Zurück zur Sessions Übersicht';
 $string['lastsurvey'] = 'Letzte Umfrage';
 $string['answers'] = 'Antwortmöglichkeiten';
-$string['editquestions'] = 'Fragen bearbeiten (in PINGO)';
-$string['editsession'] = 'Session bearbeiten (in PINGO)';
 $string['continuesurvey'] = 'Fortfahren';
 $string['repeatsurvey'] = 'Wiederholen';
 $string['stopsurvey'] = 'Stoppen';
 $string['surveys'] = 'Umfragen';
 $string['nosurveys'] = 'Sie haben noch keine Umfragen in dieser Session erstellt.';
 $string['nosurveyactive'] = 'Keine Umfrage aktiv';
+$string['sessions'] = 'Sessions';
+$string['quickstart'] = 'Schnellstart';
+$string['catalog'] = 'Katalog';
+$string['createsessioninpingo'] = 'Session anlegen (in PINGO)';
+$string['startsurvey'] = 'Starten';
 
 // Strings for the login form.
 $string['pingoemail'] = 'Die E-Mail-Adresse in PINGO';
@@ -94,6 +96,11 @@ $string['nopingoyet'] = 'Noch kein Account?';
 $string['registerforpingo'] = 'Bei PINGO registrieren (externe Seite)';
 $string['logintopingo'] = 'Bei PINGO anmelden';
 
+// Strings for the quickstart form.
+$string['questiontypes'] = 'Fragetyp';
+$string['answeroptions'] = 'Antwortoptionen';
+$string['durationchoices'] = 'Dauer';
+
 // Strings for the events.
 $string['eventconnectionclosed'] = 'PINGO Verbindung beendet';
 $string['eventconnectioncreated'] = 'PINGO Verbindung angelegt';
@@ -102,7 +109,7 @@ $string['eventpingologinfailed'] = 'PINGO Login fehlgeschlagen';
 $string['eventpingologinsuccessful'] = 'PINGO Login erfolgreich';
 
 // Strings for all errors.
-$string['errunauthorized'] = 'Authentifizierung fehlgeschlagen. Die gespeicherte Anmeldung für PINGO ist ungültig oder wurde in PINGO widerrufen.';
+$string['errunauthorized'] = 'Authentifizierung fehlgeschlagen. Die gespeicherte Anmeldung für PINGO ist ungültig oder wurde in PINGO widerrufen. Die Verbindungn muss geschloßen und neu gestartet werden.';
 $string['errnoemail'] = 'Keine gültige E-Mail-Adresse';
 $string['errnosession'] = 'Fehler beim Laden der Session Daten. Bitte Seite neu laden.';
 

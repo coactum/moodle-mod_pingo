@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Class containing data for pingo sessions overview
+ * Class containing data for pingo tab area
  *
  * @package     mod_pingo
  * @copyright   2023 coactum GmbH
@@ -29,27 +29,27 @@ use templatable;
 use stdClass;
 
 /**
- * Class containing data for pingo sessions overview
+ * Class containing data for pingo tab area
  *
  * @package     mod_pingo
  * @copyright   2023 coactum GmbH
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class pingo_sessionsoverview implements renderable, templatable {
+class pingo_tabarea implements renderable, templatable {
 
     /** @var int */
     protected $cmid;
     /** @var object */
-    protected $sessions;
+    protected $activetab;
 
     /**
      * Construct this renderable.
-     * @param int $cmid The course module id.
-     * @param object $sessions The object with all sessions.
+     * @param int $cmid The course module id
+     * @param obj $activetab The object with the active tab.
      */
-    public function __construct($cmid, $sessions) {
+    public function __construct($cmid, $activetab) {
         $this->cmid = $cmid;
-        $this->sessions = $sessions;
+        $this->activetab = $activetab;
     }
 
     /**
@@ -61,8 +61,7 @@ class pingo_sessionsoverview implements renderable, templatable {
     public function export_for_template(renderer_base $output) {
         $data = new stdClass();
         $data->cmid = $this->cmid;
-        $data->sessions = $this->sessions;
-        $data->remoteserver = get_config('pingo', 'remoteserver');
+        $data->activetab = $this->activetab;
         return $data;
     }
 }

@@ -23,19 +23,27 @@
  */
 
 use mod_pingo\output\pingo_connectioninfo;
+use mod_pingo\output\pingo_tabarea;
 use mod_pingo\output\pingo_sessionsoverview;
 use mod_pingo\output\pingo_sessionview;
+
+use mod_pingo\pingo_api\mod_pingo_api;
 
 use core\output\notification;
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
 
+require_once(__DIR__.'/classes/pingo_api/api.php');
+
 // Course_module ID.
 $id = optional_param('id', 0, PARAM_INT);
 
 // If current connection should be closed.
 $closeconnection = optional_param('closeconnection', 0, PARAM_INT);
+
+// Session that should be displayed.
+$mode = optional_param('mode', 0, PARAM_INT);
 
 // Session that should be displayed.
 $session = optional_param('session', 0, PARAM_INT);
@@ -55,8 +63,6 @@ $context = context_module::instance($cm->id);
 if ($closeconnection && $DB->record_exists('pingo_connections', array('pingo' => $moduleinstance->id))) {
     require_sesskey();
 
-    $DB->delete_records('pingo_connections', array('pingo' => $moduleinstance->id));
-
     // Trigger pingo connection closed event.
     $event = \mod_pingo\event\connection_closed::create(array(
         'objectid' => (int) $DB->get_record('pingo_connections', array('pingo' => $moduleinstance->id))->id,
@@ -64,6 +70,9 @@ if ($closeconnection && $DB->record_exists('pingo_connections', array('pingo' =>
     ));
 
     $event->trigger();
+
+    $DB->delete_records('pingo_connections', array('pingo' => $moduleinstance->id));
+
 }
 
 // Check if connection is active.
@@ -124,37 +133,15 @@ if (!$activeconnection) {
         // In this case you process validated data. $mform->get_data() returns data posted in form.
         if (isset($fromform->email) && $fromform->password) { // Try login.
 
-            // Requesting authentication_token from PINGO for email and password from the form.
-            $url = $remoteurl . "/api/get_auth_token";
+            // Get PINGO authentication token.
+            $authtoken = mod_pingo_api::get_authtoken($remoteurl, $fromform->email, $fromform->password);
 
-            $data = 'password=' . urlencode($fromform->password) . '&email=' . urlencode($fromform->email);
-
-            $options = array(
-                'RETURNTRANSFER' => 1,
-                'HEADER' => 0,
-                'FAILONERROR' => 1,
-            );
-
-            $header = array(
-                'Content-Type: application/x-www-form-urlencoded',
-                'Content-Length: ' . strlen($data),
-                'Accept: application/json'
-            );
-
-            $curl = new \curl();
-            $curl->setHeader($header);
-            $jsonresult = $curl->post($url, $data, $options);
-
-            $result = json_decode($jsonresult, true);
-
-            // var_dump($result['authentication_token']);
-
-            if (isset($result['authentication_token'])) {
+            if (isset($authtoken)) {
                 $connection = new stdClass();
                 $connection->pingo = (int) $cm->instance;
                 $connection->userid = (int) $USER->id;
                 $connection->timestarted = time();
-                $connection->authenticationtoken = $result['authentication_token'];
+                $connection->authenticationtoken = $authtoken;
 
                 $newconnectionid = $DB->insert_record('pingo_connections', $connection);
 
@@ -202,6 +189,34 @@ if (!$activeconnection) {
             redirect($redirecturl, get_string('loginfailedinvalidcredentials', 'mod_pingo'), null, notification::NOTIFY_ERROR);
         }
     }
+} else if ($mode === 2) {
+
+    require_once($CFG->dirroot . '/mod/pingo/quickstart_form.php');
+
+    $data = mod_pingo_api::get_quickstart_formdata($remoteurl);
+
+    $mform = new mod_pingo_quickstart_form(null,
+        array('question_types' => $data->questiontypes, 'duration_choices' => $data->durationchoices,
+        'answer_options' => $data->answeroptions));
+
+    if ($fromform = $mform->get_data()) {
+
+        // In this case you process validated data. $mform->get_data() returns data posted in form.
+
+        // var_dump($fromform);
+
+        if ($fromform->session) {
+            // Get session data from PINGO.
+            $session = mod_pingo_api::get_session($remoteurl, $fromform->session, $activeconnection->authenticationtoken);
+
+            var_dump($session['name']);
+
+            if (!empty($session)) {
+                mod_pingo_api::run_quickstart($remoteurl, $activeconnection->authenticationtoken, $fromform->session, $fromform->question_types, $fromform->answer_options[$fromform->question_types], $fromform->duration_choices);
+            }
+        }
+    }
+
 }
 
 // Add settingsmenu and heading for moodle < 400.
@@ -253,69 +268,64 @@ if ($viewoverview) { // Teacher view.
 
         $event->trigger();
 
-        if (!$session && $viewallsessions) { // View sessions overview.
+        // Add section with sessions overview.
+        $activetab = new stdClass;
+        switch ($mode) {
+            case 1:
+                $activetab->sessions = true;
+                break;
+            case 2:
+                $activetab->quickstart = true;
+                break;
+            case 3:
+                $activetab->catalog = true;
+                break;
+        }
 
-            // Requesting sessions list from PINGO .
-            $url = $remoteurl . "/events?auth_token=" . $activeconnection->authenticationtoken;
+        $tabarea = new pingo_tabarea($cm->id, $activetab);
+        echo $OUTPUT->render($tabarea);
 
-            $data = '';
+        // Show content.
+        if ($mode === 1  && $viewallsessions) { // View sessions overview.
 
-            $options = array(
-                'RETURNTRANSFER' => 1,
-                'HEADER' => 0,
-                'FAILONERROR' => 1,
-            );
-
-            $header = array(
-                'Content-Type: application/x-www-form-urlencoded',
-                'Content-Length: ' . strlen($data),
-                'Accept: application/json'
-            );
-
-            $curl = new \curl();
-            $curl->setHeader($header);
-            $jsonresult = $curl->get($url, $data, $options);
-
-            if ($curl->info['http_code'] == 401) {
-                \core\notification::error(get_string('errunauthorized', 'mod_pingo'));
-            }
-
-            $sessions = json_decode($jsonresult, true);
+            // Get sessions data.
+            $sessions = mod_pingo_api::get_sessions($remoteurl, $activeconnection->authenticationtoken);
 
             // Add section with sessions overview.
             $sessionsoverview = new pingo_sessionsoverview($cm->id, $sessions);
             echo $OUTPUT->render($sessionsoverview);
-        } else if ($session) { // View selected session.
 
-            // Requesting session from PINGO .
-            $url = $remoteurl . "/events/$session/?auth_token=" . $activeconnection->authenticationtoken;
+        } else if ($mode === 2) {
 
-            $data = '';
+            // Get quickstart formdata.
+            $data = mod_pingo_api::get_quickstart_formdata($remoteurl);
 
-            $options = array(
-                'RETURNTRANSFER' => 1,
-                'HEADER' => 0,
-                'FAILONERROR' => 1,
-            );
+            // // Add quickstart form.
+            $mform = new mod_pingo_quickstart_form(new moodle_url('/mod/pingo/view.php', array('id' => $cm->id)),
+                array('question_types' => $data->questiontypes, 'duration_choices' => $data->durationchoices,
+                'answer_options' => $data->answeroptions));
 
-            $header = array(
-                'Content-Type: application/x-www-form-urlencoded',
-                'Content-Length: ' . strlen($data),
-                'Accept: application/json'
-            );
+            // Set default data.
+            $mform->set_data(array('id' => $cm->id, 'session' => '236296'));
 
-            $curl = new \curl();
-            $curl->setHeader($header);
-            $jsonresult = $curl->get($url, $data, $options);
+            echo $mform->render();
 
-            $session = json_decode($jsonresult, true);
 
-            // Add section with session view.
-            $sessionview = new pingo_sessionview($cm->id, $session, $context, $activeconnection->authenticationtoken);
-            echo $OUTPUT->render($sessionview);
-            // var_dump($activeconnection->authenticationtoken);
+        } else if ($mode === 3) {
 
-            echo '<pre>' , var_dump($session) , '</pre>';
+        } else if ($mode === 0) {
+            if ($session) {
+
+                // Get session data from PINGO.
+                $session = mod_pingo_api::get_session($remoteurl, $session, $activeconnection->authenticationtoken);
+
+                // Add section with session view.
+                $sessionview = new pingo_sessionview($cm->id, $session, $context, $activeconnection->authenticationtoken);
+                echo $OUTPUT->render($sessionview);
+
+                echo '<pre>' , var_dump($session) , '</pre>';
+            }
+
         }
 
     } else { // Show from for login to PINGO.
@@ -324,7 +334,6 @@ if ($viewoverview) { // Teacher view.
 
         // Set default data.
         $mform->set_data(array('id' => $cm->id, 'email' => 'b3855300@urhen.com', 'password' => 'Supergeheimespasswort1!'));
-        // $mform->set_data(array('id' => $cm->id));
 
         echo $mform->render();
 

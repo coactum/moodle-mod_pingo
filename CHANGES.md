@@ -1,4 +1,9 @@
 ## Changelog ##
+- [0.0.5]:
+    - Added first part of quickstart functionality.
+    - Added tabarea component for layout.
+    - Moved the fetching of PINGO data into seperat methods in an own class.
+
 - [0.0.4]:
     - Added more functionality.
 

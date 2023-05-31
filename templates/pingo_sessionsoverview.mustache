@@ -40,7 +40,6 @@
                         {{#str}}description{{/str}}
                     </th>
                     <th scope="col">
-                        {{#str}}show{{/str}}
                     </th>
                 </tr>
             </thead>
@@ -49,7 +48,7 @@
                     <tr>
                         <td>{{name}} <a href="view.php?id={{cmid}}&session={{token}}" title="{{#str}}show{{/str}}">#{{token}}</a></td>
                         <td>{{description}}</td>
-                        <td><a href="view.php?id={{cmid}}&session={{id}}" title="{{#str}}show{{/str}}">{{#str}}show{{/str}}</a></td>
+                        <td><a class="btn btn-primary" href="view.php?id={{cmid}}&session={{id}}" title="{{#str}}show{{/str}}">{{#str}}show{{/str}}</a></td>
                     </tr>
                 {{/sessions}}
                 {{^sessions}}
@@ -57,5 +56,8 @@
                 {{/sessions}}
             </tbody>
         </table>
+        <div class="d-flex justify-content-center">
+            <a class="btn btn-primary" href="{{remoteserver}}/events/new" target="_blank"> {{#str}}createsessioninpingo, mod_pingo{{/str}}</a>
+        </div>
     </div>
 </div>

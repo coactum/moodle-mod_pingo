@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * File containing the class definition for the pingo login form.
+ * File containing the class definition for the pingo quickstart form.
  *
  * @package     mod_pingo
  * @copyright   2023 coactum GmbH
@@ -28,13 +28,13 @@ global $CFG;
 require_once("$CFG->libdir/formslib.php");
 
 /**
- * Form for the login to pingo.
+ * Form for the quickstart to pingo.
  *
  * @package   mod_pingo
  * @copyright 2023 coactum GmbH
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL Juv3 or later
  */
-class mod_pingo_login_form extends moodleform {
+class mod_pingo_quickstart_form extends moodleform {
 
     /**
      * Define the form - called by parent constructor.
@@ -45,31 +45,37 @@ class mod_pingo_login_form extends moodleform {
 
         $mform = $this->_form; // Don't forget the underscore!
 
-        $mform->addElement('header', 'login', get_string('login', 'pingo'));
+        $mform->addElement('header', 'quickstart', get_string('quickstart', 'pingo'));
 
         $mform->addElement('hidden', 'id', null);
         $mform->setType('id', PARAM_INT);
 
-        $mform->addElement('hidden', 'user', null);
-        $mform->setType('user', PARAM_INT);
+        $mform->addElement('hidden', 'session', null);
+        $mform->setType('session', PARAM_INT);
 
-        $mform->addElement('text', 'email', get_string('pingoemail', 'mod_pingo'));
-        $mform->addHelpButton('email', 'pingoemail', 'mod_pingo');
-        $mform->addRule('email', null, 'required', null, 'client');
-        $mform->addRule('email', get_string('errnoemail', 'mod_pingo'), 'email', '', 'client', false, false);
-        $mform->setType('email', PARAM_EMAIL);
+        $mform->addElement('hidden', 'mode', 2);
+        $mform->setType('mode', PARAM_INT);
 
-        // $mform->addElement('text', 'password', get_string('pingopassword', 'mod_pingo'));
-        $mform->addElement('passwordunmask', 'password', get_string('pingopassword', 'mod_pingo'));
-        $mform->addHelpButton('password', 'pingopassword', 'mod_pingo');
-        $mform->setType('password', PARAM_TEXT);
-        $mform->addRule('password', null, 'required', null, 'client');
+        // var_dump($this->_customdata);
 
-        $mform->addElement('static', 'signupforpingo', get_string('nopingoyet', 'mod_pingo'),
-            '<a class="btn btn-secondary" target="_blank" href="' . get_config('pingo', 'remoteserver') . '/users/sign_up"' . '">' .
-            get_string('registerforpingo', 'mod_pingo') . '</a>');
+        $select = $mform->addElement('select', 'question_types', get_string('questiontypes', 'pingo'), $this->_customdata['question_types']);
+        $mform->setType('question_types', PARAM_TEXT);
 
-        $this->add_action_buttons(false, get_string('logintopingo', 'mod_pingo'));
+        foreach ($this->_customdata['answer_options'] as $type => $options) {
+            // var_dump('<pre>');
+            // var_dump($options);
+            // var_dump('</pre><br>');
+            if (!empty($options) && (!isset($options[0]) || (isset($options[0]) && $options[0] != ''))) {
+                $select = $mform->addElement('select', 'answer_options[' . $type . ']', get_string('answeroptions', 'pingo'), $options);
+                $mform->setType('answer_options', PARAM_TEXT);
+                $mform->hideIf('answer_options[' . $type . ']', 'question_types', 'neq', $type);
+            }
+        }
+
+        $select = $mform->addElement('select', 'duration_choices', get_string('durationchoices', 'pingo'), $this->_customdata['duration_choices']);
+        $mform->setType('duration_choices', PARAM_INT);
+
+        $this->add_action_buttons(false, get_string('startsurvey', 'pingo'));
     }
 
     /**
