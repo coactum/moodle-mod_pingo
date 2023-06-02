@@ -39,6 +39,8 @@ class pingo_connectioninfo implements renderable, templatable {
 
     /** @var int */
     protected $cmid;
+    /** @var object */
+    protected $activeconnection;
 
     /**
      * Construct this renderable.

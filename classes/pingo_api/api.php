@@ -65,7 +65,7 @@ class mod_pingo_api {
         $curl->setHeader($header);
         $jsonresult = $curl->post($url, $data, $options);
 
-        var_dump($curl);
+        // var_dump($curl);
 
         return json_decode($jsonresult, true)['authentication_token'];
     }
@@ -100,7 +100,9 @@ class mod_pingo_api {
         $curl->setHeader($header);
         $jsonresult = $curl->get($url, $data, $options);
 
-        if ($curl->info['http_code'] == 401) {
+        if (!isset($curl->info['http_code'])) {
+            return false;
+        } else if ($curl->info['http_code'] == 401) {
             \core\notification::error(get_string('errunauthorized', 'mod_pingo'));
             return false;
         } else {
@@ -137,7 +139,9 @@ class mod_pingo_api {
         $curl->setHeader($header);
         $jsonresult = $curl->get($url, $data, $options);
 
-        if ($curl->info['http_code'] == 401) {
+        if (!isset($curl->info['http_code'])) {
+            return false;
+        } else if ($curl->info['http_code'] == 401) {
             \core\notification::error(get_string('errunauthorized', 'mod_pingo'));
             return false;
         } else {
@@ -174,11 +178,14 @@ class mod_pingo_api {
         $curl = new \curl();
         $curl->setHeader($header);
         $jsonresult = $curl->get($url, $data, $options);
+        $response = json_decode($jsonresult, true);
 
-        if ($curl->info['http_code'] == 401) {
+        if (!isset($curl->info['http_code'])) {
+            return false;
+        } else if ($curl->info['http_code'] == 401) {
             $unauthorized = true;
-        } else {
-            $qts = json_decode($jsonresult, true)['question_types'];
+        } else if (isset($response['question_types'])) {
+            $qts = $response['question_types'];
 
             $questiontypes = array();
             $answeroptions = array();
@@ -206,6 +213,8 @@ class mod_pingo_api {
                     $questiontypes[$question['type']] = $question['name_en'];
                 }
             }
+        } else {
+            return false;
         }
 
         $url = $remoteurl . "/api/duration_choices";
@@ -227,7 +236,9 @@ class mod_pingo_api {
         $curl->setHeader($header);
         $jsonresult = $curl->get($url, $data, $options);
 
-        if ($curl->info['http_code'] == 401) {
+        if (!isset($curl->info['http_code'])) {
+            return false;
+        } else if ($curl->info['http_code'] == 401) {
             $unauthorized = true;
         }
 
@@ -265,14 +276,12 @@ class mod_pingo_api {
         $url = $remoteurl . "/events/$session/quick_start";
 
         // Set the request data.
-        //$data = '{auth_token=' . $authtoken . '&options=' . $answeroption . '&q_type=' . $questiontype . '&duration=' . $duration . '}';
-        $data = 'auth_token=' . $authtoken . '&options=' . $answeroption . '&q_type=' . $questiontype . '&duration=' . $duration;
-        // $data = 'auth_token=' . json_encode($authtoken) . '&options=' . json_encode($answeroption) . '&q_type=' . json_encode($questiontype). '&duration=' . json_encode($duration);
+        $data = array('auth_token' => $authtoken, 'options' => $answeroption, 'q_type' => $questiontype, 'duration' => $duration);
+        $data = json_encode($data);
 
         // Set the request header.
         $header = array(
             'Content-Type: application/json',
-            'Content-Length: ' . strlen($data),
             'Accept: application/json'
         );
 
@@ -280,15 +289,93 @@ class mod_pingo_api {
         $curl->setHeader($header);
         $curl->post($url, $data);
 
-        var_dump($curl);
-
         // Check for any errors.
-        if ($curl->error) {
-            var_dump('Error: ' . $curl->errorMessage);
+        if ($curl->error != '') {
+            return false;
+        } else if ($curl->response['HTTP/1.1'] == '201 Created') {
+            return true;
         } else {
-            // Get the response body.
-            $response = $curl->response;
-            var_dump($response);
+            return false;
         }
     }
+
+    /**
+     * Method for fetching all data needed for adding questions from catalog.
+     *
+     * @param string $remoteurl The URL to fetch the data from.
+     * @param string $authtoken The authentication token from the user.
+     * @return object Object with all data for the form (...).
+     */
+    public static function get_questionfromcatalog_formdata($remoteurl, $authtoken) {
+        $unauthorized = false;
+
+        $url = $remoteurl . "/questions?auth_token=$authtoken";
+
+        $data = '';
+
+        $options = array(
+            'RETURNTRANSFER' => 1,
+            'HEADER' => 0,
+            'FAILONERROR' => 1,
+        );
+
+        $header = array(
+            'Accept: application/json'
+        );
+
+        $curl = new \curl();
+        $curl->setHeader($header);
+        $jsonresult = $curl->get($url, $data, $options);
+
+        if (!isset($curl->info['http_code'])) {
+            return false;
+        } else if ($curl->info['http_code'] == 401) {
+            $unauthorized = true;
+        } else if (!$questions = json_decode($jsonresult, true)) {
+            return false;
+        }
+
+        $url = $remoteurl . "/api/duration_choices";
+
+        $data = '';
+
+        $options = array(
+            'RETURNTRANSFER' => 1,
+            'HEADER' => 0,
+            'FAILONERROR' => 1,
+        );
+
+        $header = array(
+            'Content-Type: application/x-www-form-urlencoded',
+            'Content-Length: ' . strlen($data),
+            'Accept: application/json'
+        );
+
+        $curl->setHeader($header);
+        $jsonresult = $curl->get($url, $data, $options);
+
+        if (!isset($curl->info['http_code'])) {
+            return false;
+        } else if ($curl->info['http_code'] == 401) {
+            $unauthorized = true;
+        }
+
+        if ($unauthorized) {
+            \core\notification::error(get_string('errunauthorized', 'mod_pingo'));
+            return false;
+        } else {
+            $durationchoices = json_decode($jsonresult, true);
+
+            if ($durationchoices) {
+                $data = new stdclass;
+                $data->durationchoices = array_combine($durationchoices["duration_choices"], $durationchoices["duration_choices"]);
+                $data->questions = $questions;
+            } else {
+                return false;
+            }
+
+            return $data;
+        }
+    }
+
 }

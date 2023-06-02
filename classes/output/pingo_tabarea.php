@@ -40,16 +40,20 @@ class pingo_tabarea implements renderable, templatable {
     /** @var int */
     protected $cmid;
     /** @var object */
-    protected $activetab;
+    protected $tabs;
+    /** @var int */
+    protected $session;
 
     /**
      * Construct this renderable.
      * @param int $cmid The course module id
-     * @param obj $activetab The object with the active tab.
+     * @param obj $tabs The object with the active tab.
+     * @param int $session The session token.
      */
-    public function __construct($cmid, $activetab) {
+    public function __construct($cmid, $tabs, $session) {
         $this->cmid = $cmid;
-        $this->activetab = $activetab;
+        $this->tabs = $tabs;
+        $this->session = $session;
     }
 
     /**
@@ -61,7 +65,8 @@ class pingo_tabarea implements renderable, templatable {
     public function export_for_template(renderer_base $output) {
         $data = new stdClass();
         $data->cmid = $this->cmid;
-        $data->activetab = $this->activetab;
+        $data->tabs = $this->tabs;
+        $data->session = $this->session;
         return $data;
     }
 }

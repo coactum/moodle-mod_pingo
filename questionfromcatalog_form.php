@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * File containing the class definition for the pingo survey quickstart form.
+ * File containing the class definition for the pingo question from catalog form.
  *
  * @package     mod_pingo
  * @copyright   2023 coactum GmbH
@@ -28,13 +28,13 @@ global $CFG;
 require_once("$CFG->libdir/formslib.php");
 
 /**
- * Form for the survey quickstart.
+ * Form for adding a question from catalog.
  *
  * @package   mod_pingo
  * @copyright 2023 coactum GmbH
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL Juv3 or later
  */
-class mod_pingo_quickstart_form extends moodleform {
+class mod_pingo_questionfromcatalog_form extends moodleform {
 
     /**
      * Define the form - called by parent constructor.
@@ -45,9 +45,9 @@ class mod_pingo_quickstart_form extends moodleform {
 
         $mform = $this->_form; // Don't forget the underscore!
 
-        $mform->addElement('header', 'quickstart', get_string('quickstart', 'pingo'));
+        $mform->addElement('header', 'questionfromcatalog', get_string('addquestionfromcatalog', 'pingo'));
 
-        $mform->addElement('html', get_string('quickstartexplanation', 'pingo', $this->_customdata['session']));
+        $mform->addElement('html', get_string('questionfromcatalogexplanation', 'pingo', $this->_customdata['session']));
 
         $mform->addElement('hidden', 'id', null);
         $mform->setType('id', PARAM_INT);
@@ -55,22 +55,20 @@ class mod_pingo_quickstart_form extends moodleform {
         $mform->addElement('hidden', 'session', null);
         $mform->setType('session', PARAM_TEXT);
 
-        $mform->addElement('hidden', 'mode', 2);
+        $mform->addElement('hidden', 'mode', 3);
         $mform->setType('mode', PARAM_INT);
 
-        $select = $mform->addElement('select', 'question_types', get_string('questiontypes', 'pingo'), $this->_customdata['question_types']);
-        $mform->setType('question_types', PARAM_TEXT);
+        $mform->addElement('html', '<br><a class="btn btn-primary m-2" href="' . $this->_customdata['remoteurl'] .
+            '/questions" target="_blank">' . get_string('managequestionsinpingo', 'mod_pingo') . '</a>');
 
-        foreach ($this->_customdata['answer_options'] as $type => $options) {
-            // var_dump('<pre>');
-            // var_dump($options);
-            // var_dump('</pre><br>');
-            if (!empty($options) && (!isset($options['']) || $options[''] != '')) {
-                $select = $mform->addElement('select', 'answer_options[' . $type . ']', get_string('answeroptions', 'pingo'), $options);
-                $mform->setType('answer_options', PARAM_TEXT);
-                $mform->hideIf('answer_options[' . $type . ']', 'question_types', 'neq', $type);
-            }
+        $radioarray = array();
+
+        foreach ($this->_customdata['questions'] as $i => $question) {
+            $radioarray[] = $mform->createElement('radio', 'question', '', $question['name'], $question['name']);
         }
+
+        $mform->addGroup($radioarray, 'question', get_string('yourquestions', 'mod_pingo'), array('<br/>'), false);
+        $mform->addRule('question', null, 'required', null, 'client');
 
         $select = $mform->addElement('select', 'duration_choices', get_string('durationchoices', 'pingo'), $this->_customdata['duration_choices']);
         $mform->setType('duration_choices', PARAM_INT);

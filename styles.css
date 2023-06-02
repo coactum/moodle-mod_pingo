@@ -23,15 +23,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later.
  */
 
-/*
-.path-mod-pingo .div {
-    margin: 5px;
-    text-align: center;
+.path-mod-pingo .pingo_sessionsoverview .minwidthtable {
+    min-width: 350px;
 }
-
-@media print {
-    .path-mod-pingo .div {
-        display: none;
-    }
-}
- */

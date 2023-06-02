@@ -45,7 +45,7 @@ class pingo_sessionsoverview implements renderable, templatable {
     /**
      * Construct this renderable.
      * @param int $cmid The course module id.
-     * @param object $sessions The object with all sessions.
+     * @param obj $sessions The object with all sessions.
      */
     public function __construct($cmid, $sessions) {
         $this->cmid = $cmid;

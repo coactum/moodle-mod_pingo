@@ -86,6 +86,11 @@ $string['quickstart'] = 'Quickstart';
 $string['catalog'] = 'Catalog';
 $string['createsessioninpingo'] = 'Create session (in PINGO)';
 $string['startsurvey'] = 'Start';
+$string['quicksurvey'] = 'Quick survey';
+$string['questionfromcatalog'] = 'From catalog';
+$string['session'] = 'Session';
+$string['surveycreated'] = 'Survey created';
+$string['reloadpage'] = 'Reload page';
 
 // Strings for the login form.
 $string['pingoemail'] = 'The email in PINGO';
@@ -97,9 +102,16 @@ $string['registerforpingo'] = 'Register for PINGO (external page)';
 $string['logintopingo'] = 'Login to PINGO';
 
 // Strings for the quickstart form.
+$string['quickstartexplanation'] = 'Start a generic survey in the selected session ({$a})';
 $string['questiontypes'] = 'Question type';
 $string['answeroptions'] = 'Answer options';
 $string['durationchoices'] = 'Duration';
+
+// Strings for the questionfromcatalog form.
+$string['addquestionfromcatalog'] = 'Add question from catalogue';
+$string['questionfromcatalogexplanation'] = 'Start a question from your question catalogue in the selected session ({$a}).';
+$string['managequestionsinpingo'] = 'Manage question catalogue (in PINGO)';
+$string['yourquestions'] = 'Your questions';
 
 // Strings for the events.
 $string['eventconnectionclosed'] = 'PINGO connection closed';
@@ -111,7 +123,8 @@ $string['eventpingologinsuccessful'] = 'PINGO login successful';
 // Strings for all errors.
 $string['errunauthorized'] = 'Authentication failed. The saved login for PINGO is invalid or has been revoked in PINGO. You have to close the connection and login in again.';
 $string['errnoemail'] = 'Not a valid mail adress';
-$string['errnosession'] = 'Error while fetching session data. Please reload page.';
+$string['errfetching'] = 'Error while fetching session data. Please reload page.';
+$string['errsurveynotcreated'] = 'Error while creating new survey.';
 
 // Strings for the privacy api.
 /*

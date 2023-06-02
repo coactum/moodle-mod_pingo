@@ -39,16 +39,23 @@
                     <th scope="col">
                         {{#str}}description{{/str}}
                     </th>
-                    <th scope="col">
+                    <th scope="col" class="minwidthtable">
                     </th>
                 </tr>
             </thead>
             <tbody>
                 {{#sessions}}
                     <tr>
-                        <td>{{name}} <a href="view.php?id={{cmid}}&session={{token}}" title="{{#str}}show{{/str}}">#{{token}}</a></td>
+                        <td>{{name}} ({{token}})</td>
                         <td>{{description}}</td>
-                        <td><a class="btn btn-primary" href="view.php?id={{cmid}}&session={{id}}" title="{{#str}}show{{/str}}">{{#str}}show{{/str}}</a></td>
+                        <td>
+                            <a class="btn btn-primary mr-1" href="view.php?id={{cmid}}&session={{token}}&mode=4" title="{{#str}}show{{/str}}">
+                                <i class="fa fa-eye d-lg-none" title="{{#str}}show{{/str}}"></i>
+                                <span class="d-none d-lg-block">{{#str}}show{{/str}}</span>
+                            </a>
+                            <a class="btn btn-primary" href="view.php?id={{cmid}}&session={{token}}&mode=2" title="{{#str}}quicksurvey, mod_pingo{{/str}}">{{#str}}quicksurvey, mod_pingo{{/str}}</a>
+                            <a class="btn btn-primary" href="view.php?id={{cmid}}&session={{token}}&mode=3" title="{{#str}}questionfromcatalog, mod_pingo{{/str}}">{{#str}}questionfromcatalog, mod_pingo{{/str}}</a>
+                        </td>
                     </tr>
                 {{/sessions}}
                 {{^sessions}}
@@ -57,7 +64,7 @@
             </tbody>
         </table>
         <div class="d-flex justify-content-center">
-            <a class="btn btn-primary" href="{{remoteserver}}/events/new" target="_blank"> {{#str}}createsessioninpingo, mod_pingo{{/str}}</a>
+            <a class="btn btn-primary" href="{{remoteserver}}/events/new" target="_blank">{{#str}}createsessioninpingo, mod_pingo{{/str}}</a>
         </div>
     </div>
 </div>

@@ -27,16 +27,19 @@
 
 {{#js}}
 {{/js}}
-<div class="pingo_tabarea">
+<div class="pingo_tabarea mt-2">
     <ul class="nav nav-tabs">
         <li class="nav-item">
-            <a class="nav-link {{#activetab.sessions}}active{{/activetab.sessions}}" aria-current="page" href="view.php?id={{cmid}}&mode=1">{{#str}}sessions, mod_pingo{{/str}}</a>
+            <a class="nav-link {{#tabs.active.sessions}}active{{/tabs.active.sessions}}" aria-current="page" href="view.php?id={{cmid}}&mode=1">{{#str}}sessions, mod_pingo{{/str}}</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link {{#activetab.quickstart}}active{{/activetab.quickstart}}" href="view.php?id={{cmid}}&mode=2">{{#str}}quickstart, mod_pingo{{/str}}</a>
+            <a class="nav-link {{#tabs.active.quickstart}}active{{/tabs.active.quickstart}}{{^session}}disabled{{/session}}" href="view.php?id={{cmid}}&mode=2{{#session}}&session={{session}}{{/session}}">{{#str}}quickstart, mod_pingo{{/str}}</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link {{#activetab.catalog}}active{{/activetab.catalog}}" href="view.php?id={{cmid}}&mode=3">{{#str}}catalog, mod_pingo{{/str}}</a>
+            <a class="nav-link {{#tabs.active.catalog}}active{{/tabs.active.catalog}}{{^session}}disabled{{/session}}" href="view.php?id={{cmid}}&mode=3{{#session}}&session={{session}}{{/session}}">{{#str}}catalog, mod_pingo{{/str}}</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {{#tabs.active.session}}active{{/tabs.active.session}}{{^session}}disabled{{/session}}" href="view.php?id={{cmid}}&mode=4{{#session}}&session={{session}}{{/session}}">{{#str}}session, mod_pingo{{/str}}</a>
         </li>
     </ul>
 </div>

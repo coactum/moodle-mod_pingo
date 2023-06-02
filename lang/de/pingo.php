@@ -86,6 +86,11 @@ $string['quickstart'] = 'Schnellstart';
 $string['catalog'] = 'Katalog';
 $string['createsessioninpingo'] = 'Session anlegen (in PINGO)';
 $string['startsurvey'] = 'Starten';
+$string['quicksurvey'] = 'Schnelle Umfrage';
+$string['questionfromcatalog'] = 'Aus Katalog';
+$string['session'] = 'Session';
+$string['surveycreated'] = 'Umfrage gestartet';
+$string['reloadpage'] = 'Seite neu laden';
 
 // Strings for the login form.
 $string['pingoemail'] = 'Die E-Mail-Adresse in PINGO';
@@ -97,9 +102,16 @@ $string['registerforpingo'] = 'Bei PINGO registrieren (externe Seite)';
 $string['logintopingo'] = 'Bei PINGO anmelden';
 
 // Strings for the quickstart form.
+$string['quickstartexplanation'] = 'Starten Sie eine generische Umfrage in der gewählten Session ({$a})';
 $string['questiontypes'] = 'Fragetyp';
 $string['answeroptions'] = 'Antwortoptionen';
 $string['durationchoices'] = 'Dauer';
+
+// Strings for the questionfromcatalog form.
+$string['addquestionfromcatalog'] = 'Frage vom Katalog hinzufügen';
+$string['questionfromcatalogexplanation'] = 'Starten Sie in der gewählten Session ({$a}) eine Frage aus ihrem Fragenkatalog.';
+$string['managequestionsinpingo'] = 'Fragenkatalog verwalten (in PINGO)';
+$string['yourquestions'] = 'Ihre Fragen';
 
 // Strings for the events.
 $string['eventconnectionclosed'] = 'PINGO Verbindung beendet';
@@ -111,7 +123,8 @@ $string['eventpingologinsuccessful'] = 'PINGO Login erfolgreich';
 // Strings for all errors.
 $string['errunauthorized'] = 'Authentifizierung fehlgeschlagen. Die gespeicherte Anmeldung für PINGO ist ungültig oder wurde in PINGO widerrufen. Die Verbindungn muss geschloßen und neu gestartet werden.';
 $string['errnoemail'] = 'Keine gültige E-Mail-Adresse';
-$string['errnosession'] = 'Fehler beim Laden der Session Daten. Bitte Seite neu laden.';
+$string['errfetching'] = 'Fehler beim Laden der Daten. Bitte Seite neu laden.';
+$string['errsurveynotcreated'] = 'Fehler beim Anlegen der neuen Umfrage.';
 
 // Strings for the privacy api.
 /*

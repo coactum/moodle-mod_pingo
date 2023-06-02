@@ -39,11 +39,19 @@ class pingo_sessionview implements renderable, templatable {
 
     /** @var int */
     protected $cmid;
+    /** @var object */
+    protected $session;
+    /** @var object */
+    protected $context;
+    /** @var string */
+    protected $authtoken;
 
     /**
      * Construct this renderable.
      * @param int $cmid The course module id
      * @param obj $session The object with the session
+     * @param obj $context The object with the context
+     * @param string $authtoken The authentication token
      */
     public function __construct($cmid, $session, $context, $authtoken) {
         $this->cmid = $cmid;
