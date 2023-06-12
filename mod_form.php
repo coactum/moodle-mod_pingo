@@ -61,14 +61,6 @@ class mod_pingo_mod_form extends moodleform_mod {
 
         $this->standard_intro_elements();
 
-        // Set default values if module instance is updated.
-        /*
-        $update = optional_param('update', null, PARAM_INT);
-        if (!isset($update) || $update == 0) {
-                // ... .
-        }
-        */
-
         // Add custom activity settings.
         $mform->addElement('header', 'editability', get_string('editability', 'pingo'));
 
@@ -96,14 +88,6 @@ class mod_pingo_mod_form extends moodleform_mod {
      */
     public function validation($data, $files) {
         $errors = parent::validation($data, $files);
-
-        /* $minwidth = 20;
-        $maxwidth = 80;
-
-        if (!$data['annotationareawidth'] || $data['annotationareawidth'] < $minwidth || $data['annotationareawidth'] > $maxwidth) {
-            $errors['annotationareawidth'] = get_string('errannotationareawidthinvalid', 'pingo', array('minwidth' => $minwidth,
-            'maxwidth' => $maxwidth));
-        } */
 
         return $errors;
     }

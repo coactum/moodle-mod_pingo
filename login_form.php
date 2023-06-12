@@ -59,7 +59,6 @@ class mod_pingo_login_form extends moodleform {
         $mform->addRule('email', get_string('errnoemail', 'mod_pingo'), 'email', '', 'client', false, false);
         $mform->setType('email', PARAM_EMAIL);
 
-        // $mform->addElement('text', 'password', get_string('pingopassword', 'mod_pingo'));
         $mform->addElement('passwordunmask', 'password', get_string('pingopassword', 'mod_pingo'));
         $mform->addHelpButton('password', 'pingopassword', 'mod_pingo');
         $mform->setType('password', PARAM_TEXT);

@@ -58,22 +58,24 @@ class mod_pingo_quickstart_form extends moodleform {
         $mform->addElement('hidden', 'mode', 2);
         $mform->setType('mode', PARAM_INT);
 
-        $select = $mform->addElement('select', 'question_types', get_string('questiontypes', 'pingo'), $this->_customdata['question_types']);
+        $select = $mform->addElement('select', 'question_types',
+            get_string('questiontypes', 'pingo'), $this->_customdata['question_types']);
         $mform->setType('question_types', PARAM_TEXT);
 
         foreach ($this->_customdata['answer_options'] as $type => $options) {
-            // var_dump('<pre>');
-            // var_dump($options);
-            // var_dump('</pre><br>');
             if (!empty($options) && (!isset($options['']) || $options[''] != '')) {
-                $select = $mform->addElement('select', 'answer_options[' . $type . ']', get_string('answeroptions', 'pingo'), $options);
+                $select = $mform->addElement('select', 'answer_options[' . $type . ']',
+                    get_string('answeroptions', 'pingo'), $options);
                 $mform->setType('answer_options', PARAM_TEXT);
                 $mform->hideIf('answer_options[' . $type . ']', 'question_types', 'neq', $type);
             }
         }
 
-        $select = $mform->addElement('select', 'duration_choices', get_string('durationchoices', 'pingo'), $this->_customdata['duration_choices']);
+        $select = $mform->addElement('select', 'duration_choices',
+            get_string('durationchoices', 'pingo'), $this->_customdata['duration_choices']);
         $mform->setType('duration_choices', PARAM_INT);
+
+        $mform->disable_form_change_checker();
 
         $this->add_action_buttons(false, get_string('startsurvey', 'pingo'));
     }

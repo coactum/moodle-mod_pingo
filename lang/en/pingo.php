@@ -72,13 +72,11 @@ $string['noconnection'] = 'No connection active';
 $string['sessionsoverview'] = 'Sessions overview';
 $string['yoursessions'] = 'Your sessions';
 $string['nosessionsavailable'] = 'No sessions available';
-$string['sessionview'] = 'Session';
 $string['lastsurvey'] = 'Last survey';
 $string['answers'] = 'Answers';
 $string['continuesurvey'] = 'Continue';
 $string['repeatsurvey'] = 'Repeat';
 $string['stopsurvey'] = 'Stop';
-$string['surveys'] = 'Surveys';
 $string['nosurveys'] = 'You have not yet created any surveys in this session.';
 $string['nosurveyactive'] = 'No survey active';
 $string['sessions'] = 'Sessions';
@@ -106,12 +104,15 @@ $string['quickstartexplanation'] = 'Start a generic survey in the selected sessi
 $string['questiontypes'] = 'Question type';
 $string['answeroptions'] = 'Answer options';
 $string['durationchoices'] = 'Duration';
+$string['nocountdown'] = 'No countdown';
 
 // Strings for the questionfromcatalog form.
 $string['addquestionfromcatalog'] = 'Add question from catalogue';
 $string['questionfromcatalogexplanation'] = 'Start a question from your question catalogue in the selected session ({$a}).';
 $string['managequestionsinpingo'] = 'Manage question catalogue (in PINGO)';
 $string['yourquestions'] = 'Your questions';
+$string['filterbytags'] = 'Filter by tag';
+$string['alltags'] = 'All tags';
 
 // Strings for the events.
 $string['eventconnectionclosed'] = 'PINGO connection closed';
@@ -127,10 +128,8 @@ $string['errfetching'] = 'Error while fetching session data. Please reload page.
 $string['errsurveynotcreated'] = 'Error while creating new survey.';
 
 // Strings for the privacy api.
-/*
-$string['privacy:metadata:pingo_participants'] = 'Contains the personal data of all pingo participants.';
-$string['privacy:metadata:pingo_submissions'] = 'Contains all data related to pingo submissions.';
-$string['privacy:metadata:pingo_participants:pingo'] = 'Id of the pingo activity the participant belongs to';
-$string['privacy:metadata:pingo_submissions:pingo'] = 'Id of the pingo activity the submission belongs to';
-$string['privacy:metadata:core_message'] = 'The pingo plugin sends messages to users and saves their content in the database.';
-*/
+$string['privacy:metadata:pingo_connections'] = 'Contains personal login data of the teachers for the login to PINGO.';
+$string['privacy:metadata:pingo_connections:userid'] = 'Moodle ID of the user who registers the plug-in instance with PINGO';
+$string['privacy:metadata:pingo_connections:pingo'] = 'ID of the plugin instance';
+$string['privacy:metadata:pingo_connections:authentication_token'] = 'The token for authentication with PINGO. Is fetched from PINGO when logging in for the first time in the plugin instance and then stored in the database. Is sent to PINGO again with every action in the plugin instance and allows full access to all data of the user stored on the PINGO server (e.g. questions, surveys, sessions, etc.). Can be invalidated in PINGO (log out of all external applications).';
+$string['privacy:metadata:pingo_connections:timestarted'] = 'Date on which the login to PINGO was made';

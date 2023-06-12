@@ -29,10 +29,8 @@
 {{/js}}
 <div class="pingo_sessionview">
     <div class="mt-5">
-        <h3>{{#str}}sessionview, mod_pingo{{/str}}</h3>
-
         {{#session}}
-            <h4>{{name}} <a href="">{{token}}</a></h4>
+            <h3>{{name}} <a href="">{{token}}</a></h3>
             {{description}}
 
             <h5 class="mt-3">{{#str}}lastsurvey, mod_pingo{{/str}}</h5>
@@ -67,13 +65,6 @@
             {{^latest_survey}}
                 {{#str}}nosurveys, mod_pingo{{/str}}
             {{/latest_survey}}
-
-            <h5 class="mt-3">{{#str}}surveys, mod_pingo{{/str}}</h5>
-            {{#surveys}}
-            {{/surveys}}
-            {{^surveys}}
-                {{#str}}nosurveys, mod_pingo{{/str}}
-            {{/surveys}}
         {{/session}}
     </div>
 </div>

@@ -58,20 +58,31 @@ class mod_pingo_questionfromcatalog_form extends moodleform {
         $mform->addElement('hidden', 'mode', 3);
         $mform->setType('mode', PARAM_INT);
 
+        $mform->addElement('hidden', 'reload', false);
+        $mform->setType('reload', PARAM_BOOL);
+
         $mform->addElement('html', '<br><a class="btn btn-primary m-2" href="' . $this->_customdata['remoteurl'] .
             '/questions" target="_blank">' . get_string('managequestionsinpingo', 'mod_pingo') . '</a>');
+
+        $select = $mform->addElement('select', 'tag',
+        get_string('filterbytags', 'pingo'), $this->_customdata['tags']);
+        $mform->setType('tag', PARAM_TEXT);
 
         $radioarray = array();
 
         foreach ($this->_customdata['questions'] as $i => $question) {
-            $radioarray[] = $mform->createElement('radio', 'question', '', $question['name'], $question['name']);
+            $radioarray[] = $mform->createElement('radio', 'question', '', $question['name'], $question['id']);
         }
 
         $mform->addGroup($radioarray, 'question', get_string('yourquestions', 'mod_pingo'), array('<br/>'), false);
         $mform->addRule('question', null, 'required', null, 'client');
+        $mform->setType('question', PARAM_TEXT);
 
-        $select = $mform->addElement('select', 'duration_choices', get_string('durationchoices', 'pingo'), $this->_customdata['duration_choices']);
+        $select = $mform->addElement('select', 'duration_choices',
+            get_string('durationchoices', 'pingo'), $this->_customdata['duration_choices']);
         $mform->setType('duration_choices', PARAM_INT);
+
+        $mform->disable_form_change_checker();
 
         $this->add_action_buttons(false, get_string('startsurvey', 'pingo'));
     }

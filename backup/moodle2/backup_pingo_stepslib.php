@@ -40,33 +40,31 @@ class backup_pingo_activity_structure_step extends backup_activity_structure_ste
     protected function define_structure() {
         $userinfo = $this->get_setting_value('userinfo');
 
-        /* // Replace with the attributes and final elements that the element will handle.
+        // Replace with the attributes and final elements that the element will handle.
         $pingo = new backup_nested_element('pingo', array('id'), array(
-            'name', 'intro', 'introformat', 'timecreated', 'timemodified'));
+            'name', 'intro', 'introformat', 'timecreated', 'timemodified', 'editableforall'));
 
-        $entries = new backup_nested_element('entries');
-        $entry = new backup_nested_element('entry', array('id'), array(
-            'userid', 'timecreated', 'timemodified', 'text', 'format'));
+        $connections = new backup_nested_element('connections');
+        $connection = new backup_nested_element('connection', array('id'), array(
+            'userid', 'authenticationtoken', 'timestarted'));
 
         // Build the tree with these elements with $root as the root of the backup tree.
-        $pingo->add_child($entries);
-        $entries->add_child($entry);
+        $pingo->add_child($connections);
+        $connections->add_child($connection);
 
         // Define the source tables for the elements.
 
         $pingo->set_source_table('pingo', array('id' => backup::VAR_ACTIVITYID));
 
         if ($userinfo) {
-            // Entries.
-            $entry->set_source_table('pingo_entries', array('pingo' => backup::VAR_PARENTID));
+            // Connections.
+            $connection->set_source_table('pingo_connections', array('pingo' => backup::VAR_PARENTID));
         }
 
         // Define id annotations.
         $rating->annotate_ids('user', 'userid');
 
-        // Define file annotations.
-        $pingo->annotate_files('mod_pingo', 'intro', null); // This file area has no itemid.
-        $entry->annotate_files('mod_pingo', 'entry', 'id'); */
+        // No file annotations.
 
         return $this->prepare_activity_structure($pingo);
     }

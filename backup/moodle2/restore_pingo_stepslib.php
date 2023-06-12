@@ -47,7 +47,7 @@ class restore_pingo_activity_structure_step extends restore_activity_structure_s
         $paths[] = new restore_path_element('pingo', '/activity/pingo');
 
         if ($userinfo) {
-            $paths[] = new restore_path_element('pingo_entry', '/activity/pingo/entries/entry');
+            $paths[] = new restore_path_element('pingo_connections', '/activity/pingo/connections/connection');
         }
 
         return $this->prepare_activity_structure($paths);
@@ -65,32 +65,6 @@ class restore_pingo_activity_structure_step extends restore_activity_structure_s
         $oldid = $data->id;
         $data->course = $this->get_courseid();
 
-        // Any changes to the list of dates that needs to be rolled should be same during course restore and course reset.
-        // See MDL-9367.
-        if (!isset($data->assesstimestart)) {
-            $data->assesstimestart = 0;
-        }
-        $data->assesstimestart = $this->apply_date_offset($data->assesstimestart);
-
-        if (!isset($data->assesstimefinish)) {
-            $data->assesstimefinish = 0;
-        }
-        $data->assesstimefinish = $this->apply_date_offset($data->assesstimefinish);
-
-        if (!isset($data->timeopen)) {
-            $data->timeopen = 0;
-        }
-        $data->timeopen = $this->apply_date_offset($data->timeopen);
-
-        if (!isset($data->timeclose)) {
-            $data->timeclose = 0;
-        }
-        $data->timeclose = $this->apply_date_offset($data->timeclose);
-
-        if ($data->scale < 0) { // Scale found, get mapping.
-            $data->scale = - ($this->get_mappingid('scale', abs($data->scale)));
-        }
-
         $newitemid = $DB->insert_record('pingo', $data);
         $this->apply_activity_instance($newitemid);
         $this->newinstanceid = $newitemid;
@@ -99,13 +73,28 @@ class restore_pingo_activity_structure_step extends restore_activity_structure_s
     }
 
     /**
+     * Restore PINGO connection.
+     *
+     * @param object $data data.
+     */
+    protected function process_pingo_connection($data) {
+        global $DB;
+
+        $data = (object) $data;
+        $oldid = $data->id;
+
+        $data->pingo = $this->get_new_parentid('pingo');
+        $data->userid = $this->get_mappingid('user', $data->userid);
+
+        $newitemid = $DB->insert_record('pingo_connections', $data);
+        $this->set_mapping('pingo_connection', $oldid, $newitemid);
+    }
+
+    /**
      * Defines post-execution actions like restoring files.
      */
     protected function after_execute() {
         // Add related files, no need to match by itemname (just internally handled context).
         $this->add_related_files('mod_pingo', 'intro', null);
-
-        // Component, filearea, mapping.
-        $this->add_related_files('mod_pingo', 'entry', 'pingo_entry');
     }
 }

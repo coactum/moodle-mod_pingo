@@ -1,4 +1,9 @@
 ## Changelog ##
+- [0.0.7]:
+    - Worked on question from catalog functionality.
+    - Added backup functionality.
+    - Added privacy functionality.
+
 - [0.0.6]:
     - Added first part of the question from catalog functionality.
 

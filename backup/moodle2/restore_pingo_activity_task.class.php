@@ -61,10 +61,9 @@ class restore_pingo_activity_task extends restore_activity_task {
 
         // Define the contents (files).
         // tablename, array(field1, field 2), $mapping.
-        /*
+
         $contents[] = new restore_decode_content('pingo', array('intro'), 'pingo');
-        $contents[] = new restore_decode_content('pingo_entries', array('text', 'feedback'), 'pingo_entry');
-        */
+
         return $contents;
     }
 
@@ -77,11 +76,10 @@ class restore_pingo_activity_task extends restore_activity_task {
         $rules = array();
 
         // Define the rules.
-        /*
+
         $rules[] = new restore_decode_rule('PINGOINDEX', '/mod/pingo/index.php?id=$1', 'course');
-        $rules[] = new restore_decode_rule('PINGOVIEWBYID', '/mod/pingo/view.php?id=$1&userid=$2',
-        array('course_module', 'userid'));
-        */
+        $rules[] = new restore_decode_rule('PINGOVIEWBYSESSION', '/mod/pingo/view.php?id=$1&session=$2',
+            array('course_module', 'session'));
 
         return $rules;
     }
@@ -97,9 +95,9 @@ class restore_pingo_activity_task extends restore_activity_task {
         $rules = array();
 
         // Define the rules to restore the logs (one rule for each event / file in the plugin/event/ folder).
-        /*
+
         $rules[] = new restore_log_rule('pingo', 'view', 'view.php?id={course_module}', '{pingo}');
-        */
+
         return $rules;
     }
 
