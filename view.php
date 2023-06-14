@@ -270,6 +270,8 @@ if (!$activeconnection) {
                     $surveycreated = mod_pingo_api::run_question_from_catalog($remoteurl, $activeconnection->authenticationtoken,
                         $fromform->session, $fromform->question, $fromform->duration_choices);
 
+                    var_dump($surveycreated);
+
                     if ($surveycreated) {
                         $urlparams = array('id' => $id, 'session' => $session['token'], 'mode' => 4);
                         $redirecturl = new moodle_url('/mod/pingo/view.php', $urlparams);
@@ -346,6 +348,10 @@ if ($viewoverview) { // Teacher view.
 
         $tabarea = new pingo_tabarea($cm->id, $tabs, $session);
         echo $OUTPUT->render($tabarea);
+
+        if (!isset($activeconnection->authenticationtoken)) {
+            $activeconnection->authenticationtoken = false;
+        }
 
         // Show content.
         if ($mode === 1  && $viewallsessions) { // View sessions overview.

@@ -44,7 +44,7 @@ class mod_pingo_api {
      * @return string The authentication token for PINGO.
      */
     public static function get_authtoken($remoteurl, $email, $password) {
-        // Requesting authentication_token from PINGO for email and password.
+        // Requesting authenticationtoken from PINGO for email and password.
         $url = $remoteurl . "/api/get_auth_token";
 
         $data = 'password=' . urlencode($password) . '&email=' . urlencode($email);
@@ -65,7 +65,13 @@ class mod_pingo_api {
         $curl->setHeader($header);
         $jsonresult = $curl->post($url, $data, $options);
 
-        return json_decode($jsonresult, true)['authentication_token'];
+        $response = json_decode($jsonresult, true);
+
+        if (isset($response['authentication_token'])) {
+            return $response['authentication_token'];
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -246,7 +252,13 @@ class mod_pingo_api {
             \core\notification::error(get_string('errunauthorized', 'mod_pingo'));
             return false;
         } else {
-            $durationchoices = json_decode($jsonresult, true)["duration_choices"];
+            $response = json_decode($jsonresult, true);
+
+            if (isset($response["duration_choices"])) {
+                $durationchoices = $response["duration_choices"];
+            } else {
+                return false;
+            }
 
             $data = new stdclass;
             $data->durationchoices = array_combine($durationchoices, $durationchoices);
@@ -427,7 +439,7 @@ class mod_pingo_api {
         // Check for any errors.
         if ($curl->error != '') {
             return false;
-        } else if ($curl->response['HTTP/1.1'] == '201 Created') {
+        } else if ($curl->response['HTTP/1.1'] == '201 Created' || $curl->response['HTTP/1.1'] == '200 OK') {
             return true;
         } else {
             return false;

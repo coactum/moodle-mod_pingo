@@ -35,16 +35,6 @@
 
             <h5 class="mt-3">{{#str}}lastsurvey, mod_pingo{{/str}}</h5>
             {{#latest_survey}}
-                <!--
-                {{name}}
-                <br>
-                <strong class="mt-1">{{#str}}participants{{/str}}:</strong> {{#voters}}{{voters}}{{/voters}}{{^voters}}0{{/voters}}
-                <br>
-                <strong class="mt-1">{{#str}}answers, mod_pingo{{/str}}:</strong>
-                {{#options}}
-                    <br><span class="badge badge-primary">{{votes}}</span> {{name}}
-                {{/options}}
-                -->
 
                 <iframe src="{{remoteserver}}/events/{{token}}/surveys/{{latest_survey._id.$oid}}/?auth_token={{authtoken}}&remote_view=true" width="100%" height="300" style="border:1px solid black;"></iframe>
 

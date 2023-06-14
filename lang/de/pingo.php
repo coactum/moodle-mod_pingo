@@ -122,7 +122,7 @@ $string['eventpingologinfailed'] = 'PINGO Login fehlgeschlagen';
 $string['eventpingologinsuccessful'] = 'PINGO Login erfolgreich';
 
 // Strings for all errors.
-$string['errunauthorized'] = 'Authentifizierung fehlgeschlagen. Die gespeicherte Anmeldung für PINGO ist ungültig oder wurde in PINGO widerrufen. Die Verbindungn muss geschloßen und neu gestartet werden.';
+$string['errunauthorized'] = 'Authentifizierung fehlgeschlagen. Die gespeicherte Anmeldung für PINGO ist ungültig oder wurde in PINGO widerrufen. Die Verbindungn muss geschlossen und neu gestartet werden.';
 $string['errnoemail'] = 'Keine gültige E-Mail-Adresse';
 $string['errfetching'] = 'Fehler beim Laden der Daten. Bitte Seite neu laden.';
 $string['errsurveynotcreated'] = 'Fehler beim Anlegen der neuen Umfrage.';
@@ -131,6 +131,6 @@ $string['errsurveynotcreated'] = 'Fehler beim Anlegen der neuen Umfrage.';
 $string['privacy:metadata:pingo_connections'] = 'Enthält personenbezogene Anmeldedaten der Lehrenden für die Anmeldung bei PINGO.';
 $string['privacy:metadata:pingo_connections:userid'] = 'Moodle ID des Benutzers der die Plugininstanz bei PINGO anmeldet';
 $string['privacy:metadata:pingo_connections:pingo'] = 'ID der Plugin Instanz';
-$string['privacy:metadata:pingo_connections:authentication_token'] = 'Der Token zur Authentifizierung bei PINGO. Wird beim erstmaligen Login in der Plugin-Instanz von PINGO geholt und dann dauerhaft in der Datenbank gespeichert. Wird bei jeder Aktion im Plugin erneut an PINGO geschickt und ermöglicht vollen Zugriff auf alle auf dem PINGO Server gespeicherten Daten des oder der Nutzenden (z. B. Fragen, Umfragen, Sessions usw.). Kann in PINGO ungültig gemacht werden (von allen externen Anwendungen abmelden).';
+$string['privacy:metadata:pingo_connections:authenticationtoken'] = 'Der Token zur Authentifizierung bei PINGO. Wird beim erstmaligen Login in der Plugin-Instanz von PINGO geholt und dann dauerhaft in der Datenbank gespeichert. Wird bei jeder Aktion im Plugin erneut an PINGO geschickt und ermöglicht vollen Zugriff auf alle auf dem PINGO Server gespeicherten Daten des oder der Nutzenden (z. B. Fragen, Umfragen, Sessions usw.). Kann in PINGO ungültig gemacht werden (von allen externen Anwendungen abmelden).';
 $string['privacy:metadata:pingo_connections:timestarted'] = 'Datum an dem die Anmeldung an PINGO erfolgt ist';
 

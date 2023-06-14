@@ -28,7 +28,7 @@
           <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
           <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Moodle id of user"/>
           <FIELD NAME="pingo" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="ID of pingo"/>
-          <FIELD NAME="authentication_token" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Token for the connection from pingo"/>
+          <FIELD NAME="authenticationtoken" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Token for the connection from pingo"/>
           <FIELD NAME="timestarted" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
         </FIELDS>
         <KEYS>

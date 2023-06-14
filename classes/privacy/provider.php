@@ -33,9 +33,6 @@ use \core_privacy\local\metadata\collection;
 use \core_privacy\local\request\transform;
 use \core_privacy\local\request\contextlist;
 
-use \core_privacy\local\request\user_preference_provider;
-
-
 /**
  * Implementation of the privacy subsystem plugin provider for the PINGO activity module.
  *
@@ -50,9 +47,7 @@ class provider implements
     \core_privacy\local\request\plugin\provider,
 
     // This plugin is capable of determining which users have data within it.
-    \core_privacy\local\request\core_userlist_provider,
-
-    \core_privacy\local\request\user_preference_provider {
+    \core_privacy\local\request\core_userlist_provider {
 
     /**
      * Provides the meta data stored for a user stored by the plugin.
@@ -66,7 +61,7 @@ class provider implements
         $items->add_database_table('pingo_connections', [
             'pingo' => 'privacy:metadata:pingo_connections:userid',
             'userid' => 'privacy:metadata:pingo_connections:pingo',
-            'authentication_token' => 'privacy:metadata:pingo_connections:authentication_token',
+            'authenticationtoken' => 'privacy:metadata:pingo_connections:authenticationtoken',
             'timestarted' => 'privacy:metadata:pingo_connections:timestarted',
         ], 'privacy:metadata:pingo_connections');
 
@@ -100,7 +95,7 @@ class provider implements
                   JOIN {course_modules} cm ON cm.id = c.instanceid AND c.contextlevel = :contextlevel
                   JOIN {modules} m ON m.id = cm.module AND m.name = :modulename
                   JOIN {pingo} p ON p.id = cm.instance
-                  JOIN {pingo_connections} c ON c.pingo = p.id
+                  JOIN {pingo_connections} pc ON pc.pingo = p.id
                   WHERE c.userid = :userid
         ";
 
@@ -128,11 +123,11 @@ class provider implements
 
         // Get users.
         $sql;
-        $sql = "SELECT c.userid
+        $sql = "SELECT pc.userid
                   FROM {course_modules} cm
                   JOIN {modules} m ON m.id = cm.module AND m.name = :modulename
                   JOIN {pingo} p ON p.id = cm.instance
-                  JOIN {pingo_connections} c ON c.pingo = p.id
+                  JOIN {pingo_connections} pc ON pc.pingo = p.id
                  WHERE cm.id = :instanceid";
         $userlist->add_from_sql('userid', $sql, $params);
     }
@@ -205,15 +200,15 @@ class provider implements
 
         // Find all connections for the PINGO instance.
         $sql = "SELECT
-                    c.id,
-                    c.userid,
-                    c.pingo,
-                    c.authentication_token,
-                    c.timestarted
-                   FROM {pingo_connections} c
+                    pc.id,
+                    pc.userid,
+                    pc.pingo,
+                    pc.authenticationtoken,
+                    pc.timestarted
+                   FROM {pingo_connections} pc
                    WHERE (
-                    c.pingo = :pingoid AND
-                    c.userid = :userid
+                    pc.pingo = :pingoid AND
+                    pc.userid = :userid
                     )
         ";
 
@@ -255,7 +250,7 @@ class provider implements
         $connectiondata = (object) [
             'userid' => $connection->userid,
             'pingo' => $connection->pingo,
-            'authentication_token' => $connection->authentication_token,
+            'authenticationtoken' => $connection->authenticationtoken,
             'timestarted' => $timestarted,
         ];
 
