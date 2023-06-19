@@ -29,23 +29,14 @@
 {{/js}}
 <div class="pingo_connectioninfo">
     <div class="d-flex justify-content-between">
-        <div><span class="font-weight-bold">{{#str}}remoteserver, mod_pingo{{/str}}:</span> <a href="{{remoteserver}}" target="_blank">{{remoteserver}}</a></div>
-
         {{#activeconnection}}
-            <div class="bg-success text-white text-center p-2">
-                <i class="fa fa-check d-lg-none" title="{{#str}}connectionactive, mod_pingo{{/str}}"></i>
-                <span class="d-none d-lg-block">{{#str}}connectionactive, mod_pingo{{/str}}</span>
+            <div class="p-2" title="{{#str}}connected, mod_pingo{{/str}} ({{remoteserver}})">
+                <i class="fa fa-check text-success"></i>
+                <strong>{{#str}}connected, mod_pingo{{/str}} <a class="d-none d-sm-inline" href="{{remoteserver}}" target="_blank"> ({{remoteserver}})</a></strong>
             </div>
-        {{/activeconnection}}
-        {{^activeconnection}}
-            <div class="bg-warning text-white text-center p-2">{{#str}}noconnection, mod_pingo{{/str}}</div>
-        {{/activeconnection}}
-
-        {{#activeconnection}}
             <div class="actionbuttons">
                 <a class="btn btn-primary" href="view.php?id={{cmid}}&closeconnection=1&sesskey={{sesskey}}">
-                    <i class="fa fa-times d-lg-none" title="{{#str}}closeconnection, mod_pingo{{/str}}"></i>
-                    <span class="d-none d-lg-block">{{#str}}closeconnection, mod_pingo{{/str}}</span>
+                    <span>{{#str}}closeconnection, mod_pingo{{/str}}</span>
                 </a>
             </div>
         {{/activeconnection}}

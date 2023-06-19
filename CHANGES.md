@@ -1,6 +1,11 @@
 ## Changelog ##
+
+- [0.0.9]:
+    - Working on all features.
+    - Removing unused stuff.
+
 - [0.0.8]:
-    - Some changes and bugfixes
+    - Some changes and bugfixes.
 
 - [0.0.7]:
     - Worked on question from catalog functionality.

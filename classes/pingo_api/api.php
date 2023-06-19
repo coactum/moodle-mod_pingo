@@ -78,11 +78,11 @@ class mod_pingo_api {
      * Method for fetching the requested session from PINGO.
      *
      * @param string $remoteurl The URL to fetch the data from.
-     * @param int $session The ID of the session in PINGO.
      * @param string $authtoken The authentication token from the user.
+     * @param int $session The ID of the session in PINGO.
      * @return object Object with all data from the session in PINGO.
      */
-    public static function get_session($remoteurl, $session, $authtoken) {
+    public static function get_session($remoteurl, $authtoken, $session) {
         // Requesting session from PINGO .
         $url = $remoteurl . "/events/$session/?auth_token=" . $authtoken;
 
@@ -101,16 +101,19 @@ class mod_pingo_api {
         );
 
         $curl = new \curl();
+
         $curl->setHeader($header);
-        $jsonresult = $curl->get($url, $data, $options);
+        $jsonresult = $curl->get($url, $data);
 
         if (!isset($curl->info['http_code'])) {
             return false;
         } else if ($curl->info['http_code'] == 401) {
             \core\notification::error(get_string('errunauthorized', 'mod_pingo'));
             return false;
+        } else if (!$session = json_decode($jsonresult, true)) {
+            return false;
         } else {
-            return json_decode($jsonresult, true);
+            return $session;
         }
     }
 
@@ -155,20 +158,78 @@ class mod_pingo_api {
     }
 
     /**
-     * Method for fetching all data needed for the quickstart form.
+     * Method for fetching the available duration choices from PINGO.
+     *
+     * @param string $remoteurl The URL to fetch the data from.
+     * @return object Object The duration choices from PINGO.
+     */
+    public static function get_durationchoices($remoteurl) {
+        // Requesting duration choices from PINGO .
+        $url = $remoteurl . "/api/duration_choices";
+
+        $data = '';
+
+        $options = array(
+            'RETURNTRANSFER' => 1,
+            'HEADER' => 0,
+            'FAILONERROR' => 1,
+        );
+
+        $header = array(
+            'Content-Type: application/x-www-form-urlencoded',
+            'Content-Length: ' . strlen($data),
+            'Accept: application/json'
+        );
+
+        $curl = new \curl();
+        $curl->setHeader($header);
+        $jsonresult = $curl->get($url, $data, $options);
+
+        if (!isset($curl->info['http_code'])) {
+            return false;
+        } else {
+            $response = json_decode($jsonresult, true);
+
+            if (isset($response["duration_choices"])) {
+                foreach ($response["duration_choices"] as $duration) {
+                    $formatedduration = format_text($duration, 2);
+                    $mins = floor($formatedduration / 60);
+                    $secs = $formatedduration % 60;
+
+                    if ($mins < 1) {
+                        $timestr = $secs . 's';
+                    } else if ($secs == 0) {
+                        $timestr = $mins . 'min';
+                    } else {
+                        $timestr = $mins . 'min ' . $secs . 's';
+                    }
+
+                    $durationchoices[$formatedduration] = $timestr;
+                }
+
+                $durationchoices[0] = get_string('nocountdown', 'mod_pingo');
+                return $durationchoices;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    /**
+     * Method for fetching question types and answer options for the quickstart form.
      *
      * @param string $remoteurl The URL to fetch the data from.
      * @param string $authtoken The authentication token from the user.
-     * @return object Object with all data for the form (durationchoices, questiontypes, answeroptions).
+     * @return object Object with all data for the form (question types and answer options).
      */
     public static function get_quickstart_formdata($remoteurl, $authtoken) {
         $url = $remoteurl . "/api/question_types";
 
-        // Check if unauthorized (because question_types and duration dont need auth_token).
-        if (!self::get_sessions($remoteurl, $authtoken)) {
+        // Check if unauthorized (because question_types dont need auth_token).
+        /* if (!self::get_sessions($remoteurl, $authtoken)) {
             \core\notification::error(get_string('errunauthorized', 'mod_pingo'));
             return false;
-        }
+        } */
 
         $data = '';
 
@@ -191,9 +252,6 @@ class mod_pingo_api {
 
         if (!isset($curl->info['http_code'])) {
             return false;
-        } else if ($curl->info['http_code'] == 401) {
-            \core\notification::error(get_string('errunauthorized', 'mod_pingo'));
-            return false;
         } else if (isset($response['question_types'])) {
             $qts = $response['question_types'];
 
@@ -201,72 +259,45 @@ class mod_pingo_api {
             $answeroptions = array();
 
             foreach ($qts as $i => $question) {
+                $tempoptions = array();
+
                 if (current_language() == 'de') {
                     if ($question['options_de'][0] != '') {
                         foreach ($question['options_de'] as $i => $opt) {
-                            $tempoptions[$i] = $opt;
+                            $tempoptions[format_text($i, 2)] = format_text($opt, 2);
                         }
-                        $answeroptions[$question['type']] = array_combine($tempoptions, $tempoptions);
+                        $answeroptions[format_text($question['type'], 2)] = array_combine($tempoptions, $tempoptions);
                     } else {
-                        $answeroptions[$question['type']] = array_combine($question['options'], $question['options']);
+                        foreach ($question['options'] as $i => $opt) {
+                            $tempoptions[format_text($i, 2)] = format_text($opt, 2);
+                        }
+                        $answeroptions[format_text($question['type'], 2)] = array_combine($tempoptions, $tempoptions);
                     }
-                    $questiontypes[$question['type']] = $question['name_de'];
+                    $questiontypes[format_text($question['type'], 2)] = format_text($question['name_de'], 2);
+
                 } else {
                     if ($question['options_en'][0] != '') {
                         foreach ($question['options_en'] as $i => $opt) {
-                            $tempoptions[$i] = $opt;
+                            $tempoptions[format_text($i, 2)] = format_text($opt, 2);
                         }
-                        $answeroptions[$question['type']] = array_combine($tempoptions, $tempoptions);
+                        $answeroptions[format_text($question['type'], 2)] = array_combine($tempoptions, $tempoptions);
                     } else {
-                        $answeroptions[$question['type']] = array_combine($question['options'], $question['options']);
+                        foreach ($question['options'] as $i => $opt) {
+                            $tempoptions[format_text($i, 2)] = format_text($opt, 2);
+                        }
+                        $answeroptions[format_text($question['type'], 2)] = array_combine($tempoptions, $tempoptions);
                     }
-                    $questiontypes[$question['type']] = $question['name_en'];
+                    $questiontypes[format_text($question['type'], 2)] = format_text($question['name_en'], 2);
                 }
-            }
-        } else {
-            return false;
-        }
-
-        $url = $remoteurl . "/api/duration_choices";
-
-        $data = '';
-
-        $options = array(
-            'RETURNTRANSFER' => 1,
-            'HEADER' => 0,
-            'FAILONERROR' => 1,
-        );
-
-        $header = array(
-            'Content-Type: application/x-www-form-urlencoded',
-            'Content-Length: ' . strlen($data),
-            'Accept: application/json'
-        );
-
-        $curl->setHeader($header);
-        $jsonresult = $curl->get($url, $data, $options);
-
-        if (!isset($curl->info['http_code'])) {
-            return false;
-        } else if ($curl->info['http_code'] == 401) {
-            \core\notification::error(get_string('errunauthorized', 'mod_pingo'));
-            return false;
-        } else {
-            $response = json_decode($jsonresult, true);
-
-            if (isset($response["duration_choices"])) {
-                $durationchoices = $response["duration_choices"];
-            } else {
-                return false;
             }
 
             $data = new stdclass;
-            $data->durationchoices = array_combine($durationchoices, $durationchoices);
-            $data->durationchoices[0] = get_string('nocountdown', 'mod_pingo');
             $data->questiontypes = $questiontypes;
             $data->answeroptions = $answeroptions;
 
             return $data;
+        } else {
+            return false;
         }
     }
 
@@ -313,12 +344,12 @@ class mod_pingo_api {
     }
 
     /**
-     * Method for fetching all data needed for adding questions from catalog.
+     * Method for fetching questions and tags for the adding questions from catalog form.
      *
      * @param string $remoteurl The URL to fetch the data from.
      * @param string $authtoken The authentication token from the user.
      * @param string $tag The tag of the questions.
-     * @return object Object with all data for the form (durationchoices, questions).
+     * @return object Object with all data for the form (questions and tags).
      */
     public static function get_questionfromcatalog_formdata($remoteurl, $authtoken, $tag) {
         $url = $remoteurl . "/questions?auth_token=$authtoken&tag=$tag";
@@ -340,66 +371,29 @@ class mod_pingo_api {
         $jsonresult = $curl->get($url, $data, $options);
 
         if (!isset($curl->info['http_code'])) {
-            var_dump('questions curl failed');
             return false;
         } else if ($curl->info['http_code'] == 401) {
             \core\notification::error(get_string('errunauthorized', 'mod_pingo'));
             return false;
         } else if (!$questions = json_decode($jsonresult, true)) {
-            var_dump('no questions fetched');
             return false;
         } else {
             // Get array with all tags used by questions.
             $tags = array('alltags' => get_string('alltags', 'mod_pingo'));
             foreach ($questions as $question) {
                 foreach ($question['tags'] as $tag) {
-                    if (!in_array($tag, $tags)) {
-                        $tags[$tag] = $tag;
+                    $tagformatted = format_text($tag, 2);
+                    if (!in_array($tagformatted, $tags)) {
+                        $tags[$tagformatted] = $tagformatted;
                     }
                 }
             }
-        }
 
-        $url = $remoteurl . "/api/duration_choices";
-
-        $data = '';
-
-        $options = array(
-            'RETURNTRANSFER' => 1,
-            'HEADER' => 0,
-            'FAILONERROR' => 1,
-        );
-
-        $header = array(
-            'Content-Type: application/x-www-form-urlencoded',
-            'Content-Length: ' . strlen($data),
-            'Accept: application/json'
-        );
-
-        $curl->setHeader($header);
-        $jsonresult = $curl->get($url, $data, $options);
-
-        if (!isset($curl->info['http_code'])) {
-            var_dump('duration choices curl failed');
-            return false;
-        } else if ($curl->info['http_code'] == 401) {
-            \core\notification::error(get_string('errunauthorized', 'mod_pingo'));
-            return false;
-        } else {
-            $durationchoices = json_decode($jsonresult, true);
-
-            if ($durationchoices) {
-                $data = new stdclass;
-                $data->durationchoices = array_combine($durationchoices["duration_choices"], $durationchoices["duration_choices"]);
-                $data->durationchoices[0] = get_string('nocountdown', 'mod_pingo');
-                $data->questions = $questions;
-                $data->tags = $tags;
-            } else {
-                var_dump('no duration choices fetched');
-                return false;
-            }
-
+            $data = new stdclass;
+            $data->questions = $questions;
+            $data->tags = $tags;
             return $data;
+
         }
     }
 
@@ -434,7 +428,46 @@ class mod_pingo_api {
         $curl->setHeader($header);
         $curl->post($url, $data);
 
-        var_dump($curl);
+        // Check for any errors.
+        if ($curl->error != '') {
+            return false;
+        } else if ($curl->response['HTTP/1.1'] == '201 Created' || $curl->response['HTTP/1.1'] == '200 OK') {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Method for running a question from catalog as a survey.
+     *
+     * @param string $remoteurl The URL to fetch the data from.
+     * @param string $authtoken The authentication token from the user.
+     * @param string $session The ID of the session.
+     * @param string $surveyid The id of the survey that should be stopped.
+     * @param string $stoptime The time when the survey should be stopped.
+     */
+    public static function stop_survey($remoteurl, $authtoken, $session, $surveyid, $stoptime) {
+
+        // Create a new cURL handle.
+        $curl = new \curl();
+
+        // Set the URL endpoint.
+        $url = $remoteurl . "/events/$session/surveys/$surveyid/stop";
+
+        // Set the request data.
+        $data = array('auth_token' => $authtoken, 'stoptime' => $stoptime);
+        $data = json_encode($data);
+
+        // Set the request header.
+        $header = array(
+            'Content-Type: application/json',
+            'Accept: application/json'
+        );
+
+        // Perform the POST request.
+        $curl->setHeader($header);
+        $curl->post($url, $data);
 
         // Check for any errors.
         if ($curl->error != '') {
@@ -443,6 +476,54 @@ class mod_pingo_api {
             return true;
         } else {
             return false;
+        }
+    }
+
+
+    /**
+     * Method for fetching the running surveys from PINGO.
+     *  NOT USED AT THE MOMENT!
+     *
+     * @param string $remoteurl The URL to fetch the data from.
+     * @param string $authtoken The authentication token from the user.
+     * @param string $session The ID of the session.
+     * @return object Object The duration choices from PINGO.
+     */
+    public static function get_runningsurveys($remoteurl, $authtoken, $session) {
+        // Requesting duration choices from PINGO .
+        $url = $remoteurl . "/events/$session/surveys?auth_token=$authtoken";
+
+        $data = '';
+
+        $options = array(
+            'RETURNTRANSFER' => 1,
+            'HEADER' => 0,
+            'FAILONERROR' => 1,
+        );
+
+        $header = array(
+            'Content-Type: application/x-www-form-urlencoded',
+            'Content-Length: ' . strlen($data),
+            'Accept: application/json'
+        );
+
+        $curl = new \curl();
+        $curl->setHeader($header);
+        $jsonresult = $curl->get($url, $data, $options);
+
+        if (!isset($curl->info['http_code'])) {
+            return false;
+        } else if ($curl->info['http_code'] == 401) {
+            \core\notification::error(get_string('errunauthorized', 'mod_pingo'));
+            return false;
+        } else {
+            $response = json_decode($jsonresult, true);
+
+            if (isset($response)) {
+                return $response;
+            } else {
+                return false;
+            }
         }
     }
 }

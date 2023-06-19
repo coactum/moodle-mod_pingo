@@ -51,9 +51,6 @@ $string['pingo:logintopingo'] = 'Bei PINGO anmelden';
 $string['pingo:viewallsessions'] = 'Alle PINGO Sessions ansehen';
 $string['pingo:startsurvey'] = 'Umfrage aus PINGO starten';
 
-// Strings for the tasks.
-$string['task'] = 'Aufgabe';
-
 // Strings for the admin settings.
 $string['connectionsdetails'] = 'Verbindungseinstellungen';
 $string['remoteserver'] = 'PINGO-Server';
@@ -66,17 +63,16 @@ $string['login'] = 'Login';
 $string['loginfailed'] = 'PINGO Login fehlgeschlagen';
 $string['loginfailedinvalidcredentials'] = 'PINGO Login fehlgeschlagen (fehlerhafte Anmeldedaten)';
 $string['loginsuccessful'] = 'PINGO Login erfolgreich';
-$string['connectionactive'] = 'Verbindung aktiv';
-$string['closeconnection'] = 'Aktuelle Verbindung trennen';
-$string['noconnection'] = 'Keine Verbindung aktiv';
-$string['sessionsoverview'] = 'Sessions Übersicht';
+$string['connected'] = 'Verbunden';
+$string['closeconnection'] = 'Verbindung trennen';
+$string['noconnection'] = 'Nicht verbunden';
 $string['yoursessions'] = 'Ihre Sessions';
 $string['nosessionsavailable'] = 'Keine Sitzungen verfügbar';
-$string['lastsurvey'] = 'Letzte Umfrage';
 $string['answers'] = 'Antwortmöglichkeiten';
 $string['continuesurvey'] = 'Fortfahren';
 $string['repeatsurvey'] = 'Wiederholen';
 $string['stopsurvey'] = 'Stoppen';
+$string['stoptime'] = 'Wann stoppen?';
 $string['nosurveys'] = 'Sie haben noch keine Umfragen in dieser Session erstellt.';
 $string['nosurveyactive'] = 'Keine Umfrage aktiv';
 $string['sessions'] = 'Sessions';
@@ -89,6 +85,10 @@ $string['questionfromcatalog'] = 'Aus Katalog';
 $string['session'] = 'Session';
 $string['surveycreated'] = 'Umfrage gestartet';
 $string['reloadpage'] = 'Seite neu laden';
+$string['surveystopped'] = 'Umfrage wird gestoppt';
+$string['surveyends'] = 'Die Umfrage endet in ';
+$string['surveyhasnoend'] = 'Die Umfrage hat kein Enddatum.';
+$string['surveyended'] = 'Die Umfrage endete am {$a}.';
 
 // Strings for the login form.
 $string['pingoemail'] = 'Die E-Mail-Adresse in PINGO';
@@ -98,9 +98,11 @@ $string['pingopassword_help'] = 'Das Passwort des Accounts in PINGO';
 $string['nopingoyet'] = 'Noch kein Account?';
 $string['registerforpingo'] = 'Bei PINGO registrieren (externe Seite)';
 $string['logintopingo'] = 'Bei PINGO anmelden';
+$string['pingoimpressum'] = 'Impressum (PINGO)';
+$string['pingoprivacypolicy'] = 'Datenschutzerklärung (PINGO)';
 
 // Strings for the quickstart form.
-$string['quickstartexplanation'] = 'Starten Sie eine generische Umfrage in der gewählten Session ({$a})';
+$string['quickstartexplanation'] = 'Starten Sie eine generische Umfrage in dieser Session.';
 $string['questiontypes'] = 'Fragetyp';
 $string['answeroptions'] = 'Antwortoptionen';
 $string['durationchoices'] = 'Dauer';
@@ -108,7 +110,7 @@ $string['nocountdown'] = 'Ohne Countdown';
 
 // Strings for the questionfromcatalog form.
 $string['addquestionfromcatalog'] = 'Frage vom Katalog hinzufügen';
-$string['questionfromcatalogexplanation'] = 'Starten Sie in der gewählten Session ({$a}) eine Frage aus ihrem Fragenkatalog.';
+$string['questionfromcatalogexplanation'] = 'Starten Sie in dieser Session eine Frage aus ihrem Fragenkatalog.';
 $string['managequestionsinpingo'] = 'Fragenkatalog verwalten (in PINGO)';
 $string['yourquestions'] = 'Ihre Fragen';
 $string['filterbytags'] = 'Tag-Filter';
@@ -122,10 +124,12 @@ $string['eventpingologinfailed'] = 'PINGO Login fehlgeschlagen';
 $string['eventpingologinsuccessful'] = 'PINGO Login erfolgreich';
 
 // Strings for all errors.
-$string['errunauthorized'] = 'Authentifizierung fehlgeschlagen. Die gespeicherte Anmeldung für PINGO ist ungültig oder wurde in PINGO widerrufen. Die Verbindungn muss geschlossen und neu gestartet werden.';
+$string['errunauthorized'] = 'Authentifizierung fehlgeschlagen. Die gespeicherte Anmeldung für PINGO ist ungültig oder wurde in PINGO widerrufen. Die Verbindung muss geschlossen und neu gestartet werden.';
 $string['errnoemail'] = 'Keine gültige E-Mail-Adresse';
 $string['errfetching'] = 'Fehler beim Laden der Daten. Bitte Seite neu laden.';
 $string['errsurveynotcreated'] = 'Fehler beim Anlegen der neuen Umfrage.';
+$string['errsurveynotstopped'] = 'Fehler beim Stoppen der Umfrage.';
+$string['errnoquestionchoosen'] = 'Keine Frage ausgewählt.';
 
 // Strings for the privacy api.
 $string['privacy:metadata:pingo_connections'] = 'Enthält personenbezogene Anmeldedaten der Lehrenden für die Anmeldung bei PINGO.';

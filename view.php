@@ -107,8 +107,17 @@ if (!$activeconnection) {
     $PAGE->navbar->add(get_string("login", "pingo"));
     $PAGE->set_url('/mod/pingo/view.php', array('id' => $cm->id));
 } else if (!$session) {
-    $PAGE->navbar->add(get_string("sessionsoverview", "pingo"));
-    $PAGE->set_url('/mod/pingo/view.php', array('id' => $cm->id));
+    $PAGE->navbar->add(get_string("sessions", "pingo"));
+    $PAGE->set_url('/mod/pingo/view.php', array('id' => $cm->id, 'mode' => $mode));
+} else if ($mode == 2) {
+    $PAGE->navbar->add(get_string("quickstart", "pingo") . ' (' . $session . ')');
+    $PAGE->set_url('/mod/pingo/view.php', array('id' => $cm->id, 'session' => $session, 'mode' => $mode));
+} else if ($mode == 3) {
+    $PAGE->navbar->add(get_string("catalog", "pingo") . ' (' . $session . ')');
+    $PAGE->set_url('/mod/pingo/view.php', array('id' => $cm->id, 'session' => $session, 'mode' => $mode));
+} else if ($mode == 4) {
+    $PAGE->navbar->add(get_string("session", "pingo") . ' (' . $session . ')');
+    $PAGE->set_url('/mod/pingo/view.php', array('id' => $cm->id, 'session' => $session, 'mode' => $mode));
 } else {
     $PAGE->set_url('/mod/pingo/view.php', array('id' => $cm->id, 'session' => $session, 'mode' => $mode));
 }
@@ -196,21 +205,22 @@ if (!$activeconnection) {
     require_once($CFG->dirroot . '/mod/pingo/quickstart_form.php');
 
     $data = mod_pingo_api::get_quickstart_formdata($remoteurl, $activeconnection->authenticationtoken);
+    $durationchoices = mod_pingo_api::get_durationchoices($remoteurl);
 
     if ($data) {
         $mform = new mod_pingo_quickstart_form(null,
-            array('question_types' => $data->questiontypes, 'duration_choices' => $data->durationchoices,
-            'answer_options' => $data->answeroptions, 'session' => $session));
+            array('question_types' => $data->questiontypes, 'duration_choices' => $durationchoices,
+            'answer_options' => $data->answeroptions, 'sessiontoken' => '', 'sessionname' => ''));
 
         if ($fromform = $mform->get_data()) {
 
             // In this case you process validated data. $mform->get_data() returns data posted in form.
 
-            if ($fromform->session) {
+            if ($fromform->session && isset($fromform->duration_choices) && !empty($fromform->duration_choices)) {
                 // Get session data from PINGO.
-                $session = mod_pingo_api::get_session($remoteurl, $fromform->session, $activeconnection->authenticationtoken);
+                $sessiondata = mod_pingo_api::get_session($remoteurl, $activeconnection->authenticationtoken, $fromform->session);
 
-                if (!empty($session)) {
+                if (!empty($sessiondata)) {
                     if (!isset($fromform->answer_options) || !isset($fromform->answer_options[$fromform->question_types])) {
                         $fromform->answer_options[$fromform->question_types] = false;
                     }
@@ -220,18 +230,28 @@ if (!$activeconnection) {
                         $fromform->duration_choices);
 
                     if ($surveycreated) {
-                        $urlparams = array('id' => $id, 'session' => $session['token'], 'mode' => 4);
+                        $urlparams = array('id' => $id, 'session' => $session, 'mode' => 4);
                         $redirecturl = new moodle_url('/mod/pingo/view.php', $urlparams);
 
                         redirect($redirecturl, get_string('surveycreated', 'mod_pingo'), null, notification::NOTIFY_SUCCESS);
                     } else {
-                        $urlparams = array('id' => $id, 'session' => $session['token'], 'mode' => 2);
+                        $urlparams = array('id' => $id, 'session' => $session, 'mode' => 2);
                         $redirecturl = new moodle_url('/mod/pingo/view.php', $urlparams);
 
                         redirect($redirecturl, get_string('errsurveynotcreated', 'mod_pingo'), null, notification::NOTIFY_ERROR);
 
                     }
+                } else {
+                    $urlparams = array('id' => $id, 'session' => $session, 'mode' => 2);
+                    $redirecturl = new moodle_url('/mod/pingo/view.php', $urlparams);
+
+                    redirect($redirecturl, get_string('errsurveynotcreated', 'mod_pingo'), null, notification::NOTIFY_ERROR);
                 }
+            } else {
+                $urlparams = array('id' => $id, 'session' => $session, 'mode' => 2);
+                $redirecturl = new moodle_url('/mod/pingo/view.php', $urlparams);
+
+                redirect($redirecturl, get_string('errsurveynotcreated', 'mod_pingo'), null, notification::NOTIFY_ERROR);
             }
         }
     }
@@ -240,51 +260,102 @@ if (!$activeconnection) {
 
     // Get data for form from PINGO.
     $data = mod_pingo_api::get_questionfromcatalog_formdata($remoteurl, $activeconnection->authenticationtoken, '');
+    $durationchoices = mod_pingo_api::get_durationchoices($remoteurl);
 
     if ($data) {
         $mform = new mod_pingo_questionfromcatalog_form(null,
-            array('questions' => $data->questions, 'duration_choices' => $data->durationchoices, 'session' => $session,
-                'remoteurl' => $remoteurl, 'tags' => $data->tags));
-
-        var_dump('page reloaded');
+            array('questions' => $data->questions, 'duration_choices' => $durationchoices, 'sessiontoken' => '',
+                'sessionname' => '', 'remoteurl' => $remoteurl, 'tags' => $data->tags));
 
         if ($fromform = $mform->get_data()) {
             // In this case you process validated data. $mform->get_data() returns data posted in form.
 
-            var_dump($fromform);
-
             // Redirect if questions should be filtered by tag.
             if ($fromform->reload == 1) {
-                var_dump('i should reload');
-                $urlparams = array('id' => $id, 'session' => $session['token'], 'mode' => 3, 'tag' => $fromform->tag);
+                $urlparams = array('id' => $id, 'session' => $session, 'mode' => 3, 'tag' => $fromform->tag);
                 $redirecturl = new moodle_url('/mod/pingo/view.php', $urlparams);
 
                 redirect($redirecturl);
             }
 
-            if ($fromform->session) {
+            if ($fromform->session && isset($fromform->duration_choices) && !empty($fromform->duration_choices)) {
                 // Get session data from PINGO.
-                $session = mod_pingo_api::get_session($remoteurl, $fromform->session, $activeconnection->authenticationtoken);
+                $sessiondata = mod_pingo_api::get_session($remoteurl, $activeconnection->authenticationtoken, $fromform->session);
 
-                if (!empty($session)) {
+                if (!empty($sessiondata)) {
                     $surveycreated = mod_pingo_api::run_question_from_catalog($remoteurl, $activeconnection->authenticationtoken,
                         $fromform->session, $fromform->question, $fromform->duration_choices);
 
-                    var_dump($surveycreated);
-
                     if ($surveycreated) {
-                        $urlparams = array('id' => $id, 'session' => $session['token'], 'mode' => 4);
+                        $urlparams = array('id' => $id, 'session' => $session, 'mode' => 4);
                         $redirecturl = new moodle_url('/mod/pingo/view.php', $urlparams);
 
                         redirect($redirecturl, get_string('surveycreated', 'mod_pingo'), null, notification::NOTIFY_SUCCESS);
                     } else {
-                        $urlparams = array('id' => $id, 'session' => $session['token'], 'mode' => 3);
+                        $urlparams = array('id' => $id, 'session' => $session, 'mode' => 3);
                         $redirecturl = new moodle_url('/mod/pingo/view.php', $urlparams);
 
                         redirect($redirecturl, get_string('errsurveynotcreated', 'mod_pingo'), null, notification::NOTIFY_ERROR);
 
                     }
+                } else {
+                    $urlparams = array('id' => $id, 'session' => $session, 'mode' => 3);
+                    $redirecturl = new moodle_url('/mod/pingo/view.php', $urlparams);
+                    redirect($redirecturl, get_string('errsurveynotcreated', 'mod_pingo'), null, notification::NOTIFY_ERROR);
                 }
+            } else {
+                $urlparams = array('id' => $id, 'session' => $session, 'mode' => 3);
+                $redirecturl = new moodle_url('/mod/pingo/view.php', $urlparams);
+
+                redirect($redirecturl, get_string('errsurveynotcreated', 'mod_pingo'), null, notification::NOTIFY_ERROR);
+            }
+        }
+    }
+} else if ($mode === 4) {
+    require_once($CFG->dirroot . '/mod/pingo/stopsurvey_form.php');
+
+    // Get data for form from PINGO.
+    $sessiondata = mod_pingo_api::get_session($remoteurl, $activeconnection->authenticationtoken, $session);
+    $durationchoices = mod_pingo_api::get_durationchoices($remoteurl);
+    if ($durationchoices) {
+        $durationchoices[0] = get_string('now');
+    }
+
+    if ($sessiondata) {
+        $mform = new mod_pingo_stopsurvey_form(null,
+            array('remoteurl' => $remoteurl, 'authtoken' => $activeconnection->authenticationtoken,
+                'duration_choices' => $durationchoices, 'session' => $session));
+
+        if ($fromform = $mform->get_data()) {
+            // In this case you process validated data. $mform->get_data() returns data posted in form.
+
+            if ($fromform->session && $fromform->stoptime) {
+                if (!empty($sessiondata)) {
+                    $surveystopped = mod_pingo_api::stop_survey($remoteurl, $activeconnection->authenticationtoken,
+                        $fromform->session, $fromform->surveyid, $fromform->stoptime);
+
+                    if ($surveystopped) {
+                        $urlparams = array('id' => $id, 'session' => $session, 'mode' => 4);
+                        $redirecturl = new moodle_url('/mod/pingo/view.php', $urlparams);
+
+                        redirect($redirecturl, get_string('surveystopped', 'mod_pingo'), null, notification::NOTIFY_SUCCESS);
+                    } else {
+                        $urlparams = array('id' => $id, 'session' => $session, 'mode' => 4);
+                        $redirecturl = new moodle_url('/mod/pingo/view.php', $urlparams);
+
+                        redirect($redirecturl, get_string('errsurveynotstopped', 'mod_pingo'), null, notification::NOTIFY_ERROR);
+                    }
+                } else {
+                    $urlparams = array('id' => $id, 'session' => $session, 'mode' => 4);
+                    $redirecturl = new moodle_url('/mod/pingo/view.php', $urlparams);
+
+                    redirect($redirecturl, get_string('errsurveynotstopped', 'mod_pingo'), null, notification::NOTIFY_ERROR);
+                }
+            } else {
+                $urlparams = array('id' => $id, 'session' => $session, 'mode' => 4);
+                $redirecturl = new moodle_url('/mod/pingo/view.php', $urlparams);
+
+                redirect($redirecturl, get_string('errsurveynotstopped', 'mod_pingo'), null, notification::NOTIFY_ERROR);
             }
         }
     }
@@ -311,9 +382,10 @@ $viewallsessions = has_capability('mod/pingo:viewallsessions', $context);
 // Handle groups.
 echo groups_print_activity_menu($cm, $CFG->wwwroot . "/mod/pingo/view.php?id=$id");
 
-if ($viewoverview) { // Teacher view.
+// Teacher view.
+if ($viewoverview && ($moduleinstance->editableforall || (!$activeconnection || $USER->id == $activeconnection->userid))) {
 
-    // Add section for connectioninfo.
+     // Add section for connectioninfo.
     $connectioninfo = new pingo_connectioninfo($cm->id, $activeconnection);
     echo $OUTPUT->render($connectioninfo);
 
@@ -377,15 +449,19 @@ if ($viewoverview) { // Teacher view.
 
             // Get data for form from PINGO.
             $data = mod_pingo_api::get_quickstart_formdata($remoteurl, $activeconnection->authenticationtoken);
+            $sessiondata = mod_pingo_api::get_session($remoteurl, $activeconnection->authenticationtoken, $session);
+            $durationchoices = mod_pingo_api::get_durationchoices($remoteurl);
 
-            if ($data) {
+            if ($data && $sessiondata) {
                 // Add form.
                 $mform = new mod_pingo_quickstart_form(new moodle_url('/mod/pingo/view.php', array('id' => $cm->id)),
-                    array('question_types' => $data->questiontypes, 'duration_choices' => $data->durationchoices,
-                    'answer_options' => $data->answeroptions, 'session' => $session));
+                    array('question_types' => $data->questiontypes, 'duration_choices' => $durationchoices,
+                    'answer_options' => $data->answeroptions,
+                    'sessiontoken' => format_text($sessiondata['token'], 2),
+                    'sessionname' => format_text($sessiondata['name'], 2)));
 
                 // Set default data.
-                $mform->set_data(array('id' => $cm->id, 'session' => $session));
+                $mform->set_data(array('id' => $cm->id, 'session' => $sessiondata['token']));
 
                 // Render form.
                 echo $mform->render();
@@ -402,11 +478,15 @@ if ($viewoverview) { // Teacher view.
         } else if ($mode === 3) {
             // Get data for form from PINGO.
             $data = mod_pingo_api::get_questionfromcatalog_formdata($remoteurl, $activeconnection->authenticationtoken, $tag);
+            $sessiondata = mod_pingo_api::get_session($remoteurl, $activeconnection->authenticationtoken, $session);
+            $durationchoices = mod_pingo_api::get_durationchoices($remoteurl);
 
-            if ($data) {
+            if ($data && $sessiondata) {
                 // Add form.
                 $mform = new mod_pingo_questionfromcatalog_form(new moodle_url('/mod/pingo/view.php', array('id' => $cm->id)),
-                    array('questions' => $data->questions, 'duration_choices' => $data->durationchoices, 'session' => $session,
+                    array('questions' => $data->questions, 'duration_choices' => $durationchoices,
+                    'sessiontoken' => format_text($sessiondata['token'], 2)
+                    , 'sessionname' => format_text($sessiondata['name'], 2),
                     'remoteurl' => $remoteurl, 'tags' => $data->tags));
 
                 if ($tag == 0) {
@@ -414,7 +494,7 @@ if ($viewoverview) { // Teacher view.
                 }
 
                 // Set default data.
-                $mform->set_data(array('id' => $cm->id, 'session' => $session, 'tag' => $tag));
+                $mform->set_data(array('id' => $cm->id, 'session' => $sessiondata['token'], 'tag' => $tag));
 
                 // Render form.
                 echo $mform->render();
@@ -432,12 +512,60 @@ if ($viewoverview) { // Teacher view.
             if ($session) {
 
                 // Get session data from PINGO.
-                $sessiondata = mod_pingo_api::get_session($remoteurl, $session, $activeconnection->authenticationtoken);
+                $sessiondata = mod_pingo_api::get_session($remoteurl, $activeconnection->authenticationtoken, $session);
+                $durationchoices = mod_pingo_api::get_durationchoices($remoteurl);
+                if ($durationchoices) {
+                    $durationchoices[0] = get_string('now');
+                }
 
-                if ($sessiondata) {
+                if ($sessiondata && $durationchoices) {
+                    // Add form.
+                    $mform = new mod_pingo_stopsurvey_form(new moodle_url('/mod/pingo/view.php', array('id' => $cm->id)),
+                        array('duration_choices' => $durationchoices, 'session' => $session,
+                        'remoteurl' => $remoteurl));
+
+                    $currentsurvey = true;
+                    if ($currentsurvey == true) {
+                        if (isset($sessiondata['latest_survey']) && isset($sessiondata['latest_survey']['id'])) {
+                            $surveyid = $sessiondata['latest_survey']['id'];
+                        } else {
+                            $surveyid = false;
+                        }
+
+                        // Set default data.
+                        $mform->set_data(array('id' => $cm->id, 'session' => $session,
+                            'surveyid' => $surveyid));
+
+                        // Render form.
+                        $stopsurveyform = $mform->render();
+                    } else {
+                        $stopsurveyform = false;
+                    }
+
+                    if (isset($sessiondata['latest_survey']['ends'])) { // Survey has end date.
+                        $now = new DateTime();
+                        $endtime = new DateTime($sessiondata['latest_survey']['ends']);
+
+                        $timetillend = $now->diff($endtime);
+
+                        if ($timetillend->invert) { // Survey already ended.
+                            $surveyactive = false;
+                            $surveyendstr = get_string('surveyended', 'mod_pingo',  userdate($endtime->getTimestamp()));
+                        } else { // Survey running.
+                            $surveyactive = true;
+                            $surveyendstr = get_string('surveyends', 'mod_pingo') . '<span id="endtime">' .
+                                $endtime->format('Y-m-d H:i:s') . '</span>';
+                        }
+                    } else { // Survey has no end date.
+                        $surveyactive = true;
+                        $surveyendstr = get_string('surveyhasnoend', 'mod_pingo');
+                    }
+
                     // Add section with session view.
-                    $sessionview = new pingo_sessionview($cm->id, $sessiondata, $context, $activeconnection->authenticationtoken);
+                    $sessionview = new pingo_sessionview($cm->id, $sessiondata, $context, $activeconnection->authenticationtoken,
+                        $stopsurveyform, $surveyactive, $surveyendstr);
                     echo $OUTPUT->render($sessionview);
+
                 } else {
                     $urlparams = array('id' => $id, 'session' => $session, 'mode' => 4);
                     $redirecturl = new moodle_url('/mod/pingo/view.php', $urlparams);
@@ -463,11 +591,16 @@ if ($viewoverview) { // Teacher view.
     }
 
 } else { // Student view.
+    echo 'student view<br>';
+
+    if ($activeconnection || $USER->id != $activeconnection->userid) {
+        echo 'not able to change things<br>';
+    }
 
     $activesurvey = false;
 
     if ($activeconnection) {
-        // Print QR code to survey;
+        // Print QR code to survey.
         require_once($CFG->libdir.'/pdflib.php');
 
         $surveyid = '029725';
@@ -490,7 +623,7 @@ if ($viewoverview) { // Teacher view.
 
         $pdf->write2DBarcode($remoteurl . '/' . $surveyid, 'QRCODE,Q', 0 + 25, 0 + 18, 25, 25, $styleqr, 'N');
 
-        //Close and output PDF document.
+        // Close and output PDF document.
         // ob_start();
         // // All other content
         // ob_end_clean();

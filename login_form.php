@@ -67,6 +67,10 @@ class mod_pingo_login_form extends moodleform {
         $mform->addElement('static', 'signupforpingo', get_string('nopingoyet', 'mod_pingo'),
             '<a class="btn btn-secondary" target="_blank" href="' . get_config('pingo', 'remoteserver') . '/users/sign_up"' . '">' .
             get_string('registerforpingo', 'mod_pingo') . '</a>');
+        $mform->addElement('static', 'impressum', '', '<a target="_blank" href="https://coactum.de/imprint"' . '">' .
+            get_string('pingoimpressum', 'mod_pingo') . '</a> |
+             <a target="_blank" href="' . get_config('pingo', 'remoteserver') . '/privacy_policy.html"' . '">' .
+            get_string('pingoprivacypolicy', 'mod_pingo') . '</a>');
 
         $this->add_action_buttons(false, get_string('logintopingo', 'mod_pingo'));
     }

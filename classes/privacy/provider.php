@@ -156,7 +156,7 @@ class provider implements
                 cm.id AS cmid
             FROM {context} c
             JOIN {course_modules} cm ON cm.id = c.instanceid
-            JOIN {pingo} p ON P.id = cm.instance
+            JOIN {pingo} p ON p.id = cm.instance
             WHERE (
                 c.id {$contextsql}
             )
@@ -179,7 +179,7 @@ class provider implements
                     // Write generic module intro files.
                     helper::export_context_files($context, $user);
 
-                    self::export_connection_data($userid, $pingo->id, $pingo->contextid);
+                    self::export_connections_data($userid, $pingo->id, $pingo->contextid);
                 }
 
             }

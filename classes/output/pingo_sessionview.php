@@ -45,6 +45,13 @@ class pingo_sessionview implements renderable, templatable {
     protected $context;
     /** @var string */
     protected $authtoken;
+    /** @var string */
+    protected $stopsurveyform;
+    /** @var bool */
+    protected $surveyactive;
+    /** @var string */
+    protected $surveyendstr;
+
 
     /**
      * Construct this renderable.
@@ -52,12 +59,18 @@ class pingo_sessionview implements renderable, templatable {
      * @param obj $session The object with the session
      * @param obj $context The object with the context
      * @param string $authtoken The authentication token
+     * @param string $stopsurveyform The form for stopping the current survey
+     * @param bool $surveyactive If the last survey is still running
+     * @param string $surveyendstr String with information about the end time of the survey
      */
-    public function __construct($cmid, $session, $context, $authtoken) {
+    public function __construct($cmid, $session, $context, $authtoken, $stopsurveyform, $surveyactive, $surveyendstr) {
         $this->cmid = $cmid;
         $this->session = $session;
         $this->context = $context;
         $this->authtoken = $authtoken;
+        $this->stopsurveyform = $stopsurveyform;
+        $this->surveyactive = $surveyactive;
+        $this->surveyendstr = $surveyendstr;
     }
 
     /**
@@ -73,6 +86,26 @@ class pingo_sessionview implements renderable, templatable {
         $data->startsurvey = has_capability('mod/pingo:startsurvey', $this->context);
         $data->remoteserver = get_config('pingo', 'remoteserver');
         $data->authtoken = $this->authtoken;
+        $data->stopsurveyform = $this->stopsurveyform;
+        $data->surveyactive = $this->surveyactive;
+        $data->surveyendstr = $this->surveyendstr;
+
+        // Set height for iframe based on content.
+        if (!isset($this->session['latest_survey']['options'])) {
+            $height = 450;
+        } else {
+            $height = 580;
+
+            foreach ($this->session['latest_survey']['options'] as $option) {
+                $height += 31;
+            }
+        }
+
+        if ($data->surveyactive) {
+            $height += 50;
+        }
+
+        $data->contentheight = $height;
         return $data;
     }
 }

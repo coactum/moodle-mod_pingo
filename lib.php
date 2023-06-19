@@ -73,30 +73,9 @@ function pingo_supports($feature) {
 function pingo_add_instance($moduleinstance, $mform = null) {
     global $DB;
 
-    // Handle access time for grading.
-    /* if (empty($moduleinstance->assessed)) {
-        $moduleinstance->assessed = 0;
-    }
-
-    if (empty($moduleinstance->ratingtime) || empty($moduleinstance->assessed)) {
-        $moduleinstance->assesstimestart = 0;
-        $moduleinstance->assesstimefinish = 0;
-    } */
-
     $moduleinstance->timecreated = time();
 
     $moduleinstance->id = $DB->insert_record('pingo', $moduleinstance);
-
-    /* // Add calendar dates.
-    helper::pingo_update_calendar($moduleinstance, $moduleinstance->coursemodule);
-
-    // Add expected completion date.
-    if (! empty($moduleinstance->completionexpected)) {
-        \core_completion\api::update_completion_date_event($moduleinstance->coursemodule,
-            'pingo', $moduleinstance->id, $moduleinstance->completionexpected);
-    }
-
-    pingo_grade_item_update($moduleinstance); */
 
     return $moduleinstance->id;
 }
@@ -117,53 +96,7 @@ function pingo_update_instance($moduleinstance, $mform = null) {
     $moduleinstance->timemodified = time();
     $moduleinstance->id = $moduleinstance->instance;
 
-    /* if (empty($moduleinstance->assessed)) {
-        $moduleinstance->assessed = 0;
-    }
-
-    if (empty($moduleinstance->ratingtime) || empty($moduleinstance->assessed)) {
-        $moduleinstance->assesstimestart = 0;
-        $moduleinstance->assesstimefinish = 0;
-    }
-
-    if (empty($moduleinstance->notification)) {
-        $moduleinstance->notification = 0;
-    }
-
-    // If the aggregation type or scale (i.e. max grade) changes then recalculate the grades for the entire moduleinstance
-    // if scale changes - do we need to recheck the ratings, if ratings higher than scale how do we want to respond?
-    // for count and sum aggregation types the grade we check to make sure they do not exceed the scale (i.e. max score)
-    // when calculating the grade.
-    $oldmoduleinstance = $DB->get_record('pingo', array('id' => $moduleinstance->id));
-
-    $updategrades = false;
-
-    if ($oldmoduleinstance->assessed <> $moduleinstance->assessed) {
-        // Whether this moduleinstance is rated.
-        $updategrades = true;
-    }
-
-    if ($oldmoduleinstance->scale <> $moduleinstance->scale) {
-        // The scale currently in use.
-        $updategrades = true;
-    }
-
-    if ($updategrades) {
-        pingo_update_grades($moduleinstance); // Recalculate grades for the moduleinstance.
-    } */
-
     $DB->update_record('pingo', $moduleinstance);
-
-    /* // Update calendar.
-    helper::pingo_update_calendar($moduleinstance, $moduleinstance->coursemodule);
-
-    // Update completion date.
-    $completionexpected = (! empty($moduleinstance->completionexpected)) ? $moduleinstance->completionexpected : null;
-    \core_completion\api::update_completion_date_event($moduleinstance->coursemodule,
-        'pingo', $moduleinstance->id, $completionexpected);
-
-    // Update grade.
-    pingo_grade_item_update($moduleinstance); */
 
     return true;
 }
@@ -191,22 +124,10 @@ function pingo_delete_instance($id) {
         return false;
     }
 
-    /*
-    $context = context_module::instance($cm->id);
-
-    // Delete files.
-    $fs = get_file_storage();
-    $fs->delete_area_files($context->id);
-
-    // Update completion for calendar events.
-    \core_completion\api::update_completion_date_event($cm->id, 'pingo', $pingo->id, null);
-
-    // Delete grades.
-    pingo_grade_item_delete($pingo);
-    */
-
-    // Delete other db tables.
-    // ...
+    // Delete pingo connections.
+    if ($DB->record_exists('pingo_connections', array('pingo' => $id))) {
+        $DB->delete_records('pingo_connections', array('pingo' => $id));
+    }
 
     // Delete pingo, else return false.
     if (!$DB->delete_records("pingo", array("id" => $pingo->id))) {
@@ -590,11 +511,10 @@ function pingo_reset_userdata($data) {
     $componentstr = get_string('modulenameplural', 'pingo');
     $status = array();
 
-    /*
     // Get pingos in course that should be resetted.
-    $sql = "SELECT m.id
-                FROM {pingo} m
-                WHERE m.course = ?";
+    $sql = "SELECT p.id
+                FROM {pingo} p
+                WHERE p.course = ?";
 
     $params = array(
         $data->courseid
@@ -602,227 +522,27 @@ function pingo_reset_userdata($data) {
 
     $pingos = $DB->get_records_sql($sql, $params);
 
-    // Delete entries and their annotations, files and ratings.
+    // Delete pingo connections.
     if (!empty($data->reset_pingo_all)) {
 
-        $fs = get_file_storage();
-
-        // Get ratings manager.
-        $rm = new rating_manager();
-        $ratingdeloptions = new stdClass;
-        $ratingdeloptions->component = 'mod_pingo';
-        $ratingdeloptions->ratingarea = 'entry';
-
-        foreach ($pingos as $pingoid => $unused) {
-            if (!$cm = get_coursemodule_from_instance('pingo', $pingoid)) {
-                continue;
-            }
-
-            // Remove files.
-            $context = context_module::instance($cm->id);
-            $fs->delete_area_files($context->id, 'mod_pingo', 'entry');
-            $fs->delete_area_files($context->id, 'mod_pingo', 'feedback');
-
-            // Remove ratings.
-            $ratingdeloptions->contextid = $context->id;
-            $rm->delete_ratings($ratingdeloptions);
-        }
-
-        // Remove all grades from gradebook (if that is not already done by the reset_gradebook_grades).
-        if (empty($data->reset_gradebook_grades)) {
-            pingo_reset_gradebook($data->courseid);
-        }
-
-        // Delete the annotations of all entries.
-        $DB->delete_records_select('pingo_annotations', "pingo IN ($sql)", $params);
-
-        // Delete all entries.
-        $DB->delete_records_select('pingo_entries', "pingo IN ($sql)", $params);
+        $DB->delete_records_select('pingo_connections', "pingo IN ($sql)", $params);
 
         $status[] = array(
             'component' => $modulename,
             'item' => get_string('alluserdatadeleted', 'pingo'),
             'error' => false
         );
-    } */
+    }
 
     // Updating dates - shift may be negative too.
     if ($data->timeshift) {
         // Any changes to the list of dates that needs to be rolled should be same during course restore and course reset.
         // See MDL-9367.
-        shift_course_mod_dates('pingo', array('assesstimestart', 'assesstimefinish'), $data->timeshift, $data->courseid);
+        shift_course_mod_dates('pingo', array(''), $data->timeshift, $data->courseid);
         $status[] = array('component' => $componentstr, 'item' => get_string('datechanged'), 'error' => false);
     }
 
     return $status;
-}
-
-
-/**
- * Removes all grades in the pingo gradebook
- *
- * @param int $courseid
- */
-function pingo_reset_gradebook($courseid) {
-    /* global $DB;
-
-    $params = array($courseid);
-
-    $sql = "SELECT ma.*, cm.idnumber as cmidnumber, ma.course as courseid
-              FROM {pingo} ma, {course_modules} cm, {modules} m
-             WHERE m.name='pingo' AND m.id=cm.module AND cm.instance=ma.id AND ma.course=?";
-
-    if ($pingos = $DB->get_records_sql($sql, $params)) {
-        foreach ($pingos as $pingo) {
-            pingo_grade_item_update($pingo, 'reset');
-        }
-    } */
-}
-
-/**
- * Get pingo grades for a user (custom function used by pingo_update_grades).
- *
- * @param object $pingo If null, all pingos
- * @param int $userid If false all users
- * @return object $grades
- */
-function pingo_get_user_grades($pingo, $userid = 0) {
-    global $CFG;
-
-    require_once($CFG->dirroot . '/rating/lib.php');
-
-    $ratingoptions = new stdClass();
-    $ratingoptions->component = 'mod_pingo';
-    $ratingoptions->ratingarea = 'entry';
-    $ratingoptions->modulename = 'pingo';
-    $ratingoptions->moduleid = $pingo->id;
-    $ratingoptions->userid = $userid;
-    $ratingoptions->aggregationmethod = $pingo->assessed;
-    $ratingoptions->scaleid = $pingo->scale;
-    $ratingoptions->itemtable = 'pingo_entries';
-    $ratingoptions->itemtableusercolumn = 'userid';
-
-    $rm = new rating_manager();
-
-    return $rm->get_user_grades($ratingoptions);
-}
-
-/**
- * Update grades in the pingo gradebook.
- *
- * Needed by {@see grade_update_mod_grades()}.
- *
- * @param stdClass $moduleinstance Instance object with extra cmidnumber and modname property.
- * @param int $userid Update grade of specific user only, 0 means all participants.
- */
-function pingo_update_grades($moduleinstance, $userid = 0) {
-    global $CFG;
-    require_once($CFG->libdir . '/gradelib.php');
-
-    $cm = get_coursemodule_from_instance('pingo', $moduleinstance->id);
-    $moduleinstance->cmidnumber = $cm->idnumber;
-
-    if (!$moduleinstance->assessed) {
-        pingo_grade_item_update($moduleinstance);
-    } else if ($grades = pingo_get_user_grades($moduleinstance, $userid)) {
-        pingo_grade_item_update($moduleinstance, $grades);
-    } else if ($userid && $nullifnone) {
-        $grade = new stdClass();
-        $grade->userid = $userid;
-        $grade->rawgrade = null;
-        pingo_grade_item_update($moduleinstance, $grade);
-    } else {
-        pingo_grade_item_update($moduleinstance);
-    }
-}
-
-/**
- * Creates or updates grade item for given pingo.
- *
- * Needed by {@see grade_update_mod_grades()}.
- *
- * @param stdClass $moduleinstance Instance object with extra cmidnumber and modname property.
- * @param array $grades optional array/object of grade(s); 'reset' means reset grades in gradebook
- * @return void.
- */
-function pingo_grade_item_update($moduleinstance, $grades = null) {
-    global $CFG;
-    require_once($CFG->libdir.'/gradelib.php');
-
-    $params = array(
-        'itemname' => $pingo->name,
-        'idnumber' => $pingo->cmidnumber
-    );
-
-    if (! $pingo->assessed || $pingo->scale == 0) {
-        $params['gradetype'] = GRADE_TYPE_NONE;
-    } else if ($pingo->scale > 0) {
-        $params['gradetype'] = GRADE_TYPE_VALUE;
-        $params['grademax'] = $pingo->scale;
-        $params['grademin'] = 0;
-    } else if ($pingo->scale < 0) {
-        $params['gradetype'] = GRADE_TYPE_SCALE;
-        $params['scaleid'] = - $pingo->scale;
-    }
-
-    if ($grades === 'reset') {
-        $params['reset'] = true;
-        $grades = null;
-    }
-
-    return grade_update('mod/pingo', $pingo->course, 'mod', 'pingo', $pingo->id, 0, $grades, $params);
-}
-
-/**
- * Delete grade item for given module instance.
- *
- * @param stdClass $moduleinstance Instance object.
- * @return grade_item.
- */
-function pingo_grade_item_delete($moduleinstance) {
-    global $CFG;
-    require_once($CFG->libdir.'/gradelib.php');
-
-    return grade_update('/mod/pingo', $moduleinstance->course, 'mod', 'pingo',
-                        $moduleinstance->id, 0, null, array('deleted' => 1));
-}
-
-/**
- * Checks if scale is being used by any instance of mod_pingo.
- *
- * This is used to find out if scale used anywhere.
- *
- * @param int $scaleid ID of the scale.
- * @return bool True if the scale is used by any mod_pingo instance.
- */
-function pingo_scale_used_anywhere($scaleid) {
-    global $DB;
-
-    if (empty($scaleid)) {
-        return false;
-    }
-
-    return $DB->record_exists_select('pingo', "scale = ? and assessed > 0", [$scaleid * -1]);
-}
-
-/**
- * Returns the lists of all browsable file areas within the given module context.
- *
- * The file area 'intro' for the activity introduction field is added automatically
- * by {@see file_browser::get_file_info_context_module()}.
- *
- * @package     mod_pingo
- * @category    files
- *
- * @param stdClass $course
- * @param stdClass $cm
- * @param stdClass $context
- * @return string[]
- */
-function pingo_get_file_areas($course, $cm, $context) {
-    return array(
-        'entry' => get_string('entry', 'mod_pingo'),
-    );
 }
 
 /**
@@ -880,35 +600,6 @@ function pingo_pluginfile($course, $cm, $context, $filearea, $args, $forcedownlo
     if (!isset($areas[$filearea])) {
         return false;
     }
-
-    /* // Args[0] should be the entry id.
-    $entryid = intval(array_shift($args));
-    $entry = $DB->get_record('pingo_entries', array(
-        'id' => $entryid
-    ), 'id, userid', MUST_EXIST);
-
-    $canmanage = has_capability('mod/pingo:manageentries', $context);
-    if (! $canmanage && ! has_capability('mod/pingo:addentries', $context)) {
-        // Even if it is your own entry.
-        return false;
-    }
-
-    // Students can only see their own entry.
-    if (! $canmanage && $USER->id !== $entry->userid) {
-        return false;
-    }
-
-    if ($filearea !== 'entry' && $filearea !== 'feedback') {
-        return false;
-    }
-
-    $fs = get_file_storage();
-    $relativepath = implode('/', $args);
-    $fullpath = "/$context->id/mod_pingo/$filearea/$entryid/$relativepath";
-    $file = $fs->get_file_by_hash(sha1($fullpath));
-
-    // Finally send the file.
-    send_stored_file($file, null, 0, $forcedownload, $options); */
 
     send_file_not_found();
 }

@@ -45,9 +45,12 @@ class mod_pingo_questionfromcatalog_form extends moodleform {
 
         $mform = $this->_form; // Don't forget the underscore!
 
+        $mform->addElement('html', '<h3 class="mt-5 mb-3">' .
+            $this->_customdata['sessionname'] . ' (' . $this->_customdata['sessiontoken'] . ')</h3>');
+
         $mform->addElement('header', 'questionfromcatalog', get_string('addquestionfromcatalog', 'pingo'));
 
-        $mform->addElement('html', get_string('questionfromcatalogexplanation', 'pingo', $this->_customdata['session']));
+        $mform->addElement('html', get_string('questionfromcatalogexplanation', 'pingo'));
 
         $mform->addElement('hidden', 'id', null);
         $mform->setType('id', PARAM_INT);
@@ -71,11 +74,12 @@ class mod_pingo_questionfromcatalog_form extends moodleform {
         $radioarray = array();
 
         foreach ($this->_customdata['questions'] as $i => $question) {
-            $radioarray[] = $mform->createElement('radio', 'question', '', $question['name'], $question['id']);
+            $radioarray[] = $mform->createElement('radio', 'question', '',
+                format_text($question['name'], 2),
+                format_text($question['id'], 2));
         }
 
         $mform->addGroup($radioarray, 'question', get_string('yourquestions', 'mod_pingo'), array('<br/>'), false);
-        $mform->addRule('question', null, 'required', null, 'client');
         $mform->setType('question', PARAM_TEXT);
 
         $select = $mform->addElement('select', 'duration_choices',
@@ -94,6 +98,12 @@ class mod_pingo_questionfromcatalog_form extends moodleform {
      * @return array Array with errors
      */
     public function validation($data, $files) {
-        return array();
+        $errors = parent::validation($data, $files);
+
+        if (!isset($data['question']) && $data['reload'] == 0) {
+            $errors['question'] = get_string('errnoquestionchoosen', 'mod_pingo');
+        }
+
+        return $errors;
     }
 }

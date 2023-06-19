@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * File containing the class definition for the pingo survey quickstart form.
+ * File containing the class definition for the pingo stop survey form.
  *
  * @package     mod_pingo
  * @copyright   2023 coactum GmbH
@@ -28,13 +28,13 @@ global $CFG;
 require_once("$CFG->libdir/formslib.php");
 
 /**
- * Form for the survey quickstart.
+ * Form for stopping a survey.
  *
  * @package   mod_pingo
  * @copyright 2023 coactum GmbH
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL Juv3 or later
  */
-class mod_pingo_quickstart_form extends moodleform {
+class mod_pingo_stopsurvey_form extends moodleform {
 
     /**
      * Define the form - called by parent constructor.
@@ -45,42 +45,25 @@ class mod_pingo_quickstart_form extends moodleform {
 
         $mform = $this->_form; // Don't forget the underscore!
 
-        $mform->addElement('html', '<h3 class="mt-5 mb-3">' .
-            $this->_customdata['sessionname'] . ' (' . $this->_customdata['sessiontoken'] . ')</h3>');
-
-        $mform->addElement('header', 'quickstart', get_string('quickstart', 'pingo'));
-
-        $mform->addElement('html', get_string('quickstartexplanation', 'pingo'));
-
         $mform->addElement('hidden', 'id', null);
         $mform->setType('id', PARAM_INT);
 
         $mform->addElement('hidden', 'session', null);
         $mform->setType('session', PARAM_TEXT);
 
-        $mform->addElement('hidden', 'mode', 2);
+        $mform->addElement('hidden', 'surveyid', null);
+        $mform->setType('surveyid', PARAM_TEXT);
+
+        $mform->addElement('hidden', 'mode', 4);
         $mform->setType('mode', PARAM_INT);
 
-        $select = $mform->addElement('select', 'question_types',
-            get_string('questiontypes', 'pingo'), $this->_customdata['question_types']);
-        $mform->setType('question_types', PARAM_TEXT);
-
-        foreach ($this->_customdata['answer_options'] as $type => $options) {
-            if (!empty($options) && (!isset($options['']) || $options[''] != '')) {
-                $select = $mform->addElement('select', 'answer_options[' . $type . ']',
-                    get_string('answeroptions', 'pingo'), $options);
-                $mform->setType('answer_options', PARAM_TEXT);
-                $mform->hideIf('answer_options[' . $type . ']', 'question_types', 'neq', $type);
-            }
-        }
-
-        $select = $mform->addElement('select', 'duration_choices',
-            get_string('durationchoices', 'pingo'), $this->_customdata['duration_choices']);
-        $mform->setType('duration_choices', PARAM_INT);
+        $select = $mform->addElement('select', 'stoptime',
+            get_string('stoptime', 'pingo'), $this->_customdata['duration_choices']);
+        $mform->setType('stoptime', PARAM_INT);
 
         $mform->disable_form_change_checker();
 
-        $this->add_action_buttons(false, get_string('startsurvey', 'pingo'));
+        $this->add_action_buttons(false, get_string('stopsurvey', 'pingo'));
     }
 
     /**

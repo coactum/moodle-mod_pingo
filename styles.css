@@ -24,10 +24,5 @@
  */
 
 .path-mod-pingo .pingo_sessionsoverview .minwidthtable {
-    min-width: 380px;
-}
-
-.path-mod-pingo iframe {
-    border: none !important;
-    height: 500px;
+    min-width: 400px;
 }

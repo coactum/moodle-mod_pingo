@@ -26,13 +26,4 @@
 defined('MOODLE_INTERNAL') || die();
 
 $tasks = array(
-    /* [
-        'classname' => 'mod_pingo\task\task',
-        'blocking' => 0,
-        'minute' => '*',
-        'hour' => '*',
-        'day' => '*',
-        'month' => '*',
-        'dayofweek' => '*',
-    ], */
 );

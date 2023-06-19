@@ -51,9 +51,6 @@ $string['pingo:logintopingo'] = 'Login to PINGO';
 $string['pingo:viewallsessions'] = 'View all sessions in PINGO';
 $string['pingo:startsurvey'] = 'Start survey from PINGO';
 
-// Strings for the tasks.
-$string['task'] = 'Task';
-
 // Strings for the admin settings.
 $string['connectionsdetails'] = 'Connection settings';
 $string['remoteserver'] = 'PINGO server';
@@ -66,17 +63,16 @@ $string['login'] = 'Login';
 $string['loginfailed'] = 'PINGO login failed';
 $string['loginfailedinvalidcredentials'] = 'PINGO login failed (incorrect credentials)';
 $string['loginsuccessful'] = 'PINGO login successful';
-$string['connectionactive'] = 'Connection active';
-$string['closeconnection'] = 'Close current connection';
-$string['noconnection'] = 'No connection active';
-$string['sessionsoverview'] = 'Sessions overview';
+$string['connected'] = 'Connected';
+$string['closeconnection'] = 'Close connection';
+$string['noconnection'] = 'Not connected';
 $string['yoursessions'] = 'Your sessions';
 $string['nosessionsavailable'] = 'No sessions available';
-$string['lastsurvey'] = 'Last survey';
 $string['answers'] = 'Answers';
 $string['continuesurvey'] = 'Continue';
 $string['repeatsurvey'] = 'Repeat';
 $string['stopsurvey'] = 'Stop';
+$string['stoptime'] = 'Time to stop';
 $string['nosurveys'] = 'You have not yet created any surveys in this session.';
 $string['nosurveyactive'] = 'No survey active';
 $string['sessions'] = 'Sessions';
@@ -89,6 +85,10 @@ $string['questionfromcatalog'] = 'From catalog';
 $string['session'] = 'Session';
 $string['surveycreated'] = 'Survey created';
 $string['reloadpage'] = 'Reload page';
+$string['surveystopped'] = 'Survey will be stopped';
+$string['surveyends'] = 'Survey ends in ';
+$string['surveyhasnoend'] = 'Survey has no end date.';
+$string['surveyended'] = 'Survey ended on {$a}.';
 
 // Strings for the login form.
 $string['pingoemail'] = 'The email in PINGO';
@@ -98,9 +98,11 @@ $string['pingopassword_help'] = 'The password for the PINGO account';
 $string['nopingoyet'] = 'No account yet?';
 $string['registerforpingo'] = 'Register for PINGO (external page)';
 $string['logintopingo'] = 'Login to PINGO';
+$string['pingoimpressum'] = 'Imprint (PINGO)';
+$string['pingoprivacypolicy'] = 'Privacy policy (PINGO)';
 
 // Strings for the quickstart form.
-$string['quickstartexplanation'] = 'Start a generic survey in the selected session ({$a})';
+$string['quickstartexplanation'] = 'Start a generic survey in this session.';
 $string['questiontypes'] = 'Question type';
 $string['answeroptions'] = 'Answer options';
 $string['durationchoices'] = 'Duration';
@@ -108,7 +110,7 @@ $string['nocountdown'] = 'No countdown';
 
 // Strings for the questionfromcatalog form.
 $string['addquestionfromcatalog'] = 'Add question from catalogue';
-$string['questionfromcatalogexplanation'] = 'Start a question from your question catalogue in the selected session ({$a}).';
+$string['questionfromcatalogexplanation'] = 'Start a question from your question catalogue in this session.';
 $string['managequestionsinpingo'] = 'Manage question catalogue (in PINGO)';
 $string['yourquestions'] = 'Your questions';
 $string['filterbytags'] = 'Filter by tag';
@@ -126,6 +128,8 @@ $string['errunauthorized'] = 'Authentication failed. The saved login for PINGO i
 $string['errnoemail'] = 'Not a valid mail adress';
 $string['errfetching'] = 'Error while fetching session data. Please reload page.';
 $string['errsurveynotcreated'] = 'Error while creating new survey.';
+$string['errsurveynotstopped'] = 'Error while stopping the survey.';
+$string['errnoquestionchoosen'] = 'No question choosen.';
 
 // Strings for the privacy api.
 $string['privacy:metadata:pingo_connections'] = 'Contains personal login data of the teachers for the login to PINGO.';
