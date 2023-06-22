@@ -642,7 +642,7 @@ if ($viewoverview && ($moduleinstance->editableforall || (!$activeconnection || 
         if ($activeconnection->activesession != 0 && $sessiondata = mod_pingo_api::get_session($remoteurl,
             $activeconnection->authenticationtoken, $activeconnection->activesession)) {
 
-            if(!isset($sessiondata['description'])){
+            if (!isset($sessiondata['description'])) {
                 $sessiondata['description'] = false;
             }
 
@@ -679,10 +679,10 @@ if ($viewoverview && ($moduleinstance->editableforall || (!$activeconnection || 
                 echo '<a class="btn btn-primary" href="' . $redirecturl . '">' . get_string('reloadpage', 'mod_pingo') . '</a>';
             }
         } else {
-            echo '<strong>' . get_string('noactivesession', 'mod_pingo'). '</strong>' ;
+            echo '<strong>' . get_string('noactivesession', 'mod_pingo') . '</strong>';
         }
     } else {
-        echo '<strong>' . get_string('noactivesession', 'mod_pingo'). '</strong>' ;
+        echo '<strong>' . get_string('noactivesession', 'mod_pingo') . '</strong>';
     }
 }
 

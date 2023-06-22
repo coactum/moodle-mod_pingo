@@ -62,9 +62,10 @@ class backup_pingo_activity_structure_step extends backup_activity_structure_ste
         }
 
         // Define id annotations.
-        $rating->annotate_ids('user', 'userid');
+        $connection->annotate_ids('user', 'userid');
 
-        // No file annotations.
+        // Define file annotations.
+        $pingo->annotate_files('mod_pingo', 'intro', null); // This file area has no itemid.
 
         return $this->prepare_activity_structure($pingo);
     }

@@ -28,9 +28,6 @@
  * @uses FEATURE_MOD_INTRO
  * @uses FEATURE_SHOW_DESCRIPTION
  * @uses FEATURE_GRADE_HAS_GRADE
- * @uses FEATURE_RATE
- * @uses FEATURE_GROUPS
- * @uses FEATURE_GROUPINGS
  * @uses FEATURE_COMPLETION_TRACKS_VIEWS
  * @uses FEATURE__BACKUP_MOODLE2
  * @param string $feature Constant for requested feature.

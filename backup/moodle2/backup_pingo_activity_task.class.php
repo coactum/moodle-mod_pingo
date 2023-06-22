@@ -29,7 +29,6 @@ defined('MOODLE_INTERNAL') || die();
 // More information about the restore process: {@link https://docs.moodle.org/dev/Restore_API}.
 
 require_once($CFG->dirroot.'/mod/pingo/backup/moodle2/backup_pingo_stepslib.php');
-require_once($CFG->dirroot.'/mod/pingo/backup/moodle2/backup_pingo_settingslib.php');
 
 /**
  * The class provides all the settings and steps to perform one complete backup of mod_pingo.
@@ -62,7 +61,7 @@ class backup_pingo_activity_task extends backup_activity_task {
         $base = preg_quote($CFG->wwwroot, "/");
 
         // Link to the list of plugin instances.
-        $search = "/(".$base."\//mod\/pingo\/index.php\?id\=)([0-9]+)/";
+        $search = "/(".$base."\/mod\/pingo\/index.php\?id\=)([0-9]+)/";
         $content = preg_replace($search, '$@PINGOINDEX*$2@$', $content);
 
         // Link to view by moduleid with optional session id if session is selected.

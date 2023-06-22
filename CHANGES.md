@@ -1,5 +1,8 @@
 ## Changelog ##
 
+- [0.1.1]:
+    - Bugfixes for privacy and backup functions.
+
 - [0.1.0]:
     - Working on participants view.
     - Bugfixes.

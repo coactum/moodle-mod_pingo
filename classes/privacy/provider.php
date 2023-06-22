@@ -97,7 +97,7 @@ class provider implements
                   JOIN {modules} m ON m.id = cm.module AND m.name = :modulename
                   JOIN {pingo} p ON p.id = cm.instance
                   JOIN {pingo_connections} pc ON pc.pingo = p.id
-                  WHERE c.userid = :userid
+                  WHERE pc.userid = :userid
         ";
 
         $contextlist->add_from_sql($sql, $params);

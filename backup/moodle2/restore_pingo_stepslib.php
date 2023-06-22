@@ -77,7 +77,7 @@ class restore_pingo_activity_structure_step extends restore_activity_structure_s
      *
      * @param object $data data.
      */
-    protected function process_pingo_connection($data) {
+    protected function process_pingo_connections($data) {
         global $DB;
 
         $data = (object) $data;
