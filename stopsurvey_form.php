@@ -54,6 +54,9 @@ class mod_pingo_stopsurvey_form extends moodleform {
         $mform->addElement('hidden', 'surveyid', null);
         $mform->setType('surveyid', PARAM_TEXT);
 
+        $mform->addElement('hidden', 'surveyended', 0);
+        $mform->setType('surveyended', PARAM_BOOL);
+
         $mform->addElement('hidden', 'mode', 4);
         $mform->setType('mode', PARAM_INT);
 

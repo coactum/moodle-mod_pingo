@@ -1,5 +1,9 @@
 ## Changelog ##
 
+- [0.1.0]:
+    - Working on participants view.
+    - Bugfixes.
+
 - [0.0.9]:
     - Working on all features.
     - Removing unused stuff.

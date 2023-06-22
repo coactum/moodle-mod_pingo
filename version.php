@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'mod_pingo';
-$plugin->release = '0.0.9';
-$plugin->version = 2023061900;
+$plugin->release = '0.1.0';
+$plugin->version = 2023062200;
 $plugin->requires = 2020061507;
 $plugin->maturity = MATURITY_ALPHA;

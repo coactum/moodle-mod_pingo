@@ -43,6 +43,7 @@ $string['nonewmodules'] = 'Keine neuen Instanzen';
 
 // Strings for lib.php.
 $string['deletealluserdata'] = 'Alle Benutzerdaten löschen';
+$string['alluserdatadeleted'] = 'Alle Benutzerdaten gelöscht';
 
 // Strings for the capabilities.
 $string['pingo:addinstance'] = 'Neue PINGO Instanz hinzufügen';
@@ -86,9 +87,17 @@ $string['session'] = 'Session';
 $string['surveycreated'] = 'Umfrage gestartet';
 $string['reloadpage'] = 'Seite neu laden';
 $string['surveystopped'] = 'Umfrage wird gestoppt';
-$string['surveyends'] = 'Die Umfrage endet in ';
-$string['surveyhasnoend'] = 'Die Umfrage hat kein Enddatum.';
-$string['surveyended'] = 'Die Umfrage endete am {$a}.';
+$string['surveyends'] = 'Endet in ';
+$string['surveyhasnoend'] = 'Kein Enddatum.';
+$string['surveyended'] = 'Beendet:';
+$string['nosessionchoosen'] = 'Keine Session ausgewählt.';
+$string['noactivesession'] = 'Keine aktive Sitzung.';
+$string['setsessionactive'] = 'Sitzung für Teilnehmende aktiv schalten';
+$string['voteinpingo'] = 'Abstimmen (in PINGO)';
+$string['state'] = 'Status';
+$string['activatesession'] = 'Für Teilnehmende anzeigen';
+$string['sessionactivated'] = 'Session aktiviert';
+$string['surveyinsession'] = 'Umfrage in Session';
 
 // Strings for the login form.
 $string['pingoemail'] = 'Die E-Mail-Adresse in PINGO';
@@ -130,6 +139,7 @@ $string['errfetching'] = 'Fehler beim Laden der Daten. Bitte Seite neu laden.';
 $string['errsurveynotcreated'] = 'Fehler beim Anlegen der neuen Umfrage.';
 $string['errsurveynotstopped'] = 'Fehler beim Stoppen der Umfrage.';
 $string['errnoquestionchoosen'] = 'Keine Frage ausgewählt.';
+$string['errnotallowedforotherteachers'] = 'Andere Lehrende dürfen in dieser Aktivität keine Umfragen hinzufügen.';
 
 // Strings for the privacy api.
 $string['privacy:metadata:pingo_connections'] = 'Enthält personenbezogene Anmeldedaten der Lehrenden für die Anmeldung bei PINGO.';
@@ -137,4 +147,4 @@ $string['privacy:metadata:pingo_connections:userid'] = 'Moodle ID des Benutzers 
 $string['privacy:metadata:pingo_connections:pingo'] = 'ID der Plugin Instanz';
 $string['privacy:metadata:pingo_connections:authenticationtoken'] = 'Der Token zur Authentifizierung bei PINGO. Wird beim erstmaligen Login in der Plugin-Instanz von PINGO geholt und dann dauerhaft in der Datenbank gespeichert. Wird bei jeder Aktion im Plugin erneut an PINGO geschickt und ermöglicht vollen Zugriff auf alle auf dem PINGO Server gespeicherten Daten des oder der Nutzenden (z. B. Fragen, Umfragen, Sessions usw.). Kann in PINGO ungültig gemacht werden (von allen externen Anwendungen abmelden).';
 $string['privacy:metadata:pingo_connections:timestarted'] = 'Datum an dem die Anmeldung an PINGO erfolgt ist';
-
+$string['privacy:metadata:pingo_connections:activesession'] = 'Die PINGO Session die in der Teilnehmeransicht sichtbar ist';

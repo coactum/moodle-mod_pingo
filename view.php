@@ -26,6 +26,7 @@ use mod_pingo\output\pingo_connectioninfo;
 use mod_pingo\output\pingo_tabarea;
 use mod_pingo\output\pingo_sessionsoverview;
 use mod_pingo\output\pingo_sessionview;
+use mod_pingo\output\pingo_participantsview;
 
 use mod_pingo\pingo_api\mod_pingo_api;
 
@@ -50,6 +51,9 @@ $session = optional_param('session', 0, PARAM_INT);
 
 // Tag for the question from catalog form.
 $tag = optional_param('tag', 0, PARAM_TEXT);
+
+// Session that should be shown in the participants view.
+$activatesession = optional_param('activatesession', 0, PARAM_INT);
 
 // Set the basic variables $course, $cm and $moduleinstance.
 if ($id) {
@@ -106,7 +110,7 @@ $PAGE->navbar->add(get_string("overview", "pingo"), new moodle_url('/mod/pingo/v
 if (!$activeconnection) {
     $PAGE->navbar->add(get_string("login", "pingo"));
     $PAGE->set_url('/mod/pingo/view.php', array('id' => $cm->id));
-} else if (!$session) {
+} else if (!$session && $mode == 1) {
     $PAGE->navbar->add(get_string("sessions", "pingo"));
     $PAGE->set_url('/mod/pingo/view.php', array('id' => $cm->id, 'mode' => $mode));
 } else if ($mode == 2) {
@@ -230,9 +234,16 @@ if (!$activeconnection) {
                         $fromform->duration_choices);
 
                     if ($surveycreated) {
+                        // Set session active.
+                        if ($fromform->setsessionactive) {
+                            $connection = $DB->get_record('pingo_connections', array('pingo' => $moduleinstance->id));
+                            $connection->activesession = $fromform->session;
+
+                            $DB->update_record('pingo_connections', $connection);
+                        }
+
                         $urlparams = array('id' => $id, 'session' => $session, 'mode' => 4);
                         $redirecturl = new moodle_url('/mod/pingo/view.php', $urlparams);
-
                         redirect($redirecturl, get_string('surveycreated', 'mod_pingo'), null, notification::NOTIFY_SUCCESS);
                     } else {
                         $urlparams = array('id' => $id, 'session' => $session, 'mode' => 2);
@@ -287,9 +298,16 @@ if (!$activeconnection) {
                         $fromform->session, $fromform->question, $fromform->duration_choices);
 
                     if ($surveycreated) {
+                        // Set session active.
+                        if ($fromform->setsessionactive) {
+                            $connection = $DB->get_record('pingo_connections', array('pingo' => $moduleinstance->id));
+                            $connection->activesession = $fromform->session;
+
+                            $DB->update_record('pingo_connections', $connection);
+                        }
+
                         $urlparams = array('id' => $id, 'session' => $session, 'mode' => 4);
                         $redirecturl = new moodle_url('/mod/pingo/view.php', $urlparams);
-
                         redirect($redirecturl, get_string('surveycreated', 'mod_pingo'), null, notification::NOTIFY_SUCCESS);
                     } else {
                         $urlparams = array('id' => $id, 'session' => $session, 'mode' => 3);
@@ -317,6 +335,7 @@ if (!$activeconnection) {
     // Get data for form from PINGO.
     $sessiondata = mod_pingo_api::get_session($remoteurl, $activeconnection->authenticationtoken, $session);
     $durationchoices = mod_pingo_api::get_durationchoices($remoteurl);
+
     if ($durationchoices) {
         $durationchoices[0] = get_string('now');
     }
@@ -329,7 +348,16 @@ if (!$activeconnection) {
         if ($fromform = $mform->get_data()) {
             // In this case you process validated data. $mform->get_data() returns data posted in form.
 
-            if ($fromform->session && $fromform->stoptime) {
+            // Reload page if session has ended.
+            if ($fromform->surveyended == 1) {
+                $urlparams = array('id' => $id, 'session' => $session, 'mode' => 4);
+                $redirecturl = new moodle_url('/mod/pingo/view.php', $urlparams);
+
+                redirect($redirecturl);
+            }
+
+            if ($fromform->session && isset($fromform->stoptime)) {
+
                 if (!empty($sessiondata)) {
                     $surveystopped = mod_pingo_api::stop_survey($remoteurl, $activeconnection->authenticationtoken,
                         $fromform->session, $fromform->surveyid, $fromform->stoptime);
@@ -359,6 +387,16 @@ if (!$activeconnection) {
             }
         }
     }
+} else if ($activatesession != 0) {
+    $connection = $DB->get_record('pingo_connections', array('pingo' => $moduleinstance->id));
+    $connection->activesession = $activatesession;
+
+    $DB->update_record('pingo_connections', $connection);
+
+    $urlparams = array('id' => $id, 'mode' => 1);
+    $redirecturl = new moodle_url('/mod/pingo/view.php', $urlparams);
+
+    redirect($redirecturl, get_string('sessionactivated', 'mod_pingo'), null, notification::NOTIFY_SUCCESS);
 }
 
 // Add settingsmenu and heading for moodle < 400.
@@ -432,6 +470,13 @@ if ($viewoverview && ($moduleinstance->editableforall || (!$activeconnection || 
             $sessions = mod_pingo_api::get_sessions($remoteurl, $activeconnection->authenticationtoken);
 
             if ($sessions) {
+                // Check what sessions should be shown on participants view.
+                foreach ($sessions as $i => $session) {
+                    if ($session['token'] == $activeconnection->activesession) {
+                        $sessions[$i]['visible'] = true;
+                    }
+                }
+
                 // Add section with sessions overview.
                 $sessionsoverview = new pingo_sessionsoverview($cm->id, $sessions);
                 echo $OUTPUT->render($sessionsoverview);
@@ -524,23 +569,18 @@ if ($viewoverview && ($moduleinstance->editableforall || (!$activeconnection || 
                         array('duration_choices' => $durationchoices, 'session' => $session,
                         'remoteurl' => $remoteurl));
 
-                    $currentsurvey = true;
-                    if ($currentsurvey == true) {
-                        if (isset($sessiondata['latest_survey']) && isset($sessiondata['latest_survey']['id'])) {
-                            $surveyid = $sessiondata['latest_survey']['id'];
-                        } else {
-                            $surveyid = false;
-                        }
-
-                        // Set default data.
-                        $mform->set_data(array('id' => $cm->id, 'session' => $session,
-                            'surveyid' => $surveyid));
-
-                        // Render form.
-                        $stopsurveyform = $mform->render();
+                    if (isset($sessiondata['latest_survey']) && isset($sessiondata['latest_survey']['id'])) {
+                        $surveyid = $sessiondata['latest_survey']['id'];
                     } else {
-                        $stopsurveyform = false;
+                        $surveyid = false;
                     }
+
+                    // Set default data.
+                    $mform->set_data(array('id' => $cm->id, 'session' => $session,
+                        'surveyid' => $surveyid));
+
+                    // Render form.
+                    $stopsurveyform = $mform->render();
 
                     if (isset($sessiondata['latest_survey']['ends'])) { // Survey has end date.
                         $now = new DateTime();
@@ -550,7 +590,7 @@ if ($viewoverview && ($moduleinstance->editableforall || (!$activeconnection || 
 
                         if ($timetillend->invert) { // Survey already ended.
                             $surveyactive = false;
-                            $surveyendstr = get_string('surveyended', 'mod_pingo',  userdate($endtime->getTimestamp()));
+                            $surveyendstr = get_string('surveyended', 'mod_pingo') . '<br>' . userdate($endtime->getTimestamp());
                         } else { // Survey running.
                             $surveyactive = true;
                             $surveyendstr = get_string('surveyends', 'mod_pingo') . '<span id="endtime">' .
@@ -591,46 +631,58 @@ if ($viewoverview && ($moduleinstance->editableforall || (!$activeconnection || 
     }
 
 } else { // Student view.
-    echo 'student view<br>';
 
-    if ($activeconnection || $USER->id != $activeconnection->userid) {
-        echo 'not able to change things<br>';
+    if ($viewoverview && $activeconnection && $USER->id != $activeconnection->userid) {
+        echo '<div class="alert alert-danger alert-block fade in m-2" role="alert">';
+        echo '<button type="button" class="close" data-dismiss="alert">×</button>';
+        echo get_string('errnotallowedforotherteachers', 'mod_pingo') . '</div>';
     }
 
-    $activesurvey = false;
-
     if ($activeconnection) {
-        // Print QR code to survey.
-        require_once($CFG->libdir.'/pdflib.php');
+        if ($activeconnection->activesession != 0 && $sessiondata = mod_pingo_api::get_session($remoteurl,
+            $activeconnection->authenticationtoken, $activeconnection->activesession)) {
 
-        $surveyid = '029725';
+            if(!isset($sessiondata['description'])){
+                $sessiondata['description'] = false;
+            }
 
-        $pdf = new TCPDF;
+            if (isset($sessiondata['latest_survey']['ends'])) { // Survey has end date.
+                $now = new DateTime();
+                $endtime = new DateTime($sessiondata['latest_survey']['ends']);
 
-        // Set document information.
-        $pdf->SetCreator(PDF_CREATOR);
-        /* $pdf->SetAuthor($exammanagementinstanceobj->getMoodleSystemName());
-        $pdf->SetTitle(get_string('examlabels', 'mod_exammanagement') . ': ' . $exammanagementinstanceobj->getCourse()->fullname . ', '. $exammanagementinstanceobj->moduleinstance->name);
-        $pdf->SetSubject(get_string('examlabels', 'mod_exammanagement'));
-        $pdf->SetKeywords(get_string('examlabels', 'mod_exammanagement') . ', ' . $exammanagementinstanceobj->getCourse()->fullname . ', ' . $exammanagementinstanceobj->moduleinstance->name); */
+                $timetillend = $now->diff($endtime);
 
-        $styleqr = array(
-            'border' => false,
-            'padding' => 0,
-            'fgcolor' => array(0, 0, 0),
-            'bgcolor' => false
-        );
+                if ($timetillend->invert) { // Survey already ended.
+                    $surveyactive = false;
+                    $surveyendstr = get_string('surveyended', 'mod_pingo'). '<br>' . userdate($endtime->getTimestamp());
+                } else { // Survey running.
+                    $surveyactive = true;
+                    $surveyendstr = get_string('surveyends', 'mod_pingo') . '<span id="endtime">' .
+                        $endtime->format('Y-m-d H:i:s') . '</span>';
+                }
+            } else { // Survey has no end date.
+                $surveyactive = true;
+                $surveyendstr = get_string('surveyhasnoend', 'mod_pingo');
+            }
 
-        $pdf->write2DBarcode($remoteurl . '/' . $surveyid, 'QRCODE,Q', 0 + 25, 0 + 18, 25, 25, $styleqr, 'N');
+            if ($sessiondata) {
+                // Add section with sessions overview.
+                $participantsview = new pingo_participantsview($cm->id, array($sessiondata), $surveyactive, $surveyendstr);
+                echo $OUTPUT->render($participantsview);
+            } else {
+                $urlparams = array('id' => $id, 'mode' => 1);
+                $redirecturl = new moodle_url('/mod/pingo/view.php', $urlparams);
 
-        // Close and output PDF document.
-        // ob_start();
-        // // All other content
-        // ob_end_clean();
-        //$pdf->Output('pingo_qrcode_' . $surveyid . '.pdf', 'I');
-
+                echo '<div class="alert alert-danger alert-block fade in m-2" role="alert">';
+                echo '<button type="button" class="close" data-dismiss="alert">×</button>';
+                echo get_string('errfetching', 'mod_pingo') . '</div>';
+                echo '<a class="btn btn-primary" href="' . $redirecturl . '">' . get_string('reloadpage', 'mod_pingo') . '</a>';
+            }
+        } else {
+            echo '<strong>' . get_string('noactivesession', 'mod_pingo'). '</strong>' ;
+        }
     } else {
-        echo get_string('nosurveyactive', 'mod_pingo');
+        echo '<strong>' . get_string('noactivesession', 'mod_pingo'). '</strong>' ;
     }
 }
 

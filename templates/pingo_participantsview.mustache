@@ -18,7 +18,7 @@
     @copyright   2023 coactum GmbH
     @template pingo/pingo_sessionsoverview
 
-    Template for the overview over the sessions.
+    Template for the participants view.
 
     Example context (json):
     {
@@ -28,19 +28,21 @@
 {{#js}}
 {{/js}}
 <div class="d-flex justify-content-center">
-    <div class="pingo_sessionsoverview mt-5">
-        <h3>{{#str}}sessions, mod_pingo{{/str}}</h3>
+    <div class="pingo_participantsview mt-5">
+        <h3>{{#str}}surveyinsession, mod_pingo{{/str}}</h3>
         <table class="table table-striped table-hover">
             <thead>
                 <tr>
                     <th scope="col">
-                        {{#str}}activatesession, mod_pingo{{/str}}
-                    </th>
-                    <th scope="col">
                         {{#str}}name{{/str}}
                     </th>
+                    {{#sessions.0.description}}
+                        <th scope="col" class="w-50">
+                            {{#str}}description{{/str}}
+                        </th>
+                    {{/sessions.0.description}}
                     <th scope="col">
-                        {{#str}}description{{/str}}
+                        {{#str}}state, mod_pingo{{/str}}
                     </th>
                     <th scope="col" class="minwidthtable">
                     </th>
@@ -49,17 +51,17 @@
             <tbody>
                 {{#sessions}}
                     <tr>
-                        <td>
-                            <input type="checkbox" id="{{token}}" name="activatesession" {{#visible}}checked{{/visible}}>
-                        </td>
                         <td>{{name}} ({{token}})</td>
-                        <td>{{description}}</td>
+                        {{#description}}
+                            <td>
+                                {{description}}
+                            </td>
+                        {{/description}}
                         <td>
-                            <a class="btn btn-primary mr-1" href="view.php?id={{cmid}}&session={{token}}&mode=4" title="{{#str}}show{{/str}}">
-                                <i class="fa fa-eye" title="{{#str}}show{{/str}}"></i>
-                            </a>
-                            <a class="btn btn-primary" href="view.php?id={{cmid}}&session={{token}}&mode=2" title="{{#str}}quicksurvey, mod_pingo{{/str}}">{{#str}}quicksurvey, mod_pingo{{/str}}</a>
-                            <a class="btn btn-primary" href="view.php?id={{cmid}}&session={{token}}&mode=3" title="{{#str}}questionfromcatalog, mod_pingo{{/str}}">{{#str}}questionfromcatalog, mod_pingo{{/str}}</a>
+                            {{{surveyendstr}}}
+                        </td>
+                        <td>
+                            <a class="btn btn-primary" href="{{remoteserver}}/{{token}}" title="{{#str}}voteinpingo, mod_pingo{{/str}}" target="_blank">{{#str}}voteinpingo, mod_pingo{{/str}}</a>
                         </td>
                     </tr>
                 {{/sessions}}
@@ -68,8 +70,5 @@
                 {{/sessions}}
             </tbody>
         </table>
-        <div class="d-flex justify-content-center">
-            <a class="btn btn-primary" href="{{remoteserver}}/events/new" target="_blank">{{#str}}createsessioninpingo, mod_pingo{{/str}}</a>
-        </div>
     </div>
 </div>

@@ -43,6 +43,7 @@ $string['nonewmodules'] = 'No new modules';
 
 // Strings for lib.php.
 $string['deletealluserdata'] = 'Delete all user data';
+$string['alluserdatadeleted'] = 'All user data deleted';
 
 // Strings for the capabilities.
 $string['pingo:addinstance'] = 'Add new PINGO';
@@ -86,9 +87,17 @@ $string['session'] = 'Session';
 $string['surveycreated'] = 'Survey created';
 $string['reloadpage'] = 'Reload page';
 $string['surveystopped'] = 'Survey will be stopped';
-$string['surveyends'] = 'Survey ends in ';
-$string['surveyhasnoend'] = 'Survey has no end date.';
-$string['surveyended'] = 'Survey ended on {$a}.';
+$string['surveyends'] = 'Ends in ';
+$string['surveyhasnoend'] = 'No end date.';
+$string['surveyended'] = 'Ended:';
+$string['nosessionchoosen'] = 'No session choosen.';
+$string['noactivesession'] = 'No active session.';
+$string['setsessionactive'] = 'Set session active for students';
+$string['voteinpingo'] = 'Vote (in PINGO)';
+$string['state'] = 'State';
+$string['activatesession'] = 'Activate for participants';
+$string['sessionactivated'] = 'Session activated';
+$string['surveyinsession'] = 'Survey in session';
 
 // Strings for the login form.
 $string['pingoemail'] = 'The email in PINGO';
@@ -130,6 +139,7 @@ $string['errfetching'] = 'Error while fetching session data. Please reload page.
 $string['errsurveynotcreated'] = 'Error while creating new survey.';
 $string['errsurveynotstopped'] = 'Error while stopping the survey.';
 $string['errnoquestionchoosen'] = 'No question choosen.';
+$string['errnotallowedforotherteachers'] = 'Other teachers are not allowed to add surveys in this activity.';
 
 // Strings for the privacy api.
 $string['privacy:metadata:pingo_connections'] = 'Contains personal login data of the teachers for the login to PINGO.';
@@ -137,3 +147,4 @@ $string['privacy:metadata:pingo_connections:userid'] = 'Moodle ID of the user wh
 $string['privacy:metadata:pingo_connections:pingo'] = 'ID of the plugin instance';
 $string['privacy:metadata:pingo_connections:authenticationtoken'] = 'The token for authentication with PINGO. Is fetched from PINGO when logging in for the first time in the plugin instance and then stored in the database. Is sent to PINGO again with every action in the plugin instance and allows full access to all data of the user stored on the PINGO server (e.g. questions, surveys, sessions, etc.). Can be invalidated in PINGO (log out of all external applications).';
 $string['privacy:metadata:pingo_connections:timestarted'] = 'Date on which the login to PINGO was made';
+$string['privacy:metadata:pingo_connections:activesession'] = 'The PINGO session made available in the participants view';

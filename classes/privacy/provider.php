@@ -63,6 +63,7 @@ class provider implements
             'userid' => 'privacy:metadata:pingo_connections:pingo',
             'authenticationtoken' => 'privacy:metadata:pingo_connections:authenticationtoken',
             'timestarted' => 'privacy:metadata:pingo_connections:timestarted',
+            'activesession' => 'privacy:metadata:pingo_connections:activesession',
         ], 'privacy:metadata:pingo_connections');
 
         // The plugin does not use any subsystems that save personal data.
@@ -204,7 +205,8 @@ class provider implements
                     pc.userid,
                     pc.pingo,
                     pc.authenticationtoken,
-                    pc.timestarted
+                    pc.timestarted,
+                    pc.activesession
                    FROM {pingo_connections} pc
                    WHERE (
                     pc.pingo = :pingoid AND
@@ -252,6 +254,7 @@ class provider implements
             'pingo' => $connection->pingo,
             'authenticationtoken' => $connection->authenticationtoken,
             'timestarted' => $timestarted,
+            'activesession' => $connection->activesession,
         ];
 
         // Store the entry data.

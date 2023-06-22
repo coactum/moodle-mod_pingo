@@ -86,6 +86,8 @@ class mod_pingo_questionfromcatalog_form extends moodleform {
             get_string('durationchoices', 'pingo'), $this->_customdata['duration_choices']);
         $mform->setType('duration_choices', PARAM_INT);
 
+        $mform->addElement('advcheckbox', 'setsessionactive', '', get_string('setsessionactive', 'pingo'));
+
         $mform->disable_form_change_checker();
 
         $this->add_action_buttons(false, get_string('startsurvey', 'pingo'));

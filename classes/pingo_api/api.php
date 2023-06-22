@@ -110,6 +110,8 @@ class mod_pingo_api {
         } else if ($curl->info['http_code'] == 401) {
             \core\notification::error(get_string('errunauthorized', 'mod_pingo'));
             return false;
+        } else if ($curl->info['http_code'] != 200) {
+            return false;
         } else if (!$session = json_decode($jsonresult, true)) {
             return false;
         } else {
@@ -226,10 +228,10 @@ class mod_pingo_api {
         $url = $remoteurl . "/api/question_types";
 
         // Check if unauthorized (because question_types dont need auth_token).
-        /* if (!self::get_sessions($remoteurl, $authtoken)) {
+        if (!self::get_sessions($remoteurl, $authtoken)) {
             \core\notification::error(get_string('errunauthorized', 'mod_pingo'));
             return false;
-        } */
+        }
 
         $data = '';
 
