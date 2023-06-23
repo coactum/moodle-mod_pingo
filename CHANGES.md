@@ -1,5 +1,8 @@
 ## Changelog ##
 
+- [0.1.2]:
+    - Minor fixes.
+
 - [0.1.1]:
     - Bugfixes for privacy and backup functions.
 

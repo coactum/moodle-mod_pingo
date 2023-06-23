@@ -64,10 +64,17 @@ class mod_pingo_mod_form extends moodleform_mod {
         // Add custom activity settings.
         $mform->addElement('header', 'editability', get_string('editability', 'pingo'));
 
+        $id = optional_param('update', null, PARAM_INT);
+
         // Edit all setting if user can edit its own entries.
         $mform->addElement('selectyesno', 'editableforall', get_string('editableforall', 'pingo'));
         $mform->addHelpButton('editableforall', 'editableforall', 'pingo');
-        $mform->setDefault('editableforall', 1);
+
+        if (isset($id) && $id !== 0) {
+            $mform->disabledIf('editableforall', 'update', 'neq', 0);
+        } else {
+            $mform->setDefault('editableforall', 0);
+        }
 
         // Add standard grading elements.
         $this->standard_grading_coursemodule_elements();

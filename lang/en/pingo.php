@@ -35,7 +35,7 @@ $string['modulename_link'] = 'mod/pingo/view';
 $string['pluginadministration'] = 'Administration of PINGO';
 $string['editability'] = 'Editability';
 $string['editableforall'] = 'Editable by other teachers';
-$string['editableforall_help'] = 'If enabled, other teachers can make changes in the activity.';
+$string['editableforall_help'] = 'If enabled, all teachers in this activity can view all sessions of the connected PINGO account, create surveys in them and view their results. If this option is not enabled, only the person who logs in with their PINGO account can do this, all other teachers will then only see the participant view. <br><strong>Attention:</strong> This setting cannot be changed after the activity has been created. If you want to change it later, you have to delete the activity and create it again. In this case, no data will be lost.';
 
 // Strings for index.php.
 $string['modulenameplural'] = 'PINGOs';
@@ -128,7 +128,6 @@ $string['alltags'] = 'All tags';
 // Strings for the events.
 $string['eventconnectionclosed'] = 'PINGO connection closed';
 $string['eventconnectioncreated'] = 'PINGO connection created';
-$string['eventconnectionview'] = 'PINGO connection viewed';
 $string['eventpingologinfailed'] = 'PINGO login failed';
 $string['eventpingologinsuccessful'] = 'PINGO login successful';
 

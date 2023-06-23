@@ -30,12 +30,12 @@ $string['pluginname'] = 'PINGO';
 
 // Strings for mod_form.php.
 $string['modulename'] = 'PINGO';
-$string['modulename_help'] = 'Die Aktivität Pingo erlaubt ... ';
+$string['modulename_help'] = 'Die Aktivität PINGO erlaubt ... ';
 $string['modulename_link'] = 'mod/pingo/view';
-$string['pluginadministration'] = 'Administration der Pingo-Instanz';
+$string['pluginadministration'] = 'Administration der PINGO-Instanz';
 $string['editability'] = 'Bearbeitbarkeit';
-$string['editableforall'] = 'Durch andere Lehrende bearbeitbar';
-$string['editableforall_help'] = 'Wenn aktiviert können andere Lehrende in dieser Aktivität Änderungen vornehmen.';
+$string['editableforall'] = 'Von anderen Lehrenden nutzbar';
+$string['editableforall_help'] = 'Wenn aktiviert können alle Lehrenden in dieser Aktivität alle Sessions des verbundenen PINGO Accounts ansehen, in diesen Umfragen anlegen und deren Ergebnisse ansehen. Ist diese Option nicht aktiviert kann dies nur die Person die sich mit ihrem PINGO-Account einloggt, alle anderen Lehrenden sehen andere dann lediglich die Teilnehmeransicht. <br><strong>Achtung:</strong> Diese Einstellung kann nach dem Anlegen der Aktivität nicht mehr verändert werden. Falls eine nachträgliche Änderung gewünscht ist muss die Aktivität gelöscht und wieder neu erstellt werden. Daten gehen in diesem Fall keine verloren.';
 
 // Strings for index.php.
 $string['modulenameplural'] = 'PINGOs';
@@ -128,7 +128,6 @@ $string['alltags'] = 'Alle Tags';
 // Strings for the events.
 $string['eventconnectionclosed'] = 'PINGO Verbindung beendet';
 $string['eventconnectioncreated'] = 'PINGO Verbindung angelegt';
-$string['eventconnectionview'] = 'PINGO Verbindung angesehen';
 $string['eventpingologinfailed'] = 'PINGO Login fehlgeschlagen';
 $string['eventpingologinsuccessful'] = 'PINGO Login erfolgreich';
 

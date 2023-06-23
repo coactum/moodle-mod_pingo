@@ -429,14 +429,6 @@ if ($viewoverview && ($moduleinstance->editableforall || (!$activeconnection || 
 
     if ($activeconnection) { // Show content from PINGO.
 
-        // Trigger pingo connection viewed event.
-        $event = \mod_pingo\event\connection_viewed::create(array(
-            'objectid' => (int) $activeconnection->id,
-            'context' => $context
-        ));
-
-        $event->trigger();
-
         // Add section with sessions overview.
         $tabs = new stdClass;
         $tabs->active = new stdClass;
