@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * The connection created event for mod_pingo.
+ * The pingo login successful event for mod_pingo.
  *
  * @package   mod_pingo
  * @copyright 2023 coactum GmbH
@@ -24,13 +24,13 @@
 namespace mod_pingo\event;
 
 /**
- * The connection created event for mod_pingo.
+ * The pingo login successful event for mod_pingo.
  *
  * @package   mod_pingo
  * @copyright 2023 coactum GmbH
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class connection_created extends \core\event\base {
+class pingo_login_successful extends \core\event\base {
 
     /**
      * Init method.
@@ -47,7 +47,7 @@ class connection_created extends \core\event\base {
      * @return string
      */
     public static function get_name() {
-        return get_string('eventconnectioncreated', 'mod_pingo');
+        return get_string('eventpingologinsuccessful', 'mod_pingo');
     }
 
     /**
@@ -56,8 +56,8 @@ class connection_created extends \core\event\base {
      * @return string
      */
     public function get_description() {
-        return "The user with the id '$this->userid' has created the connection with the id '$this->objectid
-            ' in the PINGO activity with the course module id '$this->contextinstanceid'";
+        return "The user with the id '$this->userid' successfully logged in to PINGO and started the connection with the id '
+            $this->objectid' in the activity with the course module id '$this->contextinstanceid'";
     }
 
     /**

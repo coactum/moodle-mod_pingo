@@ -78,8 +78,7 @@ class restore_pingo_activity_task extends restore_activity_task {
         // Define the rules.
 
         $rules[] = new restore_decode_rule('PINGOINDEX', '/mod/pingo/index.php?id=$1', 'course');
-        $rules[] = new restore_decode_rule('PINGOVIEWBYSESSION', '/mod/pingo/view.php?id=$1&session=$2',
-            array('course_module', 'session'));
+        $rules[] = new restore_decode_rule('PINGOVIEWBYID', '/mod/pingo/view.php?id=$1', 'course_module');
 
         return $rules;
     }

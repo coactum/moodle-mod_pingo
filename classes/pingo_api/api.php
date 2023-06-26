@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Class for fetching data from pingo.
+ * Class for fetching data from PINGO.
  *
  * @package     mod_pingo
  * @copyright   2023 coactum GmbH
@@ -27,7 +27,7 @@ namespace mod_pingo\pingo_api;
 use stdclass;
 
 /**
- * Class for fetching data from pingo.
+ * Class for fetching data from PINGO.
  *
  * @package   mod_pingo
  * @copyright 2023 coactum GmbH
@@ -39,12 +39,12 @@ class mod_pingo_api {
      * Method for fetching the authentication token from PINGO.
      *
      * @param string $remoteurl The URL to fetch the data from.
-     * @param string $email The email for authentication to PINGO.
-     * @param string $password The password for authentication to PINGO.
-     * @return string The authentication token for PINGO.
+     * @param string $email The email for the login to PINGO.
+     * @param string $password The password for the PINGO login.
+     * @return string The authentication token from PINGO.
      */
     public static function get_authtoken($remoteurl, $email, $password) {
-        // Requesting authenticationtoken from PINGO for email and password.
+        // Requesting authentication token from PINGO for email and password.
         $url = $remoteurl . "/api/get_auth_token";
 
         $data = 'password=' . urlencode($password) . '&email=' . urlencode($email);
@@ -78,12 +78,12 @@ class mod_pingo_api {
      * Method for fetching the requested session from PINGO.
      *
      * @param string $remoteurl The URL to fetch the data from.
-     * @param string $authtoken The authentication token from the user.
+     * @param string $authtoken The authentication token for PINGO.
      * @param int $session The ID of the session in PINGO.
      * @return object Object with all data from the session in PINGO.
      */
     public static function get_session($remoteurl, $authtoken, $session) {
-        // Requesting session from PINGO .
+        // Requesting session from PINGO.
         $url = $remoteurl . "/events/$session/?auth_token=" . $authtoken;
 
         $data = '';
@@ -123,11 +123,11 @@ class mod_pingo_api {
      * Method for fetching all sessions from PINGO.
      *
      * @param string $remoteurl The URL to fetch the data from.
-     * @param string $authtoken The authentication token from the user.
+     * @param string $authtoken The authentication token for PINGO.
      * @return object Object with all data from all sessions in PINGO.
      */
     public static function get_sessions($remoteurl, $authtoken) {
-        // Requesting sessions list from PINGO .
+        // Requesting sessions list from PINGO.
         $url = $remoteurl . "/events?auth_token=" . $authtoken;
 
         $data = '';
@@ -166,7 +166,7 @@ class mod_pingo_api {
      * @return object Object The duration choices from PINGO.
      */
     public static function get_durationchoices($remoteurl) {
-        // Requesting duration choices from PINGO .
+        // Requesting duration choices from PINGO.
         $url = $remoteurl . "/api/duration_choices";
 
         $data = '';
@@ -221,7 +221,7 @@ class mod_pingo_api {
      * Method for fetching question types and answer options for the quickstart form.
      *
      * @param string $remoteurl The URL to fetch the data from.
-     * @param string $authtoken The authentication token from the user.
+     * @param string $authtoken The authentication token for PINGO.
      * @return object Object with all data for the form (question types and answer options).
      */
     public static function get_quickstart_formdata($remoteurl, $authtoken) {
@@ -229,7 +229,6 @@ class mod_pingo_api {
 
         // Check if unauthorized (because question_types dont need auth_token).
         if (!self::get_sessions($remoteurl, $authtoken)) {
-            \core\notification::error(get_string('errunauthorized', 'mod_pingo'));
             return false;
         }
 
@@ -307,7 +306,7 @@ class mod_pingo_api {
      * Method for running a quickstart survey.
      *
      * @param string $remoteurl The URL to fetch the data from.
-     * @param string $authtoken The authentication token from the user.
+     * @param string $authtoken The authentication token for PINGO.
      * @param string $session The ID of the session.
      * @param string $questiontype The question type choosen by the user.
      * @param string $answeroption The answer option choosen by the user.
@@ -346,14 +345,14 @@ class mod_pingo_api {
     }
 
     /**
-     * Method for fetching questions and tags for the adding questions from catalog form.
+     * Method for fetching questions and tags for the add questions from catalogue form.
      *
      * @param string $remoteurl The URL to fetch the data from.
-     * @param string $authtoken The authentication token from the user.
-     * @param string $tag The tag of the questions.
+     * @param string $authtoken The authentication token for PINGO.
+     * @param string $tag The tag of the questions that should be shown.
      * @return object Object with all data for the form (questions and tags).
      */
-    public static function get_questionfromcatalog_formdata($remoteurl, $authtoken, $tag) {
+    public static function get_questionfromcatalogue_formdata($remoteurl, $authtoken, $tag) {
         $url = $remoteurl . "/questions?auth_token=$authtoken&tag=$tag";
 
         $data = '';
@@ -400,15 +399,15 @@ class mod_pingo_api {
     }
 
     /**
-     * Method for running a question from catalog as a survey.
+     * Method for running a question from catalogue as a survey.
      *
      * @param string $remoteurl The URL to fetch the data from.
-     * @param string $authtoken The authentication token from the user.
+     * @param string $authtoken The authentication token for PINGO.
      * @param string $session The ID of the session.
      * @param string $questionid The id of the question choosen by the user.
      * @param string $duration The duration choosen by the user.
      */
-    public static function run_question_from_catalog($remoteurl, $authtoken, $session, $questionid, $duration) {
+    public static function run_question_from_catalogue($remoteurl, $authtoken, $session, $questionid, $duration) {
 
         // Create a new cURL handle.
         $curl = new \curl();
@@ -441,10 +440,10 @@ class mod_pingo_api {
     }
 
     /**
-     * Method for running a question from catalog as a survey.
+     * Method for stopping a survey.
      *
      * @param string $remoteurl The URL to fetch the data from.
-     * @param string $authtoken The authentication token from the user.
+     * @param string $authtoken The authentication token for PINGO.
      * @param string $session The ID of the session.
      * @param string $surveyid The id of the survey that should be stopped.
      * @param string $stoptime The time when the survey should be stopped.
@@ -478,54 +477,6 @@ class mod_pingo_api {
             return true;
         } else {
             return false;
-        }
-    }
-
-
-    /**
-     * Method for fetching the running surveys from PINGO.
-     *  NOT USED AT THE MOMENT!
-     *
-     * @param string $remoteurl The URL to fetch the data from.
-     * @param string $authtoken The authentication token from the user.
-     * @param string $session The ID of the session.
-     * @return object Object The duration choices from PINGO.
-     */
-    public static function get_runningsurveys($remoteurl, $authtoken, $session) {
-        // Requesting duration choices from PINGO .
-        $url = $remoteurl . "/events/$session/surveys?auth_token=$authtoken";
-
-        $data = '';
-
-        $options = array(
-            'RETURNTRANSFER' => 1,
-            'HEADER' => 0,
-            'FAILONERROR' => 1,
-        );
-
-        $header = array(
-            'Content-Type: application/x-www-form-urlencoded',
-            'Content-Length: ' . strlen($data),
-            'Accept: application/json'
-        );
-
-        $curl = new \curl();
-        $curl->setHeader($header);
-        $jsonresult = $curl->get($url, $data, $options);
-
-        if (!isset($curl->info['http_code'])) {
-            return false;
-        } else if ($curl->info['http_code'] == 401) {
-            \core\notification::error(get_string('errunauthorized', 'mod_pingo'));
-            return false;
-        } else {
-            $response = json_decode($jsonresult, true);
-
-            if (isset($response)) {
-                return $response;
-            } else {
-                return false;
-            }
         }
     }
 }

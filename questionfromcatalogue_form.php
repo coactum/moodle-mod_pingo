@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * File containing the class definition for the pingo question from catalog form.
+ * File containing the class definition for the pingo question from catalogue form.
  *
  * @package     mod_pingo
  * @copyright   2023 coactum GmbH
@@ -28,13 +28,13 @@ global $CFG;
 require_once("$CFG->libdir/formslib.php");
 
 /**
- * Form for adding a question from catalog.
+ * Form for adding a question from catalogue.
  *
  * @package   mod_pingo
  * @copyright 2023 coactum GmbH
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL Juv3 or later
  */
-class mod_pingo_questionfromcatalog_form extends moodleform {
+class mod_pingo_questionfromcatalogue_form extends moodleform {
 
     /**
      * Define the form - called by parent constructor.
@@ -48,9 +48,9 @@ class mod_pingo_questionfromcatalog_form extends moodleform {
         $mform->addElement('html', '<h3 class="mt-5 mb-3">' .
             $this->_customdata['sessionname'] . ' (' . $this->_customdata['sessiontoken'] . ')</h3>');
 
-        $mform->addElement('header', 'questionfromcatalog', get_string('addquestionfromcatalog', 'pingo'));
+        $mform->addElement('header', 'questionfromcatalogue', get_string('addquestionfromcatalogue', 'pingo'));
 
-        $mform->addElement('html', get_string('questionfromcatalogexplanation', 'pingo'));
+        $mform->addElement('html', get_string('questionfromcatalogueexplanation', 'pingo'));
 
         $mform->addElement('hidden', 'id', null);
         $mform->setType('id', PARAM_INT);

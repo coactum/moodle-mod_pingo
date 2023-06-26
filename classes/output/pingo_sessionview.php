@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Class containing data for pingo session view
+ * Class containing data for pingo session view.
  *
  * @package     mod_pingo
  * @copyright   2023 coactum GmbH
@@ -29,7 +29,7 @@ use templatable;
 use stdClass;
 
 /**
- * Class containing data for pingo session view
+ * Class containing data for pingo session view.
  *
  * @package     mod_pingo
  * @copyright   2023 coactum GmbH

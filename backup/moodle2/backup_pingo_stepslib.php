@@ -48,7 +48,7 @@ class backup_pingo_activity_structure_step extends backup_activity_structure_ste
         $connection = new backup_nested_element('connection', array('id'), array(
             'userid', 'authenticationtoken', 'timestarted', 'activesession'));
 
-        // Build the tree with these elements with $root as the root of the backup tree.
+        // Build the tree with these elements with $pingo as the root of the backup tree.
         $pingo->add_child($connections);
         $connections->add_child($connection);
 

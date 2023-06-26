@@ -64,9 +64,9 @@ class backup_pingo_activity_task extends backup_activity_task {
         $search = "/(".$base."\/mod\/pingo\/index.php\?id\=)([0-9]+)/";
         $content = preg_replace($search, '$@PINGOINDEX*$2@$', $content);
 
-        // Link to view by moduleid with optional session id if session is selected.
+        // Link to view by moduleid.
         $search = "/(".$base."\/mod\/pingo\/view.php\?id\=)([0-9]+)/";
-        $content = preg_replace($search, '$@PINGOVIEWBYSESSION*$2@$', $content);
+        $content = preg_replace($search, '$@PINGOVIEWBYID*$2@$', $content);
 
         return $content;
     }

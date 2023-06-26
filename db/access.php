@@ -50,7 +50,7 @@ $capabilities = array(
     ),
 
     'mod/pingo:logintopingo' => array(
-        'riskbitmask' => RISK_PERSONAL,
+        'riskbitmask' => RISK_PERSONAL | RISK_SPAM,
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => array(
@@ -72,7 +72,7 @@ $capabilities = array(
     ),
 
     'mod/pingo:startsurvey' => array(
-        'riskbitmask' => RISK_PERSONAL,
+        'riskbitmask' => RISK_PERSONAL | RISK_SPAM,
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => array(

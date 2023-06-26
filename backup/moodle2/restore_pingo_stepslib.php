@@ -31,10 +31,6 @@
  */
 class restore_pingo_activity_structure_step extends restore_activity_structure_step {
 
-    /** @var newinstanceid Store id of new instance if needed to store id of parent instance in subpath. */
-    protected $newinstanceid = false;
-
-
     /**
      * Defines the structure to be restored.
      *
@@ -54,7 +50,7 @@ class restore_pingo_activity_structure_step extends restore_activity_structure_s
     }
 
     /**
-     * Processes the pingo restore data.
+     * Processes the PINGO restore data.
      *
      * @param array $data Parsed element data.
      */
@@ -67,7 +63,6 @@ class restore_pingo_activity_structure_step extends restore_activity_structure_s
 
         $newitemid = $DB->insert_record('pingo', $data);
         $this->apply_activity_instance($newitemid);
-        $this->newinstanceid = $newitemid;
 
         return;
     }

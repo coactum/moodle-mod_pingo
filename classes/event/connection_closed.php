@@ -75,6 +75,6 @@ class connection_closed extends \core\event\base {
      * Get objectid mapping for restore.
      */
     public static function get_objectid_mapping() {
-        return array('db' => 'pingo_connections', 'restore' => 'pingo_connections');
+        return array('db' => 'pingo_connections', 'restore' => 'pingo_connection');
     }
 }

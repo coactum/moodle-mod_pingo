@@ -49,11 +49,11 @@ $mode = optional_param('mode', 1, PARAM_INT);
 // Session that should be displayed.
 $session = optional_param('session', 0, PARAM_INT);
 
-// Tag for the question from catalog form.
+// Tag for the question from catalogue form.
 $tag = optional_param('tag', 0, PARAM_TEXT);
 
 // Session that should be shown in the participants view.
-$activatesession = optional_param('activatesession', 0, PARAM_INT);
+$activatesession = optional_param('activatesession', -1, PARAM_INT);
 
 // Set the basic variables $course, $cm and $moduleinstance.
 if ($id) {
@@ -117,7 +117,7 @@ if (!$activeconnection) {
     $PAGE->navbar->add(get_string("quickstart", "pingo") . ' (' . $session . ')');
     $PAGE->set_url('/mod/pingo/view.php', array('id' => $cm->id, 'session' => $session, 'mode' => $mode));
 } else if ($mode == 3) {
-    $PAGE->navbar->add(get_string("catalog", "pingo") . ' (' . $session . ')');
+    $PAGE->navbar->add(get_string("catalogue", "pingo") . ' (' . $session . ')');
     $PAGE->set_url('/mod/pingo/view.php', array('id' => $cm->id, 'session' => $session, 'mode' => $mode));
 } else if ($mode == 4) {
     $PAGE->navbar->add(get_string("session", "pingo") . ' (' . $session . ')');
@@ -160,15 +160,15 @@ if (!$activeconnection) {
 
                 $newconnectionid = $DB->insert_record('pingo_connections', $connection);
 
-                // Trigger pingo connection login successful event.
-                $event = \mod_pingo\event\pingologin_successful::create(array(
+                // Trigger PINGO connection login successful event.
+                $event = \mod_pingo\event\pingo_login_successful::create(array(
                     'objectid' => $newconnectionid,
                     'context' => $context
                 ));
 
                 $event->trigger();
 
-                // Trigger pingo connection created event.
+                // Trigger PINGO connection created event.
                 $event = \mod_pingo\event\connection_created::create(array(
                     'objectid' => $newconnectionid,
                     'context' => $context
@@ -182,8 +182,8 @@ if (!$activeconnection) {
                 redirect($redirecturl, get_string('loginsuccessful', 'mod_pingo'), null, notification::NOTIFY_SUCCESS);
 
             } else {
-                // Trigger pingo connection login failed event.
-                $event = \mod_pingo\event\pingologin_failed::create(array(
+                // Trigger PINGO connection login failed event.
+                $event = \mod_pingo\event\pingo_login_failed::create(array(
                     'objectid' => (int) $USER->id,
                     'context' => $context
                 ));
@@ -242,6 +242,14 @@ if (!$activeconnection) {
                             $DB->update_record('pingo_connections', $connection);
                         }
 
+                        // Trigger PINGO survey created event.
+                        $event = \mod_pingo\event\pingo_survey_created::create(array(
+                            'objectid' => (int) $fromform->session,
+                            'context' => $context
+                        ));
+
+                        $event->trigger();
+
                         $urlparams = array('id' => $id, 'session' => $session, 'mode' => 4);
                         $redirecturl = new moodle_url('/mod/pingo/view.php', $urlparams);
                         redirect($redirecturl, get_string('surveycreated', 'mod_pingo'), null, notification::NOTIFY_SUCCESS);
@@ -267,14 +275,14 @@ if (!$activeconnection) {
         }
     }
 } else if ($mode === 3) {
-    require_once($CFG->dirroot . '/mod/pingo/questionfromcatalog_form.php');
+    require_once($CFG->dirroot . '/mod/pingo/questionfromcatalogue_form.php');
 
     // Get data for form from PINGO.
-    $data = mod_pingo_api::get_questionfromcatalog_formdata($remoteurl, $activeconnection->authenticationtoken, '');
+    $data = mod_pingo_api::get_questionfromcatalogue_formdata($remoteurl, $activeconnection->authenticationtoken, '');
     $durationchoices = mod_pingo_api::get_durationchoices($remoteurl);
 
     if ($data) {
-        $mform = new mod_pingo_questionfromcatalog_form(null,
+        $mform = new mod_pingo_questionfromcatalogue_form(null,
             array('questions' => $data->questions, 'duration_choices' => $durationchoices, 'sessiontoken' => '',
                 'sessionname' => '', 'remoteurl' => $remoteurl, 'tags' => $data->tags));
 
@@ -294,7 +302,7 @@ if (!$activeconnection) {
                 $sessiondata = mod_pingo_api::get_session($remoteurl, $activeconnection->authenticationtoken, $fromform->session);
 
                 if (!empty($sessiondata)) {
-                    $surveycreated = mod_pingo_api::run_question_from_catalog($remoteurl, $activeconnection->authenticationtoken,
+                    $surveycreated = mod_pingo_api::run_question_from_catalogue($remoteurl, $activeconnection->authenticationtoken,
                         $fromform->session, $fromform->question, $fromform->duration_choices);
 
                     if ($surveycreated) {
@@ -305,6 +313,14 @@ if (!$activeconnection) {
 
                             $DB->update_record('pingo_connections', $connection);
                         }
+
+                        // Trigger PINGO survey created event.
+                        $event = \mod_pingo\event\pingo_survey_created::create(array(
+                            'objectid' => (int) $fromform->session,
+                            'context' => $context
+                        ));
+
+                        $event->trigger();
 
                         $urlparams = array('id' => $id, 'session' => $session, 'mode' => 4);
                         $redirecturl = new moodle_url('/mod/pingo/view.php', $urlparams);
@@ -387,7 +403,7 @@ if (!$activeconnection) {
             }
         }
     }
-} else if ($activatesession != 0) {
+} else if ($activatesession >= 0) {
     $connection = $DB->get_record('pingo_connections', array('pingo' => $moduleinstance->id));
     $connection->activesession = $activatesession;
 
@@ -441,7 +457,7 @@ if ($viewoverview && ($moduleinstance->editableforall || (!$activeconnection || 
                 $tabs->active->quickstart = true;
                 break;
             case 3:
-                $tabs->active->catalog = true;
+                $tabs->active->catalogue = true;
                 break;
             case 4:
                 $tabs->active->session = true;
@@ -514,13 +530,13 @@ if ($viewoverview && ($moduleinstance->editableforall || (!$activeconnection || 
 
         } else if ($mode === 3) {
             // Get data for form from PINGO.
-            $data = mod_pingo_api::get_questionfromcatalog_formdata($remoteurl, $activeconnection->authenticationtoken, $tag);
+            $data = mod_pingo_api::get_questionfromcatalogue_formdata($remoteurl, $activeconnection->authenticationtoken, $tag);
             $sessiondata = mod_pingo_api::get_session($remoteurl, $activeconnection->authenticationtoken, $session);
             $durationchoices = mod_pingo_api::get_durationchoices($remoteurl);
 
             if ($data && $sessiondata) {
                 // Add form.
-                $mform = new mod_pingo_questionfromcatalog_form(new moodle_url('/mod/pingo/view.php', array('id' => $cm->id)),
+                $mform = new mod_pingo_questionfromcatalogue_form(new moodle_url('/mod/pingo/view.php', array('id' => $cm->id)),
                     array('questions' => $data->questions, 'duration_choices' => $durationchoices,
                     'sessiontoken' => format_text($sessiondata['token'], 2)
                     , 'sessionname' => format_text($sessiondata['name'], 2),

@@ -30,7 +30,7 @@ namespace mod_pingo\event;
  * @copyright 2023 coactum GmbH
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class pingologin_failed extends \core\event\base {
+class pingo_login_failed extends \core\event\base {
 
     /**
      * Init method.
@@ -57,7 +57,7 @@ class pingologin_failed extends \core\event\base {
      */
     public function get_description() {
         return "The user with the id '$this->userid' tried to log in to PINGO but failed
-            in the PINGO activity with the course module id '$this->contextinstanceid'";
+            in the activity with the course module id '$this->contextinstanceid'";
     }
 
     /**

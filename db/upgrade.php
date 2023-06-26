@@ -28,7 +28,7 @@ defined('MOODLE_INTERNAL') || die();
 require_once(__DIR__.'/upgradelib.php');
 
 /**
- * Upgrade the pingo plugin from the given old version.
+ * Upgrade the PINGO plugin from the given old version.
  *
  * @param int $oldversion
  * @return bool

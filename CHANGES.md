@@ -1,5 +1,8 @@
 ## Changelog ##
 
+- [0.1.3]:
+    - Final preparations and cleanup part one.
+
 - [0.1.2]:
     - Minor fixes.
 
@@ -18,12 +21,12 @@
     - Some changes and bugfixes.
 
 - [0.0.7]:
-    - Worked on question from catalog functionality.
+    - Worked on question from catalogue functionality.
     - Added backup functionality.
     - Added privacy functionality.
 
 - [0.0.6]:
-    - Added first part of the question from catalog functionality.
+    - Added first part of the question from catalogue functionality.
 
 - [0.0.5]:
     - Added first part of quickstart functionality.

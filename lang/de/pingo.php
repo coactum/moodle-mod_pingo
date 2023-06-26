@@ -30,12 +30,28 @@ $string['pluginname'] = 'PINGO';
 
 // Strings for mod_form.php.
 $string['modulename'] = 'PINGO';
-$string['modulename_help'] = 'Die Aktivität PINGO erlaubt ... ';
+$string['modulename_help'] = 'Die Aktivität erlaubt die Integration des kostenlos nutzbaren Classroom-Response-Systems für PINGO in Moodle.
+
+PINGO ermöglicht das unkomplizierte Einholen von Live-Feedback und lässt sich vielfältig in der Lehre einsetzen. So können vorab bequem Umfragen vorbereitet und diese in der Lehrveranstaltung dann schnell dem gesamten Publikum über dessen Mobilgeräte zugänglich gemacht werden.
+
+Diese Aktivität ermöglicht dabei die Integration von PINGO in Moodle. So erlaubt sie Lehrenden, sich direkt in der Aktivität bei PINGO anzumelden und danach auf ihre in PINGO angelegten Sessions zuzugreifen, sie anzusehen, in ihnen Umfragen hinzuzufügen und diese dann zu starten.
+Teilnehmende können dann die Umfragen direkt in der Aktivität ansehen. Für zusätzliche Aktionen wie etwa das Anlegen neuer Sessions oder Fragen leitet die Aktivität zudem zur Webvariante von PINGO weiter.
+
+Lehrende können ...
+
+* sich bequem in PINGO einloggen
+* alle in PINGO angelegten Sessions ansehen
+* schnelle Umfragen sowie Fragen aus dem Fragenkatalog zu einer Session hinzufügen und starten
+* einzelne Sessions und die jeweils letzte dort aktive Umfrage ansehen
+
+Teilnehmende können ...
+
+* Die aktive Session ansehen und die dortige Umfrage zur Abstimmung öffnen';
 $string['modulename_link'] = 'mod/pingo/view';
-$string['pluginadministration'] = 'Administration der PINGO-Instanz';
+$string['pluginadministration'] = 'Administration von PINGO';
 $string['editability'] = 'Bearbeitbarkeit';
 $string['editableforall'] = 'Von anderen Lehrenden nutzbar';
-$string['editableforall_help'] = 'Wenn aktiviert können alle Lehrenden in dieser Aktivität alle Sessions des verbundenen PINGO Accounts ansehen, in diesen Umfragen anlegen und deren Ergebnisse ansehen. Ist diese Option nicht aktiviert kann dies nur die Person die sich mit ihrem PINGO-Account einloggt, alle anderen Lehrenden sehen andere dann lediglich die Teilnehmeransicht. <br><strong>Achtung:</strong> Diese Einstellung kann nach dem Anlegen der Aktivität nicht mehr verändert werden. Falls eine nachträgliche Änderung gewünscht ist muss die Aktivität gelöscht und wieder neu erstellt werden. Daten gehen in diesem Fall keine verloren.';
+$string['editableforall_help'] = 'Wenn aktiviert können alle Lehrenden in dieser Aktivität alle Sessions des verbundenen PINGO Accounts ansehen, in diesen Umfragen anlegen und deren Ergebnisse ansehen. Ist diese Option nicht aktiviert kann dies nur die Person die sich mit ihrem PINGO-Account einloggt, alle anderen Lehrenden sehen dann lediglich die Teilnehmeransicht. <br><strong>Achtung:</strong> Diese Einstellung kann nach dem Anlegen der Aktivität nicht mehr verändert werden. Falls eine nachträgliche Änderung gewünscht ist muss die Aktivität gelöscht und wieder neu erstellt werden. Daten in PINGO gehen in diesem Fall keine verloren.';
 
 // Strings for index.php.
 $string['modulenameplural'] = 'PINGOs';
@@ -50,7 +66,7 @@ $string['pingo:addinstance'] = 'Neue PINGO Instanz hinzufügen';
 $string['pingo:viewoverview'] = 'Übersichtsseite ansehen';
 $string['pingo:logintopingo'] = 'Bei PINGO anmelden';
 $string['pingo:viewallsessions'] = 'Alle PINGO Sessions ansehen';
-$string['pingo:startsurvey'] = 'Umfrage aus PINGO starten';
+$string['pingo:startsurvey'] = 'Umfrage in Session starten';
 
 // Strings for the admin settings.
 $string['connectionsdetails'] = 'Verbindungseinstellungen';
@@ -66,23 +82,17 @@ $string['loginfailedinvalidcredentials'] = 'PINGO Login fehlgeschlagen (fehlerha
 $string['loginsuccessful'] = 'PINGO Login erfolgreich';
 $string['connected'] = 'Verbunden';
 $string['closeconnection'] = 'Verbindung trennen';
-$string['noconnection'] = 'Nicht verbunden';
-$string['yoursessions'] = 'Ihre Sessions';
 $string['nosessionsavailable'] = 'Keine Sitzungen verfügbar';
-$string['answers'] = 'Antwortmöglichkeiten';
-$string['continuesurvey'] = 'Fortfahren';
-$string['repeatsurvey'] = 'Wiederholen';
 $string['stopsurvey'] = 'Stoppen';
 $string['stoptime'] = 'Wann stoppen?';
 $string['nosurveys'] = 'Sie haben noch keine Umfragen in dieser Session erstellt.';
-$string['nosurveyactive'] = 'Keine Umfrage aktiv';
 $string['sessions'] = 'Sessions';
 $string['quickstart'] = 'Schnellstart';
-$string['catalog'] = 'Katalog';
+$string['catalogue'] = 'Katalog';
 $string['createsessioninpingo'] = 'Session anlegen (in PINGO)';
 $string['startsurvey'] = 'Starten';
 $string['quicksurvey'] = 'Schnelle Umfrage';
-$string['questionfromcatalog'] = 'Aus Katalog';
+$string['questionfromcatalogue'] = 'Aus Katalog';
 $string['session'] = 'Session';
 $string['surveycreated'] = 'Umfrage gestartet';
 $string['reloadpage'] = 'Seite neu laden';
@@ -90,7 +100,6 @@ $string['surveystopped'] = 'Umfrage wird gestoppt';
 $string['surveyends'] = 'Endet in ';
 $string['surveyhasnoend'] = 'Kein Enddatum.';
 $string['surveyended'] = 'Beendet:';
-$string['nosessionchoosen'] = 'Keine Session ausgewählt.';
 $string['noactivesession'] = 'Keine aktive Sitzung.';
 $string['setsessionactive'] = 'Sitzung für Teilnehmende aktiv schalten';
 $string['voteinpingo'] = 'Abstimmen (in PINGO)';
@@ -101,8 +110,8 @@ $string['surveyinsession'] = 'Umfrage in Session';
 
 // Strings for the login form.
 $string['pingoemail'] = 'Die E-Mail-Adresse in PINGO';
-$string['pingoemail_help'] = 'Der für den PINGO Account genutzte E-Mail-Adresse';
-$string['pingopassword'] = 'Das Passwort in PINGO';
+$string['pingoemail_help'] = 'Die für den Login in PINGO genutzte E-Mail-Adresse';
+$string['pingopassword'] = 'Das Passwort für PINGO';
 $string['pingopassword_help'] = 'Das Passwort des Accounts in PINGO';
 $string['nopingoyet'] = 'Noch kein Account?';
 $string['registerforpingo'] = 'Bei PINGO registrieren (externe Seite)';
@@ -117,9 +126,9 @@ $string['answeroptions'] = 'Antwortoptionen';
 $string['durationchoices'] = 'Dauer';
 $string['nocountdown'] = 'Ohne Countdown';
 
-// Strings for the questionfromcatalog form.
-$string['addquestionfromcatalog'] = 'Frage vom Katalog hinzufügen';
-$string['questionfromcatalogexplanation'] = 'Starten Sie in dieser Session eine Frage aus ihrem Fragenkatalog.';
+// Strings for the question from catalogue form.
+$string['addquestionfromcatalogue'] = 'Frage vom Katalog hinzufügen';
+$string['questionfromcatalogueexplanation'] = 'Starten Sie in dieser Session eine Frage aus Ihrem Fragenkatalog.';
 $string['managequestionsinpingo'] = 'Fragenkatalog verwalten (in PINGO)';
 $string['yourquestions'] = 'Ihre Fragen';
 $string['filterbytags'] = 'Tag-Filter';
@@ -130,6 +139,7 @@ $string['eventconnectionclosed'] = 'PINGO Verbindung beendet';
 $string['eventconnectioncreated'] = 'PINGO Verbindung angelegt';
 $string['eventpingologinfailed'] = 'PINGO Login fehlgeschlagen';
 $string['eventpingologinsuccessful'] = 'PINGO Login erfolgreich';
+$string['eventpingosurveycreated'] = 'PINGO Umfrage erstellt';
 
 // Strings for all errors.
 $string['errunauthorized'] = 'Authentifizierung fehlgeschlagen. Die gespeicherte Anmeldung für PINGO ist ungültig oder wurde in PINGO widerrufen. Die Verbindung muss geschlossen und neu gestartet werden.';
@@ -144,6 +154,6 @@ $string['errnotallowedforotherteachers'] = 'Andere Lehrende dürfen in dieser Ak
 $string['privacy:metadata:pingo_connections'] = 'Enthält personenbezogene Anmeldedaten der Lehrenden für die Anmeldung bei PINGO.';
 $string['privacy:metadata:pingo_connections:userid'] = 'Moodle ID des Benutzers der die Plugininstanz bei PINGO anmeldet';
 $string['privacy:metadata:pingo_connections:pingo'] = 'ID der Plugin Instanz';
-$string['privacy:metadata:pingo_connections:authenticationtoken'] = 'Der Token zur Authentifizierung bei PINGO. Wird beim erstmaligen Login in der Plugin-Instanz von PINGO geholt und dann dauerhaft in der Datenbank gespeichert. Wird bei jeder Aktion im Plugin erneut an PINGO geschickt und ermöglicht vollen Zugriff auf alle auf dem PINGO Server gespeicherten Daten des oder der Nutzenden (z. B. Fragen, Umfragen, Sessions usw.). Kann in PINGO ungültig gemacht werden (von allen externen Anwendungen abmelden).';
+$string['privacy:metadata:pingo_connections:authenticationtoken'] = 'Der Token zur Authentifizierung bei PINGO. Wird beim erstmaligen Login in der Plugin-Instanz von PINGO geholt und dann dauerhaft in der Datenbank gespeichert. Wird bei jeder Aktion im Plugin erneut an PINGO geschickt und ermöglicht vollen Zugriff auf alle auf dem PINGO Server gespeicherten Daten des oder der Nutzenden (z. B. Fragen, Umfragen, Sessions usw.). Kann in PINGO ungültig gemacht werden.';
 $string['privacy:metadata:pingo_connections:timestarted'] = 'Datum an dem die Anmeldung an PINGO erfolgt ist';
 $string['privacy:metadata:pingo_connections:activesession'] = 'Die PINGO Session die in der Teilnehmeransicht sichtbar ist';
