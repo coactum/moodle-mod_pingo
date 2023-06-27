@@ -27,7 +27,6 @@
  *
  * @uses FEATURE_MOD_INTRO
  * @uses FEATURE_SHOW_DESCRIPTION
- * @uses FEATURE_GRADE_HAS_GRADE
  * @uses FEATURE_COMPLETION_TRACKS_VIEWS
  * @uses FEATURE__BACKUP_MOODLE2
  * @param string $feature Constant for requested feature.
@@ -210,7 +209,7 @@ function pingo_reset_userdata($data) {
         $DB->delete_records_select('pingo_connections', "pingo IN ($sql)", $params);
 
         $status[] = array(
-            'component' => $modulename,
+            'component' => $componentstr,
             'item' => get_string('alluserdatadeleted', 'pingo'),
             'error' => false
         );

@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * File containing the class definition for the pingo login form.
+ * File containing the class definition for the login form.
  *
  * @package     mod_pingo
  * @copyright   2023 coactum GmbH
@@ -28,7 +28,7 @@ global $CFG;
 require_once("$CFG->libdir/formslib.php");
 
 /**
- * Form for the login to pingo.
+ * Form for the login to PINGO.
  *
  * @package   mod_pingo
  * @copyright 2023 coactum GmbH

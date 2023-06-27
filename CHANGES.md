@@ -1,5 +1,8 @@
 ## Changelog ##
 
+- [0.1.4]:
+    - Final preparations and cleanup part two.
+
 - [0.1.3]:
     - Final preparations and cleanup part one.
 

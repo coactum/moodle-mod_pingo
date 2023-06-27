@@ -43,7 +43,7 @@ $id = optional_param('id', 0, PARAM_INT);
 // If current connection should be closed.
 $closeconnection = optional_param('closeconnection', 0, PARAM_INT);
 
-// Session that should be displayed.
+// The mode for the page (1=sessions, 2=quickstart, 3=questionfromcatalog, 4=session).
 $mode = optional_param('mode', 1, PARAM_INT);
 
 // Session that should be displayed.
@@ -67,12 +67,15 @@ require_login($course, true, $cm);
 
 $context = context_module::instance($cm->id);
 
+// Check if connection is active.
+$activeconnection = $DB->get_record('pingo_connections', array('pingo' => $moduleinstance->id));
+
 if ($closeconnection && $DB->record_exists('pingo_connections', array('pingo' => $moduleinstance->id))) {
     require_sesskey();
 
-    // Trigger pingo connection closed event.
+    // Trigger PINGO connection closed event.
     $event = \mod_pingo\event\connection_closed::create(array(
-        'objectid' => (int) $DB->get_record('pingo_connections', array('pingo' => $moduleinstance->id))->id,
+        'objectid' => (int) $activeconnection->id,
         'context' => $context
     ));
 
@@ -80,10 +83,12 @@ if ($closeconnection && $DB->record_exists('pingo_connections', array('pingo' =>
 
     $DB->delete_records('pingo_connections', array('pingo' => $moduleinstance->id));
 
-}
+    $urlparams = array('id' => $id);
+    $redirecturl = new moodle_url('/mod/pingo/view.php', $urlparams);
 
-// Check if connection is active.
-$activeconnection = $DB->get_record('pingo_connections', array('pingo' => $moduleinstance->id));
+    redirect($redirecturl, get_string('eventconnectionclosed', 'mod_pingo'), null, notification::NOTIFY_SUCCESS);
+
+}
 
 $remoteurl = get_config('pingo', 'remoteserver');
 
@@ -135,7 +140,7 @@ $PAGE->set_title(get_string('modulename', 'mod_pingo').': ' . $modulename);
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($context);
 
-if (!$activeconnection) {
+if (!$activeconnection) { // Login.
 
     // Check if new connection should be saved.
     require_once($CFG->dirroot . '/mod/pingo/login_form.php');
@@ -151,7 +156,7 @@ if (!$activeconnection) {
             // Get PINGO authentication token.
             $authtoken = mod_pingo_api::get_authtoken($remoteurl, $fromform->email, $fromform->password);
 
-            if (isset($authtoken)) {
+            if (isset($authtoken) && $authtoken != 'invalid') {
                 $connection = new stdClass();
                 $connection->pingo = (int) $cm->instance;
                 $connection->userid = (int) $USER->id;
@@ -204,7 +209,7 @@ if (!$activeconnection) {
             redirect($redirecturl, get_string('loginfailedinvalidcredentials', 'mod_pingo'), null, notification::NOTIFY_ERROR);
         }
     }
-} else if ($mode === 2) {
+} else if ($mode === 2) {  // Quickstart.
 
     require_once($CFG->dirroot . '/mod/pingo/quickstart_form.php');
 
@@ -219,8 +224,8 @@ if (!$activeconnection) {
         if ($fromform = $mform->get_data()) {
 
             // In this case you process validated data. $mform->get_data() returns data posted in form.
+            if ($fromform->session && isset($fromform->duration_choices)) {
 
-            if ($fromform->session && isset($fromform->duration_choices) && !empty($fromform->duration_choices)) {
                 // Get session data from PINGO.
                 $sessiondata = mod_pingo_api::get_session($remoteurl, $activeconnection->authenticationtoken, $fromform->session);
 
@@ -258,7 +263,6 @@ if (!$activeconnection) {
                         $redirecturl = new moodle_url('/mod/pingo/view.php', $urlparams);
 
                         redirect($redirecturl, get_string('errsurveynotcreated', 'mod_pingo'), null, notification::NOTIFY_ERROR);
-
                     }
                 } else {
                     $urlparams = array('id' => $id, 'session' => $session, 'mode' => 2);
@@ -274,7 +278,7 @@ if (!$activeconnection) {
             }
         }
     }
-} else if ($mode === 3) {
+} else if ($mode === 3) {  // Question from catalogue.
     require_once($CFG->dirroot . '/mod/pingo/questionfromcatalogue_form.php');
 
     // Get data for form from PINGO.
@@ -291,13 +295,21 @@ if (!$activeconnection) {
 
             // Redirect if questions should be filtered by tag.
             if ($fromform->reload == 1) {
-                $urlparams = array('id' => $id, 'session' => $session, 'mode' => 3, 'tag' => $fromform->tag);
+
+                // If tag value contains js and is therefore filtered by moodle.
+                if (isset($fromform->tag)) {
+                    $tag = $fromform->tag;
+                } else {
+                    $tag = '';
+                }
+
+                $urlparams = array('id' => $id, 'session' => $session, 'mode' => 3, 'tag' => $tag);
                 $redirecturl = new moodle_url('/mod/pingo/view.php', $urlparams);
 
                 redirect($redirecturl);
             }
 
-            if ($fromform->session && isset($fromform->duration_choices) && !empty($fromform->duration_choices)) {
+            if ($fromform->session && isset($fromform->duration_choices)) {
                 // Get session data from PINGO.
                 $sessiondata = mod_pingo_api::get_session($remoteurl, $activeconnection->authenticationtoken, $fromform->session);
 
@@ -330,7 +342,6 @@ if (!$activeconnection) {
                         $redirecturl = new moodle_url('/mod/pingo/view.php', $urlparams);
 
                         redirect($redirecturl, get_string('errsurveynotcreated', 'mod_pingo'), null, notification::NOTIFY_ERROR);
-
                     }
                 } else {
                     $urlparams = array('id' => $id, 'session' => $session, 'mode' => 3);
@@ -345,7 +356,7 @@ if (!$activeconnection) {
             }
         }
     }
-} else if ($mode === 4) {
+} else if ($mode === 4) { // Session.
     require_once($CFG->dirroot . '/mod/pingo/stopsurvey_form.php');
 
     // Get data for form from PINGO.
@@ -627,15 +638,14 @@ if ($viewoverview && ($moduleinstance->editableforall || (!$activeconnection || 
 
         }
 
-    } else { // Show from for login to PINGO.
+    } else { // Show form for login to PINGO.
         // Add form for PINGO login.
         $mform = new mod_pingo_login_form(new moodle_url('/mod/pingo/view.php', array('id' => $cm->id)));
 
         // Set default data.
-        $mform->set_data(array('id' => $cm->id, 'email' => 'b3855300@urhen.com', 'password' => 'Supergeheimespasswort1!'));
+        $mform->set_data(array('id' => $cm->id));
 
         echo $mform->render();
-
     }
 
 } else { // Student view.

@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * File containing the class definition for the pingo question from catalogue form.
+ * File containing the class definition for the question from catalogue form.
  *
  * @package     mod_pingo
  * @copyright   2023 coactum GmbH
@@ -48,9 +48,9 @@ class mod_pingo_questionfromcatalogue_form extends moodleform {
         $mform->addElement('html', '<h3 class="mt-5 mb-3">' .
             $this->_customdata['sessionname'] . ' (' . $this->_customdata['sessiontoken'] . ')</h3>');
 
-        $mform->addElement('header', 'questionfromcatalogue', get_string('addquestionfromcatalogue', 'pingo'));
+        $mform->addElement('header', 'questionfromcatalogue', get_string('addquestionfromcatalogue', 'mod_pingo'));
 
-        $mform->addElement('html', get_string('questionfromcatalogueexplanation', 'pingo'));
+        $mform->addElement('html', get_string('questionfromcatalogueexplanation', 'mod_pingo'));
 
         $mform->addElement('hidden', 'id', null);
         $mform->setType('id', PARAM_INT);
@@ -68,7 +68,7 @@ class mod_pingo_questionfromcatalogue_form extends moodleform {
             '/questions" target="_blank">' . get_string('managequestionsinpingo', 'mod_pingo') . '</a>');
 
         $select = $mform->addElement('select', 'tag',
-        get_string('filterbytags', 'pingo'), $this->_customdata['tags']);
+        get_string('filterbytags', 'mod_pingo'), $this->_customdata['tags']);
         $mform->setType('tag', PARAM_TEXT);
 
         $radioarray = array();
@@ -83,14 +83,15 @@ class mod_pingo_questionfromcatalogue_form extends moodleform {
         $mform->setType('question', PARAM_TEXT);
 
         $select = $mform->addElement('select', 'duration_choices',
-            get_string('durationchoices', 'pingo'), $this->_customdata['duration_choices']);
+            get_string('durationchoices', 'mod_pingo'), $this->_customdata['duration_choices']);
         $mform->setType('duration_choices', PARAM_INT);
 
-        $mform->addElement('advcheckbox', 'setsessionactive', '', get_string('setsessionactive', 'pingo'));
+        $mform->addElement('advcheckbox', 'setsessionactive', '', get_string('setsessionactive', 'mod_pingo'));
+        $mform->setDefault('setsessionactive', 1);
 
         $mform->disable_form_change_checker();
 
-        $this->add_action_buttons(false, get_string('startsurvey', 'pingo'));
+        $this->add_action_buttons(false, get_string('startsurvey', 'mod_pingo'));
     }
 
     /**

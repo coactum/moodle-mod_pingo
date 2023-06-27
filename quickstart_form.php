@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * File containing the class definition for the pingo survey quickstart form.
+ * File containing the class definition for the survey quickstart form.
  *
  * @package     mod_pingo
  * @copyright   2023 coactum GmbH
@@ -79,6 +79,7 @@ class mod_pingo_quickstart_form extends moodleform {
         $mform->setType('duration_choices', PARAM_INT);
 
         $mform->addElement('advcheckbox', 'setsessionactive', '', get_string('setsessionactive', 'pingo'));
+        $mform->setDefault('setsessionactive', 1);
 
         $mform->disable_form_change_checker();
 

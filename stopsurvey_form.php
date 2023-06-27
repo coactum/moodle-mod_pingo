@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * File containing the class definition for the pingo stop survey form.
+ * File containing the class definition for the stop survey form.
  *
  * @package     mod_pingo
  * @copyright   2023 coactum GmbH

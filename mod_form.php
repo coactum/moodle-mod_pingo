@@ -39,7 +39,7 @@ class mod_pingo_mod_form extends moodleform_mod {
      * Define the form elements.
      */
     public function definition() {
-        global $CFG, $DB, $USER;
+        global $CFG;
 
         $mform = &$this->_form;
 
@@ -66,7 +66,7 @@ class mod_pingo_mod_form extends moodleform_mod {
 
         $id = optional_param('update', null, PARAM_INT);
 
-        // Edit all setting if user can edit its own entries.
+        // If other teachers can view sessions and create surveys (only changeable at instance creation).
         $mform->addElement('selectyesno', 'editableforall', get_string('editableforall', 'pingo'));
         $mform->addHelpButton('editableforall', 'editableforall', 'pingo');
 
