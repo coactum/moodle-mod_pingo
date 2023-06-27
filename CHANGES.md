@@ -1,5 +1,8 @@
 ## Changelog ##
 
+- [0.1.5]:
+    - Bugfix for admin settings.
+
 - [0.1.4]:
     - Final preparations and cleanup part two.
 

@@ -156,7 +156,7 @@ if (!$activeconnection) { // Login.
             // Get PINGO authentication token.
             $authtoken = mod_pingo_api::get_authtoken($remoteurl, $fromform->email, $fromform->password);
 
-            if (isset($authtoken) && $authtoken != 'invalid') {
+            if (isset($authtoken) && $authtoken && $authtoken != 'invalid' && $authtoken != 0) {
                 $connection = new stdClass();
                 $connection->pingo = (int) $cm->instance;
                 $connection->userid = (int) $USER->id;
