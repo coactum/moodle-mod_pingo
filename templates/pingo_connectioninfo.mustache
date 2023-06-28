@@ -1,0 +1,44 @@
+{{!
+    This file is part of Moodle - https://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
+}}
+{{!
+    @copyright   2023 coactum GmbH
+    @template pingo/pingo_connectioninfo
+
+    Template for the connection information.
+
+    Example context (json):
+    {
+    }
+}}
+
+{{#js}}
+{{/js}}
+<div class="pingo_connectioninfo">
+    <div class="d-flex justify-content-between">
+        {{#activeconnection}}
+            <div class="p-2" title="{{#str}}connected, mod_pingo{{/str}} ({{remoteserver}})">
+                <i class="fa fa-check text-success"></i>
+                <strong>{{#str}}connected, mod_pingo{{/str}} <a class="d-none d-sm-inline" href="{{remoteserver}}" target="_blank"> ({{remoteserver}})</a></strong>
+            </div>
+            <div class="closeconnectionbutton">
+                <a class="btn btn-primary" href="view.php?id={{cmid}}&closeconnection=1&sesskey={{sesskey}}">
+                    <span>{{#str}}closeconnection, mod_pingo{{/str}}</span>
+                </a>
+            </div>
+        {{/activeconnection}}
+    </div>
+</div>

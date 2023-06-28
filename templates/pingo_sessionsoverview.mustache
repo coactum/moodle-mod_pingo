@@ -1,0 +1,75 @@
+{{!
+    This file is part of Moodle - https://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
+}}
+{{!
+    @copyright   2023 coactum GmbH
+    @template pingo/pingo_sessionsoverview
+
+    Template for the overview over the sessions.
+
+    Example context (json):
+    {
+    }
+}}
+
+{{#js}}
+{{/js}}
+<div class="d-flex justify-content-center">
+    <div class="pingo_sessionsoverview mt-5">
+        <h3>{{#str}}sessions, mod_pingo{{/str}}</h3>
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">
+                        {{#str}}activatesession, mod_pingo{{/str}}
+                    </th>
+                    <th scope="col">
+                        {{#str}}name{{/str}}
+                    </th>
+                    <th scope="col">
+                        {{#str}}description{{/str}}
+                    </th>
+                    <th scope="col" class="minwidthtable">
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#sessions}}
+                    <tr>
+                        <td>
+                            <input type="checkbox" id="{{token}}" name="activatesession" {{#visible}}checked{{/visible}}>
+                        </td>
+                        <td>{{name}} ({{token}})</td>
+                        <td>{{description}}</td>
+                        <td>
+                            <a class="btn btn-primary mr-1" href="view.php?id={{cmid}}&session={{token}}&mode=4" title="{{#str}}show{{/str}}">
+                                <i class="fa fa-eye" title="{{#str}}show{{/str}}"></i>
+                            </a>
+                            <a class="btn btn-primary" href="view.php?id={{cmid}}&session={{token}}&mode=2" title="{{#str}}quicksurvey, mod_pingo{{/str}}">{{#str}}quicksurvey, mod_pingo{{/str}}</a>
+                            <a class="btn btn-primary" href="view.php?id={{cmid}}&session={{token}}&mode=3" title="{{#str}}questionfromcatalogue, mod_pingo{{/str}}">{{#str}}questionfromcatalogue, mod_pingo{{/str}}</a>
+                        </td>
+                    </tr>
+                {{/sessions}}
+                {{^sessions}}
+                    <tr><td align="center" colspan="4">{{#str}}nosessionsavailable, mod_pingo{{/str}}</td></tr>
+                {{/sessions}}
+            </tbody>
+        </table>
+        <div class="d-flex justify-content-center">
+            <a class="btn btn-primary" href="{{remoteserver}}/events/new" target="_blank">{{#str}}createsessioninpingo, mod_pingo{{/str}}</a>
+        </div>
+    </div>
+</div>

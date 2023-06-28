@@ -1,92 +1,62 @@
-# moodle-mod_pingo
+# License #
 
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
 
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-## Getting started
+You should have received a copy of the GNU General Public License along with
+this program.  If not, see <https://www.gnu.org/licenses/>.
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+2023 coactum GmbH
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+# PINGO #
 
-## Add your files
+## Description ##
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+The PINGO activity enables the integration of the free-to-use classroom response system PINGO into Moodle.
 
-```
-cd existing_repo
-git remote add origin https://git.coactum.de/coactum/moodle/moodle-mod_pingo.git
-git branch -M main
-git push -uf origin main
-```
+PINGO allows the easy collection of live feedback and can be used in a variety of ways in teaching. Surveys can be conveniently prepared in advance and then quickly made available to the entire audience via their mobile devices during the lecture.
 
-## Integrate with your tools
+This activity enables the integration of PINGO with Moodle. It allows teachers to log in to PINGO directly in the activity and then access their sessions created in PINGO, view them, add surveys to them, and then launch them.
+Participants can then view the surveys directly in the activity. For additional actions, such as creating new sessions or questions, the activity also redirects to the web version of PINGO.
 
-- [ ] [Set up project integrations](https://git.coactum.de/coactum/moodle/moodle-mod_pingo/-/settings/integrations)
+Teachers can ...
 
-## Collaborate with your team
+- conveniently log into PINGO
+- view all sessions created in PINGO
+- add and launch quick surveys and questions from the question catalogue to a session
+- view individual sessions and the last active survey in each session
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+Students can ...
 
-## Test and Deploy
+- view the active session and open the survey there for voting
 
-Use the built-in continuous integration in GitLab.
+## Use PINGO
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+Both the plugin and the PINGO service can be used free of charge and without restrictions.
 
-***
+All a teacher needs to do is to have a PINGO account and log in to the plugin with it. A PINGO account can be easily created at https://pingo.coactum.de/users/sign_up.
 
-# Editing this README
+If your organization has opted for the paid upgrade to PINGOplus (https://coactum.de/pingoplus) and thus benefits from additional advantages such as an individual design and its own domain, the remote url may have to be adjusted in the plugin settings. In this case, teachers may also need to register under the changed domain to create an account.
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
+PINGO is a service provided by the coactum GmbH (https://coactum.de/imprint) for which the following privacy policy (https://pingo.coactum.de/privacy_policy.html) applies.
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+## Quick installation instructions ##
 
-## Name
-Choose a self-explaining name for your project.
+### Install from git ###
+- Navigate to Moodle root folder.
+- **git clone https://github.com/coactum/moodle-mod_pingo.git mod/pingo**
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+### Install from a compressed file ###
+- Extract the compressed file data.
+- Rename the main folder to pingo.
+- Copy to the Moodle mod/ folder.
+- Click the 'Notifications' link on the frontpage administration block.
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+## Dependencies ##
+No dependencies.
