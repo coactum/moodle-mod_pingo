@@ -1,5 +1,8 @@
 ## Changelog ##
 
+- [1.0.0]:
+    - Release version for the Moodle plugins repository.
+
 - [0.1.6]:
     - Bugfix for sessions view.
 
