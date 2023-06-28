@@ -495,19 +495,11 @@ if ($viewoverview && ($moduleinstance->editableforall || (!$activeconnection || 
                         $sessions[$i]['visible'] = true;
                     }
                 }
-
-                // Add section with sessions overview.
-                $sessionsoverview = new pingo_sessionsoverview($cm->id, $sessions);
-                echo $OUTPUT->render($sessionsoverview);
-            } else {
-                $urlparams = array('id' => $id, 'mode' => 1);
-                $redirecturl = new moodle_url('/mod/pingo/view.php', $urlparams);
-
-                echo '<div class="alert alert-danger alert-block fade in m-2" role="alert">';
-                echo '<button type="button" class="close" data-dismiss="alert">×</button>';
-                echo get_string('errfetching', 'mod_pingo') . '</div>';
-                echo '<a class="btn btn-primary" href="' . $redirecturl . '">' . get_string('reloadpage', 'mod_pingo') . '</a>';
             }
+
+            // Add section with sessions overview.
+            $sessionsoverview = new pingo_sessionsoverview($cm->id, $sessions);
+            echo $OUTPUT->render($sessionsoverview);
 
         } else if ($mode === 2) {
 

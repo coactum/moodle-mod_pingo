@@ -1,5 +1,8 @@
 ## Changelog ##
 
+- [0.1.6]:
+    - Bugfix for sessions view.
+
 - [0.1.5]:
     - Bugfix for admin settings.
 
