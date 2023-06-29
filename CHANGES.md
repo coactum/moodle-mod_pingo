@@ -1,5 +1,8 @@
 ## Changelog ##
 
+- [1.0.1]:
+    - Multiple small bugfixes.
+
 - [1.0.0]:
     - Release version for the Moodle plugins repository.
 

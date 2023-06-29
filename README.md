@@ -40,11 +40,11 @@ Students can ...
 
 Both the plugin and the PINGO service can be used free of charge and without restrictions.
 
-All a teacher needs to do is to have a PINGO account and log in to the plugin with it. A PINGO account can be easily created at https://pingo.coactum.de/users/sign_up.
+All a teacher needs to do is to have a PINGO account and log in to the plugin with it. A PINGO account can be easily created at https://trypingo.com/.
 
 If your organization has opted for the paid upgrade to PINGOplus (https://coactum.de/pingoplus) and thus benefits from additional advantages such as an individual design and its own domain, the remote url may have to be adjusted in the plugin settings. In this case, teachers may also need to register under the changed domain to create an account.
 
-PINGO is a service provided by the coactum GmbH (https://coactum.de/imprint) for which the following privacy policy (https://pingo.coactum.de/privacy_policy.html) applies.
+PINGO is a service provided by the coactum GmbH (https://coactum.de/imprint).
 
 ## Quick installation instructions ##
 
