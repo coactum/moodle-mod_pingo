@@ -44,8 +44,10 @@
                     <th scope="col">
                         {{#str}}state, mod_pingo{{/str}}
                     </th>
-                    <th scope="col" class="minwidthtable">
-                    </th>
+                    {{#sessions.0.name}}
+                        <th scope="col" class="minwidthtable">
+                        </th>
+                    {{/sessions.0.name}}
                 </tr>
             </thead>
             <tbody>
@@ -66,7 +68,7 @@
                     </tr>
                 {{/sessions}}
                 {{^sessions}}
-                    <tr><td align="center" colspan="4">{{#str}}nosessionsavailable, mod_pingo{{/str}}</td></tr>
+                    <tr class="text-center"><td colspan="2">{{#str}}nosessionsavailable, mod_pingo{{/str}}</td></tr>
                 {{/sessions}}
             </tbody>
         </table>

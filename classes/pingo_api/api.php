@@ -259,36 +259,36 @@ class mod_pingo_api {
             $questiontypes = array();
             $answeroptions = array();
 
-            foreach ($qts as $i => $question) {
+            foreach ($qts as $i => $type) {
                 $tempoptions = array();
 
                 if (current_language() == 'de') {
-                    if ($question['options_de'][0] != '') {
-                        foreach ($question['options_de'] as $i => $opt) {
-                            $tempoptions[format_text($i, 2)] = format_text($opt, 2);
+                    if ($type['type'] == 'text') {
+                        foreach ($type['options_de'] as $i => $opt) {
+                            $tempoptions[format_text($type['options'][$i], 2)] = format_text($opt, 2);
                         }
-                        $answeroptions[format_text($question['type'], 2)] = array_combine($tempoptions, $tempoptions);
+                        $answeroptions[format_text($type['type'], 2)] = $tempoptions;
                     } else {
-                        foreach ($question['options'] as $i => $opt) {
-                            $tempoptions[format_text($i, 2)] = format_text($opt, 2);
+                        foreach ($type['options'] as $i => $opt) {
+                            $tempoptions[format_text($type['options'][$i], 2)] = format_text($opt, 2);
                         }
-                        $answeroptions[format_text($question['type'], 2)] = array_combine($tempoptions, $tempoptions);
+                        $answeroptions[format_text($type['type'], 2)] = array_combine($tempoptions, $tempoptions);
                     }
-                    $questiontypes[format_text($question['type'], 2)] = format_text($question['name_de'], 2);
+                    $questiontypes[format_text($type['type'], 2)] = format_text($type['name_de'], 2);
 
                 } else {
-                    if ($question['options_en'][0] != '') {
-                        foreach ($question['options_en'] as $i => $opt) {
-                            $tempoptions[format_text($i, 2)] = format_text($opt, 2);
+                    if ($type['type'] == 'text') {
+                        foreach ($type['options_en'] as $i => $opt) {
+                            $tempoptions[format_text($type['options'][$i], 2)] = format_text($opt, 2);
                         }
-                        $answeroptions[format_text($question['type'], 2)] = array_combine($tempoptions, $tempoptions);
+                        $answeroptions[format_text($type['type'], 2)] = $tempoptions;
                     } else {
-                        foreach ($question['options'] as $i => $opt) {
-                            $tempoptions[format_text($i, 2)] = format_text($opt, 2);
+                        foreach ($type['options'] as $i => $opt) {
+                            $tempoptions[format_text($type['options'][$i], 2)] = format_text($opt, 2);
                         }
-                        $answeroptions[format_text($question['type'], 2)] = array_combine($tempoptions, $tempoptions);
+                        $answeroptions[format_text($type['type'], 2)] = array_combine($tempoptions, $tempoptions);
                     }
-                    $questiontypes[format_text($question['type'], 2)] = format_text($question['name_en'], 2);
+                    $questiontypes[format_text($type['type'], 2)] = format_text($type['name_en'], 2);
                 }
             }
 

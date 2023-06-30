@@ -156,7 +156,7 @@ if (!$activeconnection) { // Login.
             // Get PINGO authentication token.
             $authtoken = mod_pingo_api::get_authtoken($remoteurl, $fromform->email, $fromform->password);
 
-            if (isset($authtoken) && $authtoken && $authtoken != 'invalid' && $authtoken != 0) {
+            if (isset($authtoken) && $authtoken && $authtoken != 'invalid' && $authtoken != '0') {
                 $connection = new stdClass();
                 $connection->pingo = (int) $cm->instance;
                 $connection->userid = (int) $USER->id;
@@ -230,6 +230,7 @@ if (!$activeconnection) { // Login.
                 $sessiondata = mod_pingo_api::get_session($remoteurl, $activeconnection->authenticationtoken, $fromform->session);
 
                 if (!empty($sessiondata)) {
+                    // For question type number.
                     if (!isset($fromform->answer_options) || !isset($fromform->answer_options[$fromform->question_types])) {
                         $fromform->answer_options[$fromform->question_types] = false;
                     }

@@ -252,7 +252,7 @@ class provider implements
         $connectiondata = (object) [
             'userid' => $connection->userid,
             'pingo' => $connection->pingo,
-            'authenticationtoken' => $connection->authenticationtoken,
+            'authenticationtoken' => '*****',
             'timestarted' => $timestarted,
             'activesession' => $connection->activesession,
         ];
