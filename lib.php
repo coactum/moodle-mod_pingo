@@ -36,7 +36,7 @@ function pingo_supports($feature) {
 
     // Adding support for FEATURE_MOD_PURPOSE (MDL-71457) and providing backward compatibility (pre-v4.0).
     if (defined('FEATURE_MOD_PURPOSE') && $feature === FEATURE_MOD_PURPOSE) {
-        return MOD_PURPOSE_COLLABORATION;
+        return MOD_PURPOSE_COMMUNICATION;
     }
 
     switch ($feature) {

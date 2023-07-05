@@ -32,9 +32,9 @@ $string['pluginname'] = 'PINGO';
 $string['modulename'] = 'PINGO';
 $string['modulename_help'] = 'The PINGO activity enables the integration of the free-to-use classroom response system PINGO into Moodle.
 
-PINGO allows the easy collection of live feedback and can be used in a variety of ways in teaching. Surveys can be conveniently prepared in advance and then quickly made available to the entire audience via their mobile devices during the lecture.
+PINGO allows the easy collection of anonymous live feedback and can be used in a variety of ways in teaching. Surveys can be conveniently prepared in advance and then quickly made available to the entire audience via their mobile devices during the lecture.
 
-This activity enables the integration of PINGO with Moodle. It allows teachers to log in to PINGO directly in the activity and then access their sessions created in PINGO, view them, add surveys to them, and then launch them.
+This activity enables the integration of PINGO into Moodle. It allows teachers to log in to PINGO directly in the activity and then access their sessions created in PINGO, view them, add surveys to them, and then launch them.
 Participants can then view the surveys directly in the activity. For additional actions, such as creating new sessions or questions, the activity also redirects to the web version of PINGO.
 
 Teachers can ...
