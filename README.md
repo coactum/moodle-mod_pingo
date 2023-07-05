@@ -20,9 +20,9 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 
 The PINGO activity enables the integration of the free-to-use classroom response system PINGO into Moodle.
 
-PINGO allows the easy collection of live feedback and can be used in a variety of ways in teaching. Surveys can be conveniently prepared in advance and then quickly made available to the entire audience via their mobile devices during the lecture.
+PINGO allows the easy collection of anonymous live feedback and can be used in a variety of ways in teaching. Surveys can be conveniently prepared in advance and then quickly made available to the entire audience via their mobile devices during the lecture.
 
-This activity enables the integration of PINGO with Moodle. It allows teachers to log in to PINGO directly in the activity and then access their sessions created in PINGO, view them, add surveys to them, and then launch them.
+This activity enables the integration of PINGO into Moodle. It allows teachers to log in to PINGO directly in the activity and then access their sessions created in PINGO, view them, add surveys to them, and then launch them.
 Participants can then view the surveys directly in the activity. For additional actions, such as creating new sessions or questions, the activity also redirects to the web version of PINGO.
 
 Teachers can ...
@@ -40,7 +40,7 @@ Students can ...
 
 Both the plugin and the PINGO service can be used free of charge and without restrictions.
 
-All a teacher needs to do is to have a PINGO account and log in to the plugin with it. A PINGO account can be easily created at https://trypingo.com/.
+To do this, a teacher only needs to have a PINGO account and use it to log in to the plugin. A PINGO account can be easily created at https://trypingo.com/.
 
 If your organization has opted for the paid upgrade to PINGOplus (https://coactum.de/pingoplus) and thus benefits from additional advantages such as an individual design and its own domain, the remote url may have to be adjusted in the plugin settings. In this case, teachers may also need to register under the changed domain to create an account.
 

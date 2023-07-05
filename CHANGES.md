@@ -1,5 +1,9 @@
 ## Changelog ##
 
+- [1.0.2]:
+    - Added monologo icon.
+    - Changed purpose to communication.
+
 - [1.0.1]:
     - Multiple small bugfixes.
 

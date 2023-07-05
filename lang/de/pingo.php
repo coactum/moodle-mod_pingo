@@ -32,7 +32,7 @@ $string['pluginname'] = 'PINGO';
 $string['modulename'] = 'PINGO';
 $string['modulename_help'] = 'Die Aktivität erlaubt die Integration des kostenlos nutzbaren Classroom-Response-Systems für PINGO in Moodle.
 
-PINGO ermöglicht das unkomplizierte Einholen von Live-Feedback und lässt sich vielfältig in der Lehre einsetzen. So können vorab bequem Umfragen vorbereitet und diese in der Lehrveranstaltung dann schnell dem gesamten Publikum über dessen Mobilgeräte zugänglich gemacht werden.
+PINGO ermöglicht das unkomplizierte Einholen von anonymem Live-Feedback und lässt sich vielfältig in der Lehre einsetzen. So können vorab bequem Umfragen vorbereitet und diese in der Lehrveranstaltung dann schnell dem gesamten Publikum über dessen Mobilgeräte zugänglich gemacht werden.
 
 Diese Aktivität ermöglicht dabei die Integration von PINGO in Moodle. So erlaubt sie Lehrenden, sich direkt in der Aktivität bei PINGO anzumelden und danach auf ihre in PINGO angelegten Sessions zuzugreifen, sie anzusehen, in ihnen Umfragen hinzuzufügen und diese dann zu starten.
 Teilnehmende können dann die Umfragen direkt in der Aktivität ansehen. Für zusätzliche Aktionen wie etwa das Anlegen neuer Sessions oder Fragen leitet die Aktivität zudem zur Webvariante von PINGO weiter.
