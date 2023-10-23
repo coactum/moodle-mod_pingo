@@ -28,7 +28,7 @@ require_once(__DIR__.'/lib.php');
 $id = required_param('id', PARAM_INT); // ID of the course.
 
 if ($id) {
-    if (!$course = $DB->get_record('course', array('id' => $id))) {
+    if (!$course = $DB->get_record('course', ['id' => $id])) {
         throw new moodle_exception('invalidcourseid');
     }
 } else {
@@ -40,9 +40,7 @@ require_course_login($course);
 $coursecontext = context_course::instance($course->id);
 
 // Trigger course_module_instance_list_viewed event.
-$event = \mod_pingo\event\course_module_instance_list_viewed::create(array(
-    'context' => $coursecontext
-));
+$event = \mod_pingo\event\course_module_instance_list_viewed::create(['context' => $coursecontext]);
 $event->add_record_snapshot('course', $course);
 $event->trigger();
 
@@ -51,7 +49,7 @@ $modulenameplural = get_string('modulenameplural', 'mod_pingo');
 
 $PAGE->set_pagelayout('incourse');
 
-$PAGE->set_url('/mod/pingo/index.php', array('id' => $id));
+$PAGE->set_url('/mod/pingo/index.php', ['id' => $id]);
 
 $PAGE->navbar->add($modulenameplural);
 
@@ -72,12 +70,12 @@ if ($usesections) {
 }
 
 if (empty($moduleinstances)) {
-    notice(get_string('nonewmodules', 'mod_pingo'), new moodle_url('/course/view.php', array('id' => $course->id)));
+    notice(get_string('nonewmodules', 'mod_pingo'), new moodle_url('/course/view.php', ['id' => $course->id]));
 }
 
 $table = new html_table();
-$table->head = array();
-$table->align = array();
+$table->head = [];
+$table->align = [];
 if ($usesections) {
     // Add column heading based on the course format. e.g. Week, Topic.
     $table->head[] = get_string('sectionname', 'format_' . $course->format);
@@ -113,9 +111,7 @@ foreach ($moduleinstances as $pingo) {
     }
 
     // Link.
-    $pingoname = format_string($pingo->name, true, array(
-        'context' => $context
-    ));
+    $pingoname = format_string($pingo->name, true, ['context' => $context]);
     if (! $pingo->visible) {
         // Show dimmed if the mod is hidden.
         $table->data[$i][] = "<a class=\"dimmed\" href=\"view.php?id=$pingo->coursemodule\">" . $pingoname . "</a>";

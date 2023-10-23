@@ -110,23 +110,23 @@ function pingo_update_instance($moduleinstance, $mform = null) {
 function pingo_delete_instance($id) {
     global $DB;
 
-    if (!$pingo = $DB->get_record('pingo', array('id' => $id))) {
+    if (!$pingo = $DB->get_record('pingo', ['id' => $id])) {
         return false;
     }
     if (!$cm = get_coursemodule_from_instance('pingo', $pingo->id)) {
         return false;
     }
-    if (!$course = $DB->get_record('course', array('id' => $cm->course))) {
+    if (!$course = $DB->get_record('course', ['id' => $cm->course])) {
         return false;
     }
 
     // Delete pingo connections.
-    if ($DB->record_exists('pingo_connections', array('pingo' => $id))) {
-        $DB->delete_records('pingo_connections', array('pingo' => $id));
+    if ($DB->record_exists('pingo_connections', ['pingo' => $id])) {
+        $DB->delete_records('pingo_connections', ['pingo' => $id]);
     }
 
     // Delete pingo, else return false.
-    if (!$DB->delete_records("pingo", array("id" => $pingo->id))) {
+    if (!$DB->delete_records("pingo", ["id" => $pingo->id])) {
         return false;
     }
 
@@ -173,7 +173,7 @@ function pingo_reset_course_form_definition(&$mform) {
  * @return array
  */
 function pingo_reset_course_form_defaults($course) {
-    return array('reset_pingo_all' => 1);
+    return ['reset_pingo_all' => 1];
 }
 
 /**
@@ -190,16 +190,16 @@ function pingo_reset_userdata($data) {
     require_once($CFG->dirroot . '/rating/lib.php');
 
     $componentstr = get_string('modulenameplural', 'pingo');
-    $status = array();
+    $status = [];
 
     // Get pingos in course that should be resetted.
     $sql = "SELECT p.id
                 FROM {pingo} p
                 WHERE p.course = ?";
 
-    $params = array(
-        $data->courseid
-    );
+    $params = [
+        $data->courseid,
+    ];
 
     $pingos = $DB->get_records_sql($sql, $params);
 
@@ -208,19 +208,19 @@ function pingo_reset_userdata($data) {
 
         $DB->delete_records_select('pingo_connections', "pingo IN ($sql)", $params);
 
-        $status[] = array(
+        $status[] = [
             'component' => $componentstr,
             'item' => get_string('alluserdatadeleted', 'pingo'),
-            'error' => false
-        );
+            'error' => false,
+        ];
     }
 
     // Updating dates - shift may be negative too.
     if ($data->timeshift) {
         // Any changes to the list of dates that needs to be rolled should be same during course restore and course reset.
         // See MDL-9367.
-        shift_course_mod_dates('pingo', array(''), $data->timeshift, $data->courseid);
-        $status[] = array('component' => $componentstr, 'item' => get_string('datechanged'), 'error' => false);
+        shift_course_mod_dates('pingo', [''], $data->timeshift, $data->courseid);
+        $status[] = ['component' => $componentstr, 'item' => get_string('datechanged'), 'error' => false];
     }
 
     return $status;
@@ -262,7 +262,7 @@ function pingo_get_file_info($browser, $areas, $course, $cm, $context, $filearea
  * @param array $options Additional options affecting the file serving.
  * @return bool false if file not found, does not return if found - just sends the file.
  */
-function pingo_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, $options = array()) {
+function pingo_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, $options = []) {
     global $DB, $CFG;
 
     if ($context->contextlevel != CONTEXT_MODULE) {
@@ -283,40 +283,4 @@ function pingo_pluginfile($course, $cm, $context, $filearea, $args, $forcedownlo
     }
 
     send_file_not_found();
-}
-
-/**
- * Extends the global navigation tree by adding mod_pingo nodes if there is a relevant content.
- *
- * This can be called by an AJAX request so do not rely on $PAGE as it might not be set up properly.
- *
- * @param navigation_node $pingonode An object representing the navigation tree node.
- * @param  stdClass $course Course object
- * @param  context_course $coursecontext Course context
- */
-function pingo_extend_navigation_course($pingonode, $course, $coursecontext) {
-    $modinfo = get_fast_modinfo($course); // Get mod_fast_modinfo from $course.
-    $index = 1; // Set index.
-    foreach ($modinfo->get_cms() as $cmid => $cm) { // Search existing course modules for this course.
-        if ($index == 1 && $cm->modname == "pingo" && $cm->uservisible && $cm->available) {
-            $url = new moodle_url("/mod/" . $cm->modname . "/index.php",
-                array("id" => $course->id)); // Set url for the link in the navigation node.
-            $node = navigation_node::create(get_string('viewallpingos', 'pingo'), $url,
-                navigation_node::TYPE_CUSTOM, null , null , null);
-            $pingonode->add_node($node);
-            $index++;
-        }
-    }
-}
-
-/**
- * Extends the settings navigation with the mod_pingo settings.
- *
- * This function is called when the context for the page is a mod_pingo module.
- * This is not called by AJAX so it is safe to rely on the $PAGE.
- *
- * @param settings_navigation $settingsnav
- * @param navigation_node $pingonode
- */
-function pingo_extend_settings_navigation($settingsnav, $pingonode = null) {
 }

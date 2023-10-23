@@ -66,15 +66,13 @@ class connection_created extends \core\event\base {
      * @return \moodle_url
      */
     public function get_url() {
-        return new \moodle_url('/mod/pingo/view.php', array(
-            'id' => $this->contextinstanceid
-        ));
+        return new \moodle_url('/mod/pingo/view.php', ['id' => $this->contextinstanceid]);
     }
 
     /**
      * Get objectid mapping for restore.
      */
     public static function get_objectid_mapping() {
-        return array('db' => 'pingo_connections', 'restore' => 'pingo_connection');
+        return ['db' => 'pingo_connections', 'restore' => 'pingo_connection'];
     }
 }

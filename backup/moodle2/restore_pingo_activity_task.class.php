@@ -57,12 +57,12 @@ class restore_pingo_activity_task extends restore_activity_task {
      * @return array.
      */
     public static function define_decode_contents() {
-        $contents = array();
+        $contents = [];
 
         // Define the contents (files).
-        // tablename, array(field1, field 2), $mapping.
+        // tablename, [field1, field 2], $mapping.
 
-        $contents[] = new restore_decode_content('pingo', array('intro'), 'pingo');
+        $contents[] = new restore_decode_content('pingo', ['intro'], 'pingo');
 
         return $contents;
     }
@@ -73,7 +73,7 @@ class restore_pingo_activity_task extends restore_activity_task {
      * @return array.
      */
     public static function define_decode_rules() {
-        $rules = array();
+        $rules = [];
 
         // Define the rules.
 
@@ -91,7 +91,7 @@ class restore_pingo_activity_task extends restore_activity_task {
      * @return array.
      */
     public static function define_restore_log_rules() {
-        $rules = array();
+        $rules = [];
 
         // Define the rules to restore the logs (one rule for each event / file in the plugin/event/ folder).
 
@@ -112,7 +112,7 @@ class restore_pingo_activity_task extends restore_activity_task {
      * activity level. All them are rules not linked to any module instance (cmid = 0)
      */
     public static function define_restore_log_rules_for_course() {
-        $rules = array();
+        $rules = [];
 
         $rules[] = new restore_log_rule('pingo', 'view all', 'index.php?id={course}', null);
 

@@ -49,17 +49,17 @@ class mod_pingo_api {
 
         $data = 'password=' . urlencode($password) . '&email=' . urlencode($email);
 
-        $options = array(
+        $options = [
             'RETURNTRANSFER' => 1,
             'HEADER' => 0,
             'FAILONERROR' => 1,
-        );
+        ];
 
-        $header = array(
+        $header = [
             'Content-Type: application/x-www-form-urlencoded',
             'Content-Length: ' . strlen($data),
-            'Accept: application/json'
-        );
+            'Accept: application/json',
+        ];
 
         $curl = new \curl();
         $curl->setHeader($header);
@@ -88,17 +88,17 @@ class mod_pingo_api {
 
         $data = '';
 
-        $options = array(
+        $options = [
             'RETURNTRANSFER' => 1,
             'HEADER' => 0,
             'FAILONERROR' => 1,
-        );
+        ];
 
-        $header = array(
+        $header = [
             'Content-Type: application/x-www-form-urlencoded',
             'Content-Length: ' . strlen($data),
-            'Accept: application/json'
-        );
+            'Accept: application/json',
+        ];
 
         $curl = new \curl();
 
@@ -132,17 +132,17 @@ class mod_pingo_api {
 
         $data = '';
 
-        $options = array(
+        $options = [
             'RETURNTRANSFER' => 1,
             'HEADER' => 0,
             'FAILONERROR' => 1,
-        );
+        ];
 
-        $header = array(
+        $header = [
             'Content-Type: application/x-www-form-urlencoded',
             'Content-Length: ' . strlen($data),
-            'Accept: application/json'
-        );
+            'Accept: application/json',
+        ];
 
         $curl = new \curl();
         $curl->setHeader($header);
@@ -171,17 +171,17 @@ class mod_pingo_api {
 
         $data = '';
 
-        $options = array(
+        $options = [
             'RETURNTRANSFER' => 1,
             'HEADER' => 0,
             'FAILONERROR' => 1,
-        );
+        ];
 
-        $header = array(
+        $header = [
             'Content-Type: application/x-www-form-urlencoded',
             'Content-Length: ' . strlen($data),
-            'Accept: application/json'
-        );
+            'Accept: application/json',
+        ];
 
         $curl = new \curl();
         $curl->setHeader($header);
@@ -234,17 +234,17 @@ class mod_pingo_api {
 
         $data = '';
 
-        $options = array(
+        $options = [
             'RETURNTRANSFER' => 1,
             'HEADER' => 0,
             'FAILONERROR' => 1,
-        );
+        ];
 
-        $header = array(
+        $header = [
             'Content-Type: application/x-www-form-urlencoded',
             'Content-Length: ' . strlen($data),
-            'Accept: application/json'
-        );
+            'Accept: application/json',
+        ];
 
         $curl = new \curl();
         $curl->setHeader($header);
@@ -256,11 +256,11 @@ class mod_pingo_api {
         } else if (isset($response['question_types'])) {
             $qts = $response['question_types'];
 
-            $questiontypes = array();
-            $answeroptions = array();
+            $questiontypes = [];
+            $answeroptions = [];
 
             foreach ($qts as $i => $type) {
-                $tempoptions = array();
+                $tempoptions = [];
 
                 if (current_language() == 'de') {
                     if ($type['type'] == 'text') {
@@ -321,14 +321,14 @@ class mod_pingo_api {
         $url = $remoteurl . "/events/$session/quick_start";
 
         // Set the request data.
-        $data = array('auth_token' => $authtoken, 'options' => $answeroption, 'q_type' => $questiontype, 'duration' => $duration);
+        $data = ['auth_token' => $authtoken, 'options' => $answeroption, 'q_type' => $questiontype, 'duration' => $duration];
         $data = json_encode($data);
 
         // Set the request header.
-        $header = array(
+        $header = [
             'Content-Type: application/json',
-            'Accept: application/json'
-        );
+            'Accept: application/json',
+        ];
 
         // Perform the POST request.
         $curl->setHeader($header);
@@ -357,15 +357,15 @@ class mod_pingo_api {
 
         $data = '';
 
-        $options = array(
+        $options = [
             'RETURNTRANSFER' => 1,
             'HEADER' => 0,
             'FAILONERROR' => 1,
-        );
+        ];
 
-        $header = array(
-            'Accept: application/json'
-        );
+        $header = [
+            'Accept: application/json',
+        ];
 
         $curl = new \curl();
         $curl->setHeader($header);
@@ -380,7 +380,7 @@ class mod_pingo_api {
             return false;
         } else {
             // Get array with all tags used by questions.
-            $tags = array('alltags' => get_string('alltags', 'mod_pingo'));
+            $tags = ['alltags' => get_string('alltags', 'mod_pingo')];
             foreach ($questions as $question) {
                 foreach ($question['tags'] as $tag) {
                     $tagformatted = format_text($tag, 2);
@@ -416,14 +416,14 @@ class mod_pingo_api {
         $url = $remoteurl . "/events/$session/add_question.js";
 
         // Set the request data.
-        $data = array('auth_token' => $authtoken, 'question' => $questionid, 'duration' => $duration);
+        $data = ['auth_token' => $authtoken, 'question' => $questionid, 'duration' => $duration];
         $data = json_encode($data);
 
         // Set the request header.
-        $header = array(
+        $header = [
             'Content-Type: application/json',
-            'Accept: application/json'
-        );
+            'Accept: application/json',
+        ];
 
         // Perform the POST request.
         $curl->setHeader($header);
@@ -457,14 +457,14 @@ class mod_pingo_api {
         $url = $remoteurl . "/events/$session/surveys/$surveyid/stop";
 
         // Set the request data.
-        $data = array('auth_token' => $authtoken, 'stoptime' => $stoptime);
+        $data = ['auth_token' => $authtoken, 'stoptime' => $stoptime];
         $data = json_encode($data);
 
         // Set the request header.
-        $header = array(
+        $header = [
             'Content-Type: application/json',
-            'Accept: application/json'
-        );
+            'Accept: application/json',
+        ];
 
         // Perform the POST request.
         $curl->setHeader($header);
