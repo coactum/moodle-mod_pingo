@@ -93,6 +93,6 @@ class mod_pingo_quickstart_form extends moodleform {
      * @return array Array with errors
      */
     public function validation($data, $files) {
-        return array();
+        return [];
     }
 }

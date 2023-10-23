@@ -1,5 +1,10 @@
 ## Changelog ##
 
+- [1.0.3]:
+    - Ensured compatibility with Moodle 4.3.
+        - Changed code to comply with new moodle coding standards.
+    - Changed size of svgs to 24*24.
+
 - [1.0.2]:
     - Added monologo icon.
     - Changed purpose to communication.

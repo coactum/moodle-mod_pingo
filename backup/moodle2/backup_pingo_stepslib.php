@@ -41,12 +41,12 @@ class backup_pingo_activity_structure_step extends backup_activity_structure_ste
         $userinfo = $this->get_setting_value('userinfo');
 
         // Replace with the attributes and final elements that the element will handle.
-        $pingo = new backup_nested_element('pingo', array('id'), array(
-            'name', 'intro', 'introformat', 'timecreated', 'timemodified', 'editableforall'));
+        $pingo = new backup_nested_element('pingo', ['id'], [
+            'name', 'intro', 'introformat', 'timecreated', 'timemodified', 'editableforall', ]);
 
         $connections = new backup_nested_element('connections');
-        $connection = new backup_nested_element('connection', array('id'), array(
-            'userid', 'authenticationtoken', 'timestarted', 'activesession'));
+        $connection = new backup_nested_element('connection', ['id'], [
+            'userid', 'authenticationtoken', 'timestarted', 'activesession', ]);
 
         // Build the tree with these elements with $pingo as the root of the backup tree.
         $pingo->add_child($connections);
@@ -54,11 +54,11 @@ class backup_pingo_activity_structure_step extends backup_activity_structure_ste
 
         // Define the source tables for the elements.
 
-        $pingo->set_source_table('pingo', array('id' => backup::VAR_ACTIVITYID));
+        $pingo->set_source_table('pingo', ['id' => backup::VAR_ACTIVITYID]);
 
         if ($userinfo) {
             // Connections.
-            $connection->set_source_table('pingo_connections', array('pingo' => backup::VAR_PARENTID));
+            $connection->set_source_table('pingo_connections', ['pingo' => backup::VAR_PARENTID]);
         }
 
         // Define id annotations.

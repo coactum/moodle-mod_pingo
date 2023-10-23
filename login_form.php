@@ -82,6 +82,6 @@ class mod_pingo_login_form extends moodleform {
      * @return array Array with errors
      */
     public function validation($data, $files) {
-        return array();
+        return [];
     }
 }

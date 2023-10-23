@@ -71,7 +71,7 @@ class mod_pingo_questionfromcatalogue_form extends moodleform {
         get_string('filterbytags', 'mod_pingo'), $this->_customdata['tags']);
         $mform->setType('tag', PARAM_TEXT);
 
-        $radioarray = array();
+        $radioarray = [];
 
         foreach ($this->_customdata['questions'] as $i => $question) {
             $radioarray[] = $mform->createElement('radio', 'question', '',
@@ -79,7 +79,7 @@ class mod_pingo_questionfromcatalogue_form extends moodleform {
                 format_text($question['id'], 2));
         }
 
-        $mform->addGroup($radioarray, 'question', get_string('yourquestions', 'mod_pingo'), array('<br/>'), false);
+        $mform->addGroup($radioarray, 'question', get_string('yourquestions', 'mod_pingo'), ['<br/>'], false);
         $mform->setType('question', PARAM_TEXT);
 
         $select = $mform->addElement('select', 'duration_choices',
