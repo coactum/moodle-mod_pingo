@@ -427,20 +427,7 @@ if (!$activeconnection) { // Login.
     redirect($redirecturl, get_string('sessionactivated', 'mod_pingo'), null, notification::NOTIFY_SUCCESS);
 }
 
-// Add settingsmenu and heading for moodle < 400.
-if ($CFG->branch < 400) {
-    $PAGE->force_settings_menu();
-}
-
 echo $OUTPUT->header();
-
-if ($CFG->branch < 400) {
-    echo $OUTPUT->heading($modulename);
-
-    if ($moduleinstance->intro) {
-        echo $OUTPUT->box(format_module_intro('pingo', $moduleinstance, $cm->id), 'generalbox', 'intro');
-    }
-}
 
 $viewoverview = has_capability('mod/pingo:viewoverview', $context);
 $viewallsessions = has_capability('mod/pingo:viewallsessions', $context);
@@ -526,8 +513,9 @@ if ($viewoverview && ($moduleinstance->editableforall || (!$activeconnection || 
                 $urlparams = ['id' => $id, 'session' => $session, 'mode' => 2];
                 $redirecturl = new moodle_url('/mod/pingo/view.php', $urlparams);
 
-                echo '<div class="alert alert-danger alert-block fade in m-2" role="alert">';
-                echo '<button type="button" class="close" data-dismiss="alert">×</button>';
+                echo '<div class="alert alert-danger alert-dismissible fade show m-2" role="alert">';
+                echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="' .
+                    get_string('closebuttontitle') . '"></button>';
                 echo get_string('errfetching', 'mod_pingo') . '</div>';
                 echo '<a class="btn btn-primary" href="' . $redirecturl . '">' . get_string('reloadpage', 'mod_pingo') . '</a>';
             }
@@ -559,8 +547,9 @@ if ($viewoverview && ($moduleinstance->editableforall || (!$activeconnection || 
                 $urlparams = ['id' => $id, 'session' => $session, 'mode' => 3];
                 $redirecturl = new moodle_url('/mod/pingo/view.php', $urlparams);
 
-                echo '<div class="alert alert-danger alert-block fade in m-2" role="alert">';
-                echo '<button type="button" class="close" data-dismiss="alert">×</button>';
+                echo '<div class="alert alert-danger alert-dismissible fade show m-2" role="alert">';
+                echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="' .
+                    get_string('closebuttontitle') . '"></button>';
                 echo get_string('errfetching', 'mod_pingo') . '</div>';
                 echo '<a class="btn btn-primary" href="' . $redirecturl . '">' . get_string('reloadpage', 'mod_pingo') . '</a>';
             }
@@ -622,8 +611,9 @@ if ($viewoverview && ($moduleinstance->editableforall || (!$activeconnection || 
                     $urlparams = ['id' => $id, 'session' => $session, 'mode' => 4];
                     $redirecturl = new moodle_url('/mod/pingo/view.php', $urlparams);
 
-                    echo '<div class="alert alert-danger alert-block fade in m-2" role="alert">';
-                    echo '<button type="button" class="close" data-dismiss="alert">×</button>';
+                    echo '<div class="alert alert-danger alert-dismissible fade show m-2" role="alert">';
+                    echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="' .
+                        get_string('closebuttontitle') . '"></button>';
                     echo get_string('errfetching', 'mod_pingo') . '</div>';
                     echo '<a class="btn btn-primary" href="' . $redirecturl . '">' . get_string('reloadpage', 'mod_pingo') . '</a>';
                 }
@@ -644,8 +634,9 @@ if ($viewoverview && ($moduleinstance->editableforall || (!$activeconnection || 
 } else { // Student view.
 
     if ($viewoverview && $activeconnection && $USER->id != $activeconnection->userid) {
-        echo '<div class="alert alert-danger alert-block fade in m-2" role="alert">';
-        echo '<button type="button" class="close" data-dismiss="alert">×</button>';
+        echo '<div class="alert alert-danger alert-dismissible fade show m-2" role="alert">';
+        echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="' .
+            get_string('closebuttontitle') . '"></button>';
         echo get_string('errnotallowedforotherteachers', 'mod_pingo') . '</div>';
     }
 
@@ -684,8 +675,9 @@ if ($viewoverview && ($moduleinstance->editableforall || (!$activeconnection || 
                 $urlparams = ['id' => $id, 'mode' => 1];
                 $redirecturl = new moodle_url('/mod/pingo/view.php', $urlparams);
 
-                echo '<div class="alert alert-danger alert-block fade in m-2" role="alert">';
-                echo '<button type="button" class="close" data-dismiss="alert">×</button>';
+                echo '<div class="alert alert-danger alert-dismissible fade show m-2" role="alert">';
+                echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="' .
+                    get_string('closebuttontitle') . '"></button>';
                 echo get_string('errfetching', 'mod_pingo') . '</div>';
                 echo '<a class="btn btn-primary" href="' . $redirecturl . '">' . get_string('reloadpage', 'mod_pingo') . '</a>';
             }
