@@ -31,7 +31,6 @@ namespace mod_pingo\event;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class pingo_survey_created extends \core\event\base {
-
     /**
      * Init method.
      */

@@ -24,7 +24,7 @@
 
  defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot.'/course/moodleform_mod.php');
+require_once($CFG->dirroot . '/course/moodleform_mod.php');
 
 /**
  * Module instance settings form.
@@ -34,7 +34,6 @@ require_once($CFG->dirroot.'/course/moodleform_mod.php');
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_pingo_mod_form extends moodleform_mod {
-
     /**
      * Define the form elements.
      */

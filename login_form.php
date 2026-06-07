@@ -35,7 +35,6 @@ require_once("$CFG->libdir/formslib.php");
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL Juv3 or later
  */
 class mod_pingo_login_form extends moodleform {
-
     /**
      * Define the form - called by parent constructor.
      */
@@ -64,9 +63,13 @@ class mod_pingo_login_form extends moodleform {
         $mform->setType('password', PARAM_TEXT);
         $mform->addRule('password', null, 'required', null, 'client');
 
-        $mform->addElement('static', 'signupforpingo', get_string('nopingoyet', 'mod_pingo'),
+        $mform->addElement(
+            'static',
+            'signupforpingo',
+            get_string('nopingoyet', 'mod_pingo'),
             '<a class="btn btn-secondary" target="_blank" href="' . get_config('pingo', 'remoteserver') . '/users/sign_up"' . '">' .
-            get_string('registerforpingo', 'mod_pingo') . '</a>');
+            get_string('registerforpingo', 'mod_pingo') . '</a>'
+        );
         $mform->addElement('static', 'impressum', '', '<a target="_blank" href="https://coactum.de/imprint"' . '">' .
             get_string('pingoimpressum', 'mod_pingo') . '</a> |
              <a target="_blank" href="' . get_config('pingo', 'remoteserver') . '/privacy_policy.html"' . '">' .

@@ -31,7 +31,6 @@
  * Define the complete structure for backup, with file and id annotations.
  */
 class backup_pingo_activity_structure_step extends backup_activity_structure_step {
-
     /**
      * Defines the structure of the resulting xml file.
      *

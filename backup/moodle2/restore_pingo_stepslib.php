@@ -30,7 +30,6 @@
  * Defines the structure step to restore one mod_pingo activity.
  */
 class restore_pingo_activity_structure_step extends restore_activity_structure_step {
-
     /**
      * Defines the structure to be restored.
      *

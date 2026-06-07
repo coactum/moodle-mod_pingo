@@ -202,7 +202,6 @@ function pingo_reset_userdata($data) {
 
     // Delete pingo connections.
     if (!empty($data->reset_pingo_all)) {
-
         $DB->delete_records_select('pingo_connections', "pingo IN ($sql)", $params);
 
         $status[] = [

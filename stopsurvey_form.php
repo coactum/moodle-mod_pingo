@@ -35,7 +35,6 @@ require_once("$CFG->libdir/formslib.php");
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL Juv3 or later
  */
 class mod_pingo_stopsurvey_form extends moodleform {
-
     /**
      * Define the form - called by parent constructor.
      */
@@ -60,8 +59,12 @@ class mod_pingo_stopsurvey_form extends moodleform {
         $mform->addElement('hidden', 'mode', 4);
         $mform->setType('mode', PARAM_INT);
 
-        $select = $mform->addElement('select', 'stoptime',
-            get_string('stoptime', 'pingo'), $this->_customdata['duration_choices']);
+        $select = $mform->addElement(
+            'select',
+            'stoptime',
+            get_string('stoptime', 'pingo'),
+            $this->_customdata['duration_choices']
+        );
         $mform->setType('stoptime', PARAM_INT);
 
         $mform->disable_form_change_checker();
