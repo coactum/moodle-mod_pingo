@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'mod_pingo';
-$plugin->release = '1.1.0';
-$plugin->version = 2026060700;
+$plugin->release = '1.1.1';
+$plugin->version = 2026060701;
 $plugin->requires = 2026042000; // Moodle 5.2.
 $plugin->maturity = MATURITY_STABLE;
