@@ -65,6 +65,13 @@ class provider implements
             'activesession' => 'privacy:metadata:pingo_connections:activesession',
         ], 'privacy:metadata:pingo_connections');
 
+        // Personal data is sent to the external PINGO server to authenticate and use its service.
+        $items->add_external_location_link('pingo', [
+            'email' => 'privacy:metadata:pingo:email',
+            'password' => 'privacy:metadata:pingo:password',
+            'authenticationtoken' => 'privacy:metadata:pingo:authenticationtoken',
+        ], 'privacy:metadata:pingo');
+
         // The plugin does not use any subsystems that save personal data.
 
         // No user preferences in the plugin.

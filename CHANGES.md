@@ -1,5 +1,8 @@
 ## Changelog ##
 
+- [1.1.1]:
+    - Declared the external_location_link in the privacy API to document that login data (email, password, authentication token) is sent to the external PINGO server (#1).
+
 - [1.1.0]:
     - Migrated the plugin to Moodle 5.2.
         - Raised the minimum required Moodle version to 5.2 (2026042000).
