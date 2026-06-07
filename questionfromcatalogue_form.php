@@ -35,7 +35,6 @@ require_once("$CFG->libdir/formslib.php");
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL Juv3 or later
  */
 class mod_pingo_questionfromcatalogue_form extends moodleform {
-
     /**
      * Define the form - called by parent constructor.
      */
@@ -67,23 +66,35 @@ class mod_pingo_questionfromcatalogue_form extends moodleform {
         $mform->addElement('html', '<br><a class="btn btn-primary m-2" href="' . $this->_customdata['remoteurl'] .
             '/questions" target="_blank">' . get_string('managequestionsinpingo', 'mod_pingo') . '</a>');
 
-        $select = $mform->addElement('select', 'tag',
-        get_string('filterbytags', 'mod_pingo'), $this->_customdata['tags']);
+        $select = $mform->addElement(
+            'select',
+            'tag',
+            get_string('filterbytags', 'mod_pingo'),
+            $this->_customdata['tags']
+        );
         $mform->setType('tag', PARAM_TEXT);
 
         $radioarray = [];
 
         foreach ($this->_customdata['questions'] as $i => $question) {
-            $radioarray[] = $mform->createElement('radio', 'question', '',
+            $radioarray[] = $mform->createElement(
+                'radio',
+                'question',
+                '',
                 format_text($question['name'], 2),
-                format_text($question['id'], 2));
+                format_text($question['id'], 2)
+            );
         }
 
         $mform->addGroup($radioarray, 'question', get_string('yourquestions', 'mod_pingo'), ['<br/>'], false);
         $mform->setType('question', PARAM_TEXT);
 
-        $select = $mform->addElement('select', 'duration_choices',
-            get_string('durationchoices', 'mod_pingo'), $this->_customdata['duration_choices']);
+        $select = $mform->addElement(
+            'select',
+            'duration_choices',
+            get_string('durationchoices', 'mod_pingo'),
+            $this->_customdata['duration_choices']
+        );
         $mform->setType('duration_choices', PARAM_INT);
 
         $mform->addElement('advcheckbox', 'setsessionactive', '', get_string('setsessionactive', 'mod_pingo'));

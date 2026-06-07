@@ -27,7 +27,11 @@ defined('MOODLE_INTERNAL') || die();
 if ($hassiteconfig) {
     if ($ADMIN->fulltree) {
         $settings->add(new admin_setting_heading('pingo/connectiondetails', get_string('connectionsdetails', 'pingo'), ''));
-        $settings->add(new admin_setting_configtext('pingo/remoteserver', get_string('remoteserver', 'pingo'),
-        get_string('remoteserverall', 'pingo'), 'https://pingo.coactum.de/'));
+        $settings->add(new admin_setting_configtext(
+            'pingo/remoteserver',
+            get_string('remoteserver', 'pingo'),
+            get_string('remoteserverall', 'pingo'),
+            'https://pingo.coactum.de/'
+        ));
     }
 }
