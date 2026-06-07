@@ -22,8 +22,8 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require(__DIR__.'/../../config.php');
-require_once(__DIR__.'/lib.php');
+require(__DIR__ . '/../../config.php');
+require_once(__DIR__ . '/lib.php');
 
 $id = required_param('id', PARAM_INT); // ID of the course.
 
@@ -91,7 +91,6 @@ $currentsection = '';
 $i = 0;
 
 foreach ($moduleinstances as $pingo) {
-
     $context = context_module::instance($pingo->coursemodule);
 
     // Section.
@@ -102,7 +101,7 @@ foreach ($moduleinstances as $pingo) {
         }
         if ($currentsection !== '') {
             $table->data[$i] = 'hr';
-            $i ++;
+            $i++;
         }
         $currentsection = $pingo->section;
     }
@@ -123,7 +122,7 @@ foreach ($moduleinstances as $pingo) {
     // Description.
     $table->data[$i][] = format_module_intro('pingo', $pingo, $pingo->coursemodule);
 
-    $i ++;
+    $i++;
 }
 
 echo html_writer::table($table);

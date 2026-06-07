@@ -1,5 +1,11 @@
 ## Changelog ##
 
+- [1.1.0]:
+    - Migrated the plugin to Moodle 5.2.
+        - Raised the minimum required Moodle version to 5.2 (2026042000).
+        - Migrated templates and views from Bootstrap 4 to Bootstrap 5 (directional spacing utilities, dismissible alerts and close buttons).
+        - Removed dead pre-Moodle 4.0 backward compatibility code.
+
 - [1.0.3]:
     - Ensured compatibility with Moodle 4.3.
         - Changed code to comply with new moodle coding standards.

@@ -36,7 +36,6 @@ use stdClass;
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class pingo_participantsview implements renderable, templatable {
-
     /** @var int */
     protected $cmid;
     /** @var object */

@@ -43,19 +43,18 @@ class provider implements
     // This plugin has data.
     \core_privacy\local\metadata\provider,
 
-    // This plugin currently implements the original plugin\provider interface.
-    \core_privacy\local\request\plugin\provider,
-
     // This plugin is capable of determining which users have data within it.
-    \core_privacy\local\request\core_userlist_provider {
+    \core_privacy\local\request\core_userlist_provider,
 
+    // This plugin currently implements the original plugin\provider interface.
+    \core_privacy\local\request\plugin\provider {
     /**
      * Provides the meta data stored for a user stored by the plugin.
      *
      * @param   collection     $items The initialised collection to add items to.
      * @return  collection     A listing of user data stored through this system.
      */
-    public static function get_metadata(collection $items) : collection {
+    public static function get_metadata(collection $items): collection {
 
         // The table 'pingo_connections' stores all data for pingo connections.
         $items->add_database_table('pingo_connections', [
@@ -81,7 +80,7 @@ class provider implements
      * @param   int         $userid     The user to search.
      * @return  contextlist $contextlist  The contextlist containing the list of contexts used in this plugin.
      */
-    public static function get_contexts_for_userid(int $userid) : contextlist {
+    public static function get_contexts_for_userid(int $userid): contextlist {
         $contextlist = new contextlist();
 
         $params = [
@@ -148,7 +147,7 @@ class provider implements
         $user = $contextlist->get_user();
         $userid = $user->id;
 
-        list($contextsql, $contextparams) = $DB->get_in_or_equal($contextlist->get_contextids(), SQL_PARAMS_NAMED);
+        [$contextsql, $contextparams] = $DB->get_in_or_equal($contextlist->get_contextids(), SQL_PARAMS_NAMED);
         $params = $contextparams;
 
         $sql = "SELECT
@@ -167,7 +166,6 @@ class provider implements
 
         if ($pingos->valid()) {
             foreach ($pingos as $pingo) {
-
                 if ($pingo) {
                     $context = \context::instance_by_id($pingo->contextid);
 
@@ -182,7 +180,6 @@ class provider implements
 
                     self::export_connections_data($userid, $pingo->id, $pingo->contextid);
                 }
-
             }
         }
 
@@ -303,7 +300,6 @@ class provider implements
 
             // Delete connections for user.
             if ($DB->record_exists('pingo_connections', ['pingo' => $cm->instance, 'userid' => $userid])) {
-
                 $DB->delete_records('pingo_connections', [
                     'pingo' => $cm->instance,
                     'userid' => $userid,
@@ -323,7 +319,7 @@ class provider implements
         $context = $userlist->get_context();
         $cm = $DB->get_record('course_modules', ['id' => $context->instanceid]);
 
-        list($userinsql, $userinparams) = $DB->get_in_or_equal($userlist->get_userids(), SQL_PARAMS_NAMED);
+        [$userinsql, $userinparams] = $DB->get_in_or_equal($userlist->get_userids(), SQL_PARAMS_NAMED);
         $params = array_merge(['pingoid' => $cm->instance], $userinparams);
 
         // Delete connections for users.

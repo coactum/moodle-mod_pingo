@@ -34,7 +34,6 @@ use stdclass;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL Juv3 or later
  */
 class mod_pingo_api {
-
     /**
      * Method for fetching the authentication token from PINGO.
      *
@@ -156,7 +155,6 @@ class mod_pingo_api {
         } else {
             return json_decode($jsonresult, true);
         }
-
     }
 
     /**
@@ -275,7 +273,6 @@ class mod_pingo_api {
                         $answeroptions[format_text($type['type'], 2)] = array_combine($tempoptions, $tempoptions);
                     }
                     $questiontypes[format_text($type['type'], 2)] = format_text($type['name_de'], 2);
-
                 } else {
                     if ($type['type'] == 'text') {
                         foreach ($type['options_en'] as $i => $opt) {
@@ -292,7 +289,7 @@ class mod_pingo_api {
                 }
             }
 
-            $data = new stdclass;
+            $data = new stdclass();
             $data->questiontypes = $questiontypes;
             $data->answeroptions = $answeroptions;
 
@@ -390,11 +387,10 @@ class mod_pingo_api {
                 }
             }
 
-            $data = new stdclass;
+            $data = new stdclass();
             $data->questions = $questions;
             $data->tags = $tags;
             return $data;
-
         }
     }
 
